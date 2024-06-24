@@ -40,8 +40,13 @@ namespace TE1.UI.Controls
                 this.e통신내역.Items.RemoveAt(this.e통신내역.Items.Count - 1);
         }
 
-        private void 라벨출력(object sender, EventArgs e) =>
-            Global.라벨인쇄.자료전송(this.e라벨날짜.DateTime, (모델구분)this.e라벨모델.EditValue, Utils.IntValue(this.e라벨번호.EditValue));
+        private void 라벨출력(object sender, EventArgs e) 
+        {
+            검사결과 검사 = Global.검사자료.검사항목찾기(107);
+            검사.결과계산();
+            Global.라벨인쇄.자료전송(검사);
+        }
+            
         private void 라벨부착(object sender, EventArgs e) => Global.라벨인쇄.라벨부착();
         private void 장치리셋(object sender, EventArgs e) => Global.라벨인쇄.장치리셋();
         private void 내역삭제(object sender, DevExpress.XtraBars.Docking2010.BaseButtonEventArgs e) => this.e통신내역.Items.Clear();

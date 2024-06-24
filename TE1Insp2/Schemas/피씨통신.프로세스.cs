@@ -62,6 +62,7 @@ namespace TE1.Schemas
 
         public Boolean 하부표면수신(통신자료 자료)
         {
+            Debug.WriteLine("하부표면수신완료.");
             하부표면번호 = 자료.번호;
             new Thread(() => {
                 Global.그랩제어.Active(카메라구분.Cam04);
@@ -72,6 +73,7 @@ namespace TE1.Schemas
 
         public Boolean 상부표면수신(통신자료 자료)
         {
+            Debug.WriteLine("상부표면수신완료.");
             상부표면번호 = 자료.번호;
             new Thread(() => Global.그랩제어.Active(카메라구분.Cam05)).Start();
             new Thread(() => Global.그랩제어.Active(카메라구분.Cam06)).Start();

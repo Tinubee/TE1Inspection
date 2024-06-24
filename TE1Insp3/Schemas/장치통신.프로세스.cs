@@ -57,7 +57,12 @@ namespace TE1.Schemas
                 Debug.WriteLine($"{Utils.FormatDate(DateTime.Now, "{0:HH:mm:ss.fff}")} => {this.입출자료.Changed(정보주소.시작정지)}", "시작정지");
 
             if (this.입출자료.Changed(정보주소.자동수동) || this.입출자료.Changed(정보주소.시작정지))
+            {
+                Global.상태정보.자동수동 = this.자동수동;
+                Global.상태정보.시작정지 = this.시작정지;
+                Global.피씨통신.제품상태전송(Global.상태정보);
                 this.동작상태알림?.Invoke();
+            }
         }
 
         // 검사위치 변경 확인
@@ -257,6 +262,10 @@ namespace TE1.Schemas
         {
             if (!검사번호확인(정보주소.라벨출력, out 검사결과 검사, Replys.No)) return;
 
+            Debug.WriteLine("라벨출력수행 시작.");
+
+            검사.결과계산();
+
             if (Global.환경설정.강제배출)
             {
                 if (Global.환경설정.양품불량)
@@ -278,11 +287,6 @@ namespace TE1.Schemas
                 }
                 라벨출력전송(검사);
             }
-        }
-
-        public void 라벨부착수행()
-        {
-
         }
 
         private void 영상촬영수행()

@@ -135,7 +135,8 @@ namespace TE1.Schemas
         public String 큐알내용 { get; set; } = String.Empty;
         [Column("ilngs"), JsonProperty("ilngs"), Translation("NG Items", "불량정보")]
         public String 불량정보 { get; set; } = String.Empty;
-
+        [NotMapped, JsonIgnore]
+        public String[] 라벨내용 { get; set; }
         [NotMapped, JsonIgnore]
         public 결과구분 큐알결과 => 큐알등급 >= 큐알등급.A && 큐알등급 <= 큐알등급.C ? 결과구분.OK : 결과구분.NG;
 
@@ -209,7 +210,8 @@ namespace TE1.Schemas
         {
             if (자료 == null || 자료.Count < 1) return;
             this.검사내역.AddRange(자료);
-            this.검사내역.ForEach(e => {
+            this.검사내역.ForEach(e =>
+            {
                 e.Init();
                 e.검사명칭 = Global.모델자료.GetItemName(this.모델구분, e.검사항목);
             });
@@ -301,7 +303,7 @@ namespace TE1.Schemas
                 List<Result> results = JsonConvert.DeserializeObject<List<Result>>(json);
                 foreach (Result result in results) SetResult(result.K, result.V);
             }
-            catch(Exception ex) { Debug.WriteLine(ex.Message, "Inspection"); }
+            catch (Exception ex) { Debug.WriteLine(ex.Message, "Inspection"); }
             //Debug.WriteLine(json);
 
         }
@@ -343,6 +345,7 @@ namespace TE1.Schemas
         public 결과구분 결과계산()
         {
             this.SetResult(검사항목.QrLegibility, (Int32)큐알등급.A);
+            this.SetResult(검사항목.Imprinted, 1);
             this.SetResult(검사항목.Surface, this.표면불량.Count);
 
             List<결과구분> 전체결과 = new List<결과구분>();
@@ -370,7 +373,10 @@ namespace TE1.Schemas
                 this.치수결과 = 최종결과(치수결과);
                 this.외관결과 = 최종결과(외관결과);
                 String[] 오류 = this.검사내역.Where(e => e.측정결과 != 결과구분.OK).Select(e => e.오류문구).ToArray();
+                String[] 라벨 = this.검사내역.Where(e => e.측정결과 != 결과구분.OK && Global.분류자료.GetItem(e.검사분류).라벨 != String.Empty).Select(e => Global.분류자료.GetItem(e.검사분류).라벨).ToArray();
                 this.불량정보 = String.Join(",", 오류);
+                this.라벨내용 = 라벨.Distinct().ToArray();
+                //Debug.WriteLine($"라벨내용 => {this.라벨내용}");
             }
             return this.측정결과;
         }
@@ -439,16 +445,15 @@ namespace TE1.Schemas
         [NotMapped, JsonIgnore]
         public String 오류내용 = String.Empty;
         [NotMapped, JsonIgnore]
-        public String 오류문구 
-        { 
+        public String 오류문구
+        {
             get
             {
                 if (this.측정결과 == 결과구분.OK) return String.Empty;
                 if (String.IsNullOrEmpty(오류내용)) return this.검사명칭;
                 return $"{this.검사명칭}={오류내용}";
-            } 
+            }
         }
-
         public static 검사정보 Create(검사정보 정보, DateTime 일시) => new 검사정보() { 검사항목 = 정보.검사항목 }.Set(정보, 일시);
         public void Init()
         {
@@ -593,8 +598,8 @@ namespace TE1.Schemas
     {
         public 검사그룹 검사그룹 = 검사그룹.없음;
         public 장치구분 장치구분 = 장치구분.None;
-        public String  변수명칭 = String.Empty;
-        public Int32   결과부호 = 1;
+        public String 변수명칭 = String.Empty;
+        public Int32 결과부호 = 1;
         public InsItem 검사정보 = new InsItem();
         public ResultAttribute() { }
         public ResultAttribute(검사그룹 그룹, 장치구분 장치) { 검사그룹 = 그룹; 장치구분 = 장치; }

@@ -31,6 +31,7 @@ namespace TE1
         public static 라벨인쇄 라벨인쇄;
         public static 분류자료 분류자료;
         public static 검사자료 검사자료;
+        public static 상태정보 상태정보;
 
         public static class 장치상태
         {
@@ -62,6 +63,7 @@ namespace TE1
                 라벨인쇄 = new 라벨인쇄();
                 분류자료 = new 분류자료();
                 검사자료 = new 검사자료();
+                상태정보 = new 상태정보();
 
                 if (!환경설정.Init()) return false;
                 로그자료.Init();
@@ -77,6 +79,7 @@ namespace TE1
                 if (!장치통신.Open()) new Exception("Unable to connect to PLC.");
                 if (!피씨통신.Open()) new Exception("Unable to connect to server.");
 
+                상태정보.Init();
                 Global.정보로그(로그영역, "Initialize", "Initialize the system.", false);
                 Initialized?.Invoke(null, true);
                 return true;

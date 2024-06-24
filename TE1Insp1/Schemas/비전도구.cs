@@ -72,7 +72,7 @@ namespace TE1.Schemas
             Debug.WriteLine(this.도구경로, this.카메라.ToString());
             if (File.Exists(this.도구경로))
             {
-                this.Job = CogSerializer.LoadObjectFromFile(this.도구경로) as CogJob;
+                 this.Job = CogSerializer.LoadObjectFromFile(this.도구경로) as CogJob;
                 this.Job.Name = $"Job{도구명칭}";
                 this.ToolBlock = (this.Job.VisionTool as CogToolGroup).Tools[0] as CogToolBlock;
             }
@@ -317,6 +317,11 @@ namespace TE1.Schemas
             if (검사 == null || Global.장치상태.자동수동 && 검사.검사완료.Contains(카메라)) return;
             if (!검사.검사완료.Contains(this.카메라)) 검사.검사완료.Add(this.카메라);
             검사.검사완료여부 = 검사.검사완료.Count >= 3;
+            if (검사.검사완료여부)
+            {
+                Debug.WriteLine($"검사완료2=> {검사.검사번호}");
+                Global.피씨통신.Publish(검사.검사번호, 검사.검사내역, 피씨명령.상부완료);
+            }
         }
 
         public Dictionary<String, Object> GetResults()

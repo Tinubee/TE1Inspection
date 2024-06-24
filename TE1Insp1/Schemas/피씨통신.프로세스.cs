@@ -29,7 +29,11 @@ namespace TE1.Schemas
 
         private Boolean 상태정보수신(통신자료 자료)
         {
+            Debug.WriteLine($"상태정보수신완료");
             상태정보 정보 = 자료.Get<상태정보>();
+
+            Debug.WriteLine($"상태정보수신완료 => {정보.자동수동}");
+
             if (정보 == null)
             {
                 Global.오류로그(로그영역, "State Info.", "The data received is incorrect.", true);
@@ -60,6 +64,7 @@ namespace TE1.Schemas
 
         private Boolean 제품투입수신(통신자료 자료)
         {
+            Debug.WriteLine($"제품투입수신 => index {자료.번호}");
             검사결과 검사 = Global.검사자료.검사시작(자료.번호);
             return 검사 != null;
         }
@@ -67,12 +72,14 @@ namespace TE1.Schemas
         public Boolean 상부치수수신(통신자료 자료)
         {
             상부치수번호 = 자료.번호;
+            Debug.WriteLine($"상부치수수신 => index {상부치수번호}");
             new Thread(() => {
                 Global.그랩제어.Active(카메라구분.Cam01);
                 Global.그랩제어.Active(카메라구분.Cam02);
                 Global.그랩제어.Active(카메라구분.Cam03);
                 Global.조명제어.TurnOn();
             }).Start();
+            //Publish(상부치수번호, 피씨명령.상부치수);
             return true;
         }
 

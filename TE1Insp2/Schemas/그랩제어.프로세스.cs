@@ -91,10 +91,10 @@ namespace TE1.Schemas
 
             if (Global.장치상태.자동수동)
             {
-                //Int32 검사번호 = Global.장치통신.촬영위치번호(장치.구분);
-                //검사결과 검사 = Global.검사자료.검사항목찾기(검사번호);
-                //if (검사 == null) return;
-                //Global.비전검사.Run(장치, 검사);
+                Int32 검사번호 = 장치.구분 == 카메라구분.Cam04 ? Global.피씨통신.하부표면번호 : Global.피씨통신.상부표면번호;
+                검사결과 검사 = Global.검사자료.검사항목찾기(검사번호);
+                if (검사 == null) return;
+                Global.비전검사.Run(장치, 검사);
             }
             else
             {

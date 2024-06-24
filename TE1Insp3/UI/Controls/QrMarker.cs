@@ -43,7 +43,6 @@ namespace TE1.UI.Controls
             {
                 Global.장치통신.큐알각인 = false;
                 Global.큐알각인.각인완료확인중 = false;
-               
                 return;
             }
 

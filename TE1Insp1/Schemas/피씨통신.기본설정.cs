@@ -27,8 +27,9 @@ namespace TE1.Schemas
         평탄측정 = 52,
         평탄완료 = 53,
         상부치수 = 54,
-        하부표면 = 55,
-        상부표면 = 56,
+        상부완료 = 55,
+        하부표면 = 56,
+        상부표면 = 57,
         //큐알각인 = 57,
         //큐알리딩 = 58,
         //라벨출력 = 59,
@@ -157,6 +158,7 @@ namespace TE1.Schemas
         public void Publish(Int32 번호, 피씨명령 명령) => Publish(new 통신자료(명령) { 발신 = 피씨구분, 번호 = 번호 }.Get());
         public void Publish(Int32 번호, 피씨명령 명령, Hosts 수신) => Publish(수신, new 통신자료(명령) { 발신 = 피씨구분, 번호 = 번호 }.Get());
         public void Publish(Int32 번호, Object 자료, 피씨명령 명령) => Publish(new 통신자료(명령, 자료) { 발신 = 피씨구분, 번호 = 번호 }.Get());
+        public void Publish(Object 자료, 피씨명령 명령) => Publish(new 통신자료(명령, 자료) { 발신 = 피씨구분}.Get());
         //public void Publish(Object 자료, 피씨명령 명령, 피씨구분 수신) => Publish(수신, new 피씨자료(명령, 자료) { 발신 = 피씨구분 }.Get());
         //public void Publish(Object 자료, 피씨명령 명령, IEnumerable<피씨구분> 수신) => Publish(수신, new 피씨자료(명령, 자료) { 발신 = 피씨구분 }.Get());
 
@@ -232,5 +234,14 @@ namespace TE1.Schemas
         [ProtoMember(3)]  public 모델구분 현재모델 = 모델구분.UPR3P24S;
         [ProtoMember(10)] public Int32   양품갯수 = 0;
         [ProtoMember(11)] public Int32   불량갯수 = 0;
+
+        public void Init()
+        {
+            //this.자동수동 = Global.장치통신.자동수동;
+            //this.시작정지 = Global.장치통신.시작정지;
+            this.현재모델 = Global.환경설정.선택모델;
+            this.양품갯수 = Global.모델자료.선택모델.양품갯수;
+            this.불량갯수 = Global.모델자료.선택모델.불량갯수;
+        }
     }
 }

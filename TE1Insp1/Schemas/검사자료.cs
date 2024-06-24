@@ -35,7 +35,7 @@ namespace TE1.Schemas
         private void 수동검사초기화()
         {
             this.수동검사 = new 검사결과();
-            this.수동검사.검사번호 = 0;
+            this.수동검사.검사번호 = 9999;
             this.수동검사.Reset();
         }
 
@@ -45,6 +45,7 @@ namespace TE1.Schemas
         {
             if (!Global.장치상태.자동수동)
             {
+                this.수동검사.검사번호 = 9999;
                 this.수동검사.Reset();
                 return this.수동검사;
             }

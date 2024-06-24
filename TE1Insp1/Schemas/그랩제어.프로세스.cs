@@ -95,6 +95,7 @@ namespace TE1.Schemas
                 검사결과 검사 = Global.검사자료.검사항목찾기(검사번호);
                 if (검사 == null) return;
                 Global.비전검사.Run(장치, 검사);
+                //Global.피씨통신.Publish(검사번호, 검사.검사내역, 피씨명령.상부완료);
             }
             else
             {

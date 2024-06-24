@@ -16,6 +16,7 @@ namespace TE1.Schemas
             if (자료.명령 == 피씨명령.연결종료) return 피씨종료수신(자료);
             if (자료.명령 == 피씨명령.검사설정) return 검사설정수신(자료);
             if (자료.명령 == 피씨명령.평탄완료) return 평탄완료수신(자료);
+            if (자료.명령 == 피씨명령.상부완료) return 치수완료수신(자료);
             return false;
         }
 
@@ -27,6 +28,7 @@ namespace TE1.Schemas
         private Boolean 피씨연결수신(통신자료 자료)
         {
             검사설정송신(자료.발신, Global.모델자료.선택모델.검사설정);
+            제품상태전송(Global.상태정보);
             return true;
         }
 
@@ -65,9 +67,26 @@ namespace TE1.Schemas
             연결정보.Remove(자료.발신);
             return !연결정보.ContainsKey(자료.발신);
         }
+        private Boolean 치수완료수신(통신자료 자료)
+        {
+            //Global.장치통신.치수측정완료();
+            Debug.WriteLine($"치수완료수신 => {자료.번호}");
+            검사결과 검사 = Global.검사자료.검사항목찾기(자료.번호);
+            if (검사 == null) return false;
 
+            List<검사정보> 치수 = 자료.Get<List<검사정보>>();
+
+            foreach (검사정보 정보 in 치수)
+            {
+                //Debug.WriteLine($"{정보.검사항목} : {정보.측정값}");
+                검사.SetResult(정보.검사항목, (Double)정보.측정값);
+            }
+
+            return true;
+        }
         private Boolean 평탄완료수신(통신자료 자료)
         {
+            Debug.WriteLine("평탄완료수신.");
             Global.장치통신.평탄측정완료();
             검사결과 검사 = Global.검사자료.검사항목찾기(자료.번호);
             if (검사 == null) return false;
@@ -80,11 +99,12 @@ namespace TE1.Schemas
         #endregion
 
         #region 명령전송
-        public void 제품투입전송(Int32 검사번호) => Publish(검사번호, 피씨명령.연결알림);
+        public void 제품투입전송(Int32 검사번호) => Publish(검사번호, 피씨명령.제품투입);
         public void 평탄측정전송(Int32 검사번호) => Publish(검사번호, 피씨명령.평탄측정, Hosts.Surface);
         public void 상부치수전송(Int32 검사번호) => Publish(검사번호, 피씨명령.상부치수, Hosts.Measure);
         public void 하부표면전송(Int32 검사번호) => Publish(검사번호, 피씨명령.하부표면, Hosts.Surface);
         public void 상부표면전송(Int32 검사번호) => Publish(검사번호, 피씨명령.상부표면, Hosts.Surface);
+        public void 제품상태전송(상태정보 정보) => Publish(정보 , 피씨명령.상태정보);
         #endregion
     }
 }

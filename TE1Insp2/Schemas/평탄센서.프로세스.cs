@@ -98,6 +98,7 @@ namespace TE1.Schemas
             {
                 if (client == null) return 자료;
                 String response = this.명령전송(client, Utils.GetDescription(센서명령.측정), 500);
+                Debug.WriteLine($"{response}");
                 자료.결과추가(검사, response);
             }
             return 자료;

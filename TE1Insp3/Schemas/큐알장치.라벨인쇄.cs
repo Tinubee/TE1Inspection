@@ -46,15 +46,17 @@ namespace TE1.Schemas
             return true;
         }
 
-        public Boolean 자료전송(DateTime 날짜, 모델구분 모델, Int32 번호)
+        public Boolean 자료전송(검사결과 검사)
         {
-            //String 자료 = $"041E{레이아웃}Q{출력장수}{ETB}D{Utils.FormatDate(날짜, 날짜포맷)}{LF}{Utils.GetDescription(모델)}{LF}{((Int32)모델).ToString("d2")}{번호.ToString("d4")}??";
-            String 자료 = $"041C1E{레이아웃}Q{출력장수}{ETB}D{Utils.FormatDate(날짜, 날짜포맷)}{Utils.GetDescription(모델)}D{번호:D4}{LF}T1{LF} {LF} {LF} {LF} {LF} {LF} ??";
-
-            return this.명령전송(제어명령.자료전송, 자료);
+            //검사.라벨내용
+            if (검사 == null) return false;
+            String 내용 = 검사.라벨출력내용(검사.라벨내용);
+            //Debug.WriteLine($"{내용}");
+            //String 자료 = $"041C1E{레이아웃}Q{출력장수}{ETB}D{Utils.FormatDate(날짜, 날짜포맷)}{Utils.GetDescription(모델)}D{번호:D4}{LF}T1{LF} {LF} {LF} {LF} {LF} {LF} ??";
+            return this.명령전송(제어명령.자료전송, 내용);
         }
 
-        public Boolean 라벨출력(검사결과 검사) => 자료전송(검사.검사일시, 검사.모델구분, 검사.검사번호);
+        public Boolean 라벨출력(검사결과 검사) => 자료전송(검사);
         public Boolean 라벨부착() { return false; }
         public Boolean 장치리셋() => this.명령전송(제어명령.장치리셋, "002??");
         public Boolean 장치상태() => this.명령전송(제어명령.장치상태, "000??");

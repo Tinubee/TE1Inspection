@@ -143,9 +143,9 @@ namespace TE1.Cam02
         internal virtual void SetFixture() { }
     }
 
-    public class DetectHoles : BaseTool
+    public class DetectTools : BaseTool
     {
-        public DetectHoles(CogToolBlock tool) : base(tool) { }
+        public DetectTools(CogToolBlock tool) : base(tool) { }
         public override Cameras Camera => Cameras.Cam02;
         internal Double CalibX => Input<Double>("CalibX");
         internal Double CalibY => Input<Double>("CalibY");
@@ -183,6 +183,18 @@ namespace TE1.Cam02
                     }
                     SetCircle(tool, item.Value);
                 }
+                else if (item.Value.InsType == InsType.X || item.Value.InsType == InsType.Y)
+                {
+                    CogCaliperTool tool;
+                    if (ToolBlock.Tools.Contains(item.Key)) tool = GetTool(item.Key) as CogCaliperTool;
+                    else
+                    {
+                        tool = new CogCaliperTool();
+                        tool.Name = item.Key;
+                        this.ToolBlock.Tools.Add(tool);
+                    }
+                    SetCaliper(tool, item.Value);
+                }
             }
         }
 
@@ -191,24 +203,38 @@ namespace TE1.Cam02
             Double x = -p.Y / CalibX;
             Double y = -p.X / CalibY;
             Double r = p.R / CalibY;
-            //Debug.WriteLine($"X: {p.X} => {x}, Y: {p.Y} => {y}, R: {p.R} => {r}", tool.Name);
             tool.RunParams.ExpectedCircularArc.CenterX = x;
             tool.RunParams.ExpectedCircularArc.CenterY = y;
             tool.RunParams.ExpectedCircularArc.Radius = r;
-            //Double angleStart = 0;
-            //if (tool.Name == "H38") angleStart = 0;
-            //else if (x <= CenterX) angleStart = Base.ToRadian(270 - 30);
-            //else angleStart = Base.ToRadian(90 + 30);
-            //tool.RunParams.ExpectedCircularArc.AngleStart = angleStart;
-            //tool.RunParams.ExpectedCircularArc.AngleSpan = Math.PI;
-            //tool.RunParams.NumCalipers = 18;
-            //tool.RunParams.NumToIgnore = 3;
             tool.RunParams.CaliperSearchLength = 100;
             tool.RunParams.CaliperProjectionLength = 10;
             tool.RunParams.CaliperSearchDirection = CogFindCircleSearchDirectionConstants.Outward;
             tool.RunParams.CaliperRunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
             tool.RunParams.CaliperRunParams.ContrastThreshold = 8;
             tool.RunParams.CaliperRunParams.FilterHalfSizeInPixels = 2;
+        }
+
+        internal virtual void SetCaliper(CogCaliperTool tool, InsItem p)
+        {
+            Double x = -p.Y / CalibX;
+            Double y = -p.X / CalibY;
+            tool.Region.CenterX = x;
+            tool.Region.CenterY = y;
+            tool.Region.SideXLength = 160;
+            tool.Region.SideYLength = 50;
+            if (p.InsType == InsType.X)
+            {
+                tool.Region.Rotation = Math.PI / 2;
+            }
+            else
+            {
+                tool.Region.Rotation = -Math.PI;
+            }
+
+            tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
+            tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
+            tool.RunParams.ContrastThreshold = 16;
+            tool.RunParams.FilterHalfSizeInPixels = 4;
         }
 
         internal virtual void CalResults()
@@ -219,7 +245,7 @@ namespace TE1.Cam02
             {
                 if (item.Value.InsType == InsType.H)
                 {
-                    if (CalResult(GetTool(item.Key) as CogFindCircleTool, out InsItem r))
+                    if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
                     {
                         results.Add(new Result(item.Key + "X", r.X));
                         results.Add(new Result(item.Key + "Y", r.Y));
@@ -230,13 +256,10 @@ namespace TE1.Cam02
                 {
 
                 }
-                else if (item.Value.InsType == InsType.X)
+                else if (item.Value.InsType == InsType.X || item.Value.InsType == InsType.Y)
                 {
-
-                }
-                else if (item.Value.InsType == InsType.Y)
-                {
-
+                    if (CalResult(GetTool(item.Key) as CogCaliperTool, item.Value, out InsItem r))
+                        results.Add(new Result(item.Key, r.D));
                 }
                 else if (item.Value.InsType == InsType.S)
                 {
@@ -247,9 +270,9 @@ namespace TE1.Cam02
             Output("Results", JsonConvert.SerializeObject(results));
         }
 
-        internal virtual Boolean CalResult(CogFindCircleTool tool, out InsItem result)
+        internal virtual Boolean CalResult(CogFindCircleTool tool, InsItem ins, out InsItem result)
         {
-            result = new InsItem() { InsType = InsType.R };
+            result = new InsItem() { InsType = ins.InsType };
             if (tool == null) return false;
             if (tool.RunStatus.Result == CogToolResultConstants.Accept)
             {
@@ -257,6 +280,21 @@ namespace TE1.Cam02
                 result.X = -Math.Round(c.CenterY, 3);
                 result.Y = -Math.Round(c.CenterX, 3);
                 result.D = Math.Round(c.Radius * 2, 3);
+            }
+            return true;
+        }
+
+        internal virtual Boolean CalResult(CogCaliperTool tool, InsItem ins, out InsItem result)
+        {
+            result = new InsItem() { InsType = ins.InsType };
+            if (tool == null) return false;
+            if (tool.RunStatus.Result == CogToolResultConstants.Accept)
+            {
+                CogCaliperResult r = tool.Results[0];
+                if (ins.InsType == InsType.X)
+                    result.D = Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
+                else if (ins.InsType == InsType.Y)
+                    result.D = Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
             }
             return true;
         }

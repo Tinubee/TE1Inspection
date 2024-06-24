@@ -140,8 +140,9 @@ namespace TE1
         public InsType InsType = InsType.H;
         public Double X = Double.NaN;
         public Double Y = Double.NaN;
-        public Double D = 0;
-        public Double R => D / 2;
+        public Double D = 0;                 // Diameter
+        public Double H = Double.NaN;        // Height
+        public Double R => D / 2;            // Radius
 
         public InsItem() {}
         public InsItem(Int32 cam, InsType ins) { Camera = cam; InsType = ins; }

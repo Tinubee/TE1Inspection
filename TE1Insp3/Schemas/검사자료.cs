@@ -127,7 +127,14 @@ namespace TE1.Schemas
             if (검사코드 > 0 && this.검사스플.ContainsKey(검사코드))
                 검사 = this.검사스플[검사코드];
             if (검사 == null && !신규여부)
-                Global.오류로그(로그영역.GetString(), "Index", $"[{검사코드}] There is no index.", true);
+            {
+                검사 = Global.검사자료.Where(x => x.검사번호 == 검사코드).FirstOrDefault();
+                if (검사 == null)
+                {
+                    Global.오류로그(로그영역.GetString(), "검사항목찾기", $"[{검사코드}] 검사항목이 없습니다.", true);
+                    return null;
+                }
+            }
             return 검사;
         }
         public 검사결과 현재검사찾기()
