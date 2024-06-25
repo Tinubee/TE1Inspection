@@ -319,7 +319,7 @@ namespace TE1.Schemas
             검사.검사완료여부 = 검사.검사완료.Count >= 3;
             if (검사.검사완료여부)
             {
-                Debug.WriteLine($"검사완료2=> {검사.검사번호}");
+                Debug.WriteLine($"검사완료 => {검사.검사번호}");
                 Global.피씨통신.Publish(검사.검사번호, 검사.검사내역, 피씨명령.상부완료);
             }
         }

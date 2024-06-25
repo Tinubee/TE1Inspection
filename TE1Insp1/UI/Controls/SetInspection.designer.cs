@@ -45,25 +45,33 @@ namespace TE1.UI.Controls
             this.검사설정Bind = new System.Windows.Forms.BindingSource(this.components);
             this.GridView1 = new MvUtils.CustomView();
             this.col검사분류 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.e분류 = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
-            this.Bind검사분류 = new System.Windows.Forms.BindingSource(this.components);
             this.col검사명칭 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.col검사그룹 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col검사일시 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col검사항목 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col검사그룹 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col검사장치 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col측정단위 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colY = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colD = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col최소값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col기준값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col최대값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col보정값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col교정값 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.col마진값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col측정값 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col결과값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col실측값 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.ｅ교정 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
+            this.col마진값 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col측정결과 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col검사여부 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col변수명칭 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col카메라여부 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col결과부호 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col오류문구 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.ｅ교정 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
+            this.e분류 = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+            this.Bind검사분류 = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
@@ -81,9 +89,9 @@ namespace TE1.UI.Controls
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ｅ교정)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.e분류)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind검사분류)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ｅ교정)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
@@ -128,21 +136,29 @@ namespace TE1.UI.Controls
             this.GridView1.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
             this.col검사분류,
             this.col검사명칭,
-            this.col검사그룹,
+            this.col검사일시,
             this.col검사항목,
+            this.col검사그룹,
             this.col검사장치,
             this.col측정단위,
             this.colX,
             this.colY,
+            this.colD,
             this.col최소값,
             this.col기준값,
             this.col최대값,
             this.col보정값,
             this.col교정값,
-            this.col마진값,
             this.col측정값,
+            this.col결과값,
             this.col실측값,
-            this.col검사여부});
+            this.col마진값,
+            this.col측정결과,
+            this.col검사여부,
+            this.col변수명칭,
+            this.col카메라여부,
+            this.col결과부호,
+            this.col오류문구});
             this.GridView1.FooterPanelHeight = 21;
             this.GridView1.GridControl = this.GridControl1;
             this.GridView1.GroupRowHeight = 21;
@@ -166,11 +182,229 @@ namespace TE1.UI.Controls
             // 
             this.col검사분류.AppearanceHeader.Options.UseTextOptions = true;
             this.col검사분류.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col검사분류.ColumnEdit = this.e분류;
             this.col검사분류.FieldName = "검사분류";
             this.col검사분류.Name = "col검사분류";
             this.col검사분류.Visible = true;
             this.col검사분류.VisibleIndex = 0;
+            // 
+            // col검사명칭
+            // 
+            this.col검사명칭.AppearanceHeader.Options.UseTextOptions = true;
+            this.col검사명칭.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사명칭.FieldName = "검사명칭";
+            this.col검사명칭.Name = "col검사명칭";
+            this.col검사명칭.Visible = true;
+            this.col검사명칭.VisibleIndex = 1;
+            // 
+            // col검사일시
+            // 
+            this.col검사일시.AppearanceHeader.Options.UseTextOptions = true;
+            this.col검사일시.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사일시.FieldName = "검사일시";
+            this.col검사일시.Name = "col검사일시";
+            // 
+            // col검사항목
+            // 
+            this.col검사항목.AppearanceHeader.Options.UseTextOptions = true;
+            this.col검사항목.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사항목.FieldName = "검사항목";
+            this.col검사항목.Name = "col검사항목";
+            this.col검사항목.Visible = true;
+            this.col검사항목.VisibleIndex = 2;
+            // 
+            // col검사그룹
+            // 
+            this.col검사그룹.AppearanceHeader.Options.UseTextOptions = true;
+            this.col검사그룹.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사그룹.FieldName = "검사그룹";
+            this.col검사그룹.Name = "col검사그룹";
+            this.col검사그룹.Visible = true;
+            this.col검사그룹.VisibleIndex = 3;
+            // 
+            // col검사장치
+            // 
+            this.col검사장치.AppearanceHeader.Options.UseTextOptions = true;
+            this.col검사장치.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사장치.FieldName = "검사장치";
+            this.col검사장치.Name = "col검사장치";
+            this.col검사장치.Visible = true;
+            this.col검사장치.VisibleIndex = 4;
+            // 
+            // col측정단위
+            // 
+            this.col측정단위.AppearanceHeader.Options.UseTextOptions = true;
+            this.col측정단위.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col측정단위.FieldName = "측정단위";
+            this.col측정단위.Name = "col측정단위";
+            this.col측정단위.Visible = true;
+            this.col측정단위.VisibleIndex = 5;
+            // 
+            // colX
+            // 
+            this.colX.AppearanceHeader.Options.UseTextOptions = true;
+            this.colX.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.colX.FieldName = "X";
+            this.colX.Name = "colX";
+            this.colX.OptionsColumn.ReadOnly = true;
+            this.colX.Visible = true;
+            this.colX.VisibleIndex = 6;
+            // 
+            // colY
+            // 
+            this.colY.AppearanceHeader.Options.UseTextOptions = true;
+            this.colY.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.colY.FieldName = "Y";
+            this.colY.Name = "colY";
+            this.colY.OptionsColumn.ReadOnly = true;
+            this.colY.Visible = true;
+            this.colY.VisibleIndex = 7;
+            // 
+            // colD
+            // 
+            this.colD.AppearanceHeader.Options.UseTextOptions = true;
+            this.colD.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.colD.FieldName = "D";
+            this.colD.Name = "colD";
+            this.colD.OptionsColumn.ReadOnly = true;
+            this.colD.Visible = true;
+            this.colD.VisibleIndex = 8;
+            // 
+            // col최소값
+            // 
+            this.col최소값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col최소값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col최소값.FieldName = "최소값";
+            this.col최소값.Name = "col최소값";
+            this.col최소값.Visible = true;
+            this.col최소값.VisibleIndex = 9;
+            // 
+            // col기준값
+            // 
+            this.col기준값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col기준값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col기준값.FieldName = "기준값";
+            this.col기준값.Name = "col기준값";
+            this.col기준값.Visible = true;
+            this.col기준값.VisibleIndex = 10;
+            // 
+            // col최대값
+            // 
+            this.col최대값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col최대값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col최대값.FieldName = "최대값";
+            this.col최대값.Name = "col최대값";
+            this.col최대값.Visible = true;
+            this.col최대값.VisibleIndex = 11;
+            // 
+            // col보정값
+            // 
+            this.col보정값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col보정값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col보정값.FieldName = "보정값";
+            this.col보정값.Name = "col보정값";
+            this.col보정값.Visible = true;
+            this.col보정값.VisibleIndex = 12;
+            // 
+            // col교정값
+            // 
+            this.col교정값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col교정값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col교정값.FieldName = "교정값";
+            this.col교정값.Name = "col교정값";
+            this.col교정값.Visible = true;
+            this.col교정값.VisibleIndex = 13;
+            // 
+            // col측정값
+            // 
+            this.col측정값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col측정값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col측정값.FieldName = "측정값";
+            this.col측정값.Name = "col측정값";
+            this.col측정값.Visible = true;
+            this.col측정값.VisibleIndex = 14;
+            // 
+            // col결과값
+            // 
+            this.col결과값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col결과값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col결과값.FieldName = "결과값";
+            this.col결과값.Name = "col결과값";
+            this.col결과값.Visible = true;
+            this.col결과값.VisibleIndex = 15;
+            // 
+            // col실측값
+            // 
+            this.col실측값.ColumnEdit = this.ｅ교정;
+            this.col실측값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col실측값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col실측값.FieldName = "실측값";
+            this.col실측값.Name = "col실측값";
+            this.col실측값.Visible = true;
+            this.col실측값.VisibleIndex = 16;
+            // 
+            // col마진값
+            // 
+            this.col마진값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col마진값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col마진값.FieldName = "마진값";
+            this.col마진값.Name = "col마진값";
+            this.col마진값.Visible = true;
+            this.col마진값.VisibleIndex = 17;
+            // 
+            // col측정결과
+            // 
+            this.col측정결과.AppearanceHeader.Options.UseTextOptions = true;
+            this.col측정결과.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col측정결과.FieldName = "측정결과";
+            this.col측정결과.Name = "col측정결과";
+            // 
+            // col검사여부
+            // 
+            this.col검사여부.AppearanceHeader.Options.UseTextOptions = true;
+            this.col검사여부.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사여부.FieldName = "검사여부";
+            this.col검사여부.Name = "col검사여부";
+            this.col검사여부.Visible = true;
+            this.col검사여부.VisibleIndex = 18;
+            // 
+            // col변수명칭
+            // 
+            this.col변수명칭.AppearanceHeader.Options.UseTextOptions = true;
+            this.col변수명칭.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col변수명칭.FieldName = "변수명칭";
+            this.col변수명칭.Name = "col변수명칭";
+            this.col변수명칭.OptionsColumn.ReadOnly = true;
+            // 
+            // col카메라여부
+            // 
+            this.col카메라여부.AppearanceHeader.Options.UseTextOptions = true;
+            this.col카메라여부.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col카메라여부.FieldName = "카메라여부";
+            this.col카메라여부.Name = "col카메라여부";
+            this.col카메라여부.OptionsColumn.ReadOnly = true;
+            // 
+            // col결과부호
+            // 
+            this.col결과부호.AppearanceHeader.Options.UseTextOptions = true;
+            this.col결과부호.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col결과부호.FieldName = "결과부호";
+            this.col결과부호.Name = "col결과부호";
+            this.col결과부호.OptionsColumn.ReadOnly = true;
+            // 
+            // col오류문구
+            // 
+            this.col오류문구.AppearanceHeader.Options.UseTextOptions = true;
+            this.col오류문구.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col오류문구.FieldName = "오류문구";
+            this.col오류문구.Name = "col오류문구";
+            this.col오류문구.OptionsColumn.ReadOnly = true;
+            // 
+            // ｅ교정
+            // 
+            this.ｅ교정.AutoHeight = false;
+            this.ｅ교정.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.ｅ교정.Name = "ｅ교정";
             // 
             // e분류
             // 
@@ -189,186 +423,6 @@ namespace TE1.UI.Controls
             // Bind검사분류
             // 
             this.Bind검사분류.DataSource = typeof(TE1.Schemas.분류자료);
-            // 
-            // col검사명칭
-            // 
-            this.col검사명칭.AppearanceHeader.Options.UseTextOptions = true;
-            this.col검사명칭.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col검사명칭.FieldName = "검사명칭";
-            this.col검사명칭.Name = "col검사명칭";
-            this.col검사명칭.Visible = true;
-            this.col검사명칭.VisibleIndex = 1;
-            // 
-            // col검사그룹
-            // 
-            this.col검사그룹.AppearanceHeader.Options.UseTextOptions = true;
-            this.col검사그룹.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col검사그룹.FieldName = "검사그룹";
-            this.col검사그룹.Name = "col검사그룹";
-            this.col검사그룹.OptionsColumn.AllowEdit = false;
-            this.col검사그룹.Visible = true;
-            this.col검사그룹.VisibleIndex = 2;
-            // 
-            // col검사항목
-            // 
-            this.col검사항목.AppearanceHeader.Options.UseTextOptions = true;
-            this.col검사항목.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col검사항목.FieldName = "검사항목";
-            this.col검사항목.Name = "col검사항목";
-            this.col검사항목.OptionsColumn.AllowEdit = false;
-            this.col검사항목.Visible = true;
-            this.col검사항목.VisibleIndex = 3;
-            // 
-            // col검사장치
-            // 
-            this.col검사장치.AppearanceHeader.Options.UseTextOptions = true;
-            this.col검사장치.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col검사장치.Caption = "검사장치";
-            this.col검사장치.FieldName = "검사장치";
-            this.col검사장치.Name = "col검사장치";
-            this.col검사장치.OptionsColumn.AllowEdit = false;
-            this.col검사장치.Visible = true;
-            this.col검사장치.VisibleIndex = 4;
-            // 
-            // col측정단위
-            // 
-            this.col측정단위.AppearanceCell.Options.UseTextOptions = true;
-            this.col측정단위.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col측정단위.AppearanceHeader.Options.UseTextOptions = true;
-            this.col측정단위.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col측정단위.Caption = "단위";
-            this.col측정단위.FieldName = "측정단위";
-            this.col측정단위.Name = "col측정단위";
-            this.col측정단위.Visible = true;
-            this.col측정단위.VisibleIndex = 5;
-            // 
-            // colX
-            // 
-            this.colX.AppearanceHeader.Options.UseTextOptions = true;
-            this.colX.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.colX.DisplayFormat.FormatString = "{0:#,0.00}";
-            this.colX.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.colX.FieldName = "X";
-            this.colX.Name = "colX";
-            this.colX.Visible = true;
-            this.colX.VisibleIndex = 6;
-            // 
-            // colY
-            // 
-            this.colY.AppearanceHeader.Options.UseTextOptions = true;
-            this.colY.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.colY.DisplayFormat.FormatString = "{0:#,0.00}";
-            this.colY.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.colY.FieldName = "Y";
-            this.colY.Name = "colY";
-            this.colY.Visible = true;
-            this.colY.VisibleIndex = 7;
-            // 
-            // col최소값
-            // 
-            this.col최소값.AppearanceHeader.Options.UseTextOptions = true;
-            this.col최소값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col최소값.DisplayFormat.FormatString = "{0:#,0.000}";
-            this.col최소값.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.col최소값.FieldName = "최소값";
-            this.col최소값.Name = "col최소값";
-            this.col최소값.Visible = true;
-            this.col최소값.VisibleIndex = 8;
-            // 
-            // col기준값
-            // 
-            this.col기준값.AppearanceHeader.Options.UseTextOptions = true;
-            this.col기준값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col기준값.DisplayFormat.FormatString = "{0:#,0.000}";
-            this.col기준값.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.col기준값.FieldName = "기준값";
-            this.col기준값.Name = "col기준값";
-            this.col기준값.Visible = true;
-            this.col기준값.VisibleIndex = 9;
-            // 
-            // col최대값
-            // 
-            this.col최대값.AppearanceHeader.Options.UseTextOptions = true;
-            this.col최대값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col최대값.DisplayFormat.FormatString = "{0:#,0.000}";
-            this.col최대값.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.col최대값.FieldName = "최대값";
-            this.col최대값.Name = "col최대값";
-            this.col최대값.Visible = true;
-            this.col최대값.VisibleIndex = 10;
-            // 
-            // col보정값
-            // 
-            this.col보정값.AppearanceHeader.Options.UseTextOptions = true;
-            this.col보정값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col보정값.DisplayFormat.FormatString = "{0:#,0.000}";
-            this.col보정값.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.col보정값.FieldName = "보정값";
-            this.col보정값.Name = "col보정값";
-            this.col보정값.Visible = true;
-            this.col보정값.VisibleIndex = 11;
-            // 
-            // col교정값
-            // 
-            this.col교정값.AppearanceHeader.Options.UseTextOptions = true;
-            this.col교정값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col교정값.DisplayFormat.FormatString = "{0:#,0.000000000;;#}";
-            this.col교정값.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.col교정값.FieldName = "교정값";
-            this.col교정값.Name = "col교정값";
-            this.col교정값.Visible = true;
-            this.col교정값.VisibleIndex = 12;
-            // 
-            // col마진값
-            // 
-            this.col마진값.AppearanceHeader.Options.UseTextOptions = true;
-            this.col마진값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col마진값.DisplayFormat.FormatString = "{0:#,0.000000000;;#}";
-            this.col마진값.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.col마진값.FieldName = "마진값";
-            this.col마진값.Name = "col마진값";
-            this.col마진값.Visible = true;
-            this.col마진값.VisibleIndex = 15;
-            // 
-            // col측정값
-            // 
-            this.col측정값.AppearanceHeader.Options.UseTextOptions = true;
-            this.col측정값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col측정값.DisplayFormat.FormatString = "{0:#,0.000}";
-            this.col측정값.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.col측정값.FieldName = "측정값";
-            this.col측정값.Name = "col측정값";
-            this.col측정값.Visible = true;
-            this.col측정값.VisibleIndex = 13;
-            // 
-            // col실측값
-            // 
-            this.col실측값.AppearanceHeader.Options.UseTextOptions = true;
-            this.col실측값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col실측값.ColumnEdit = this.ｅ교정;
-            this.col실측값.DisplayFormat.FormatString = "{0:#,0.000}";
-            this.col실측값.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.col실측값.FieldName = "실측값";
-            this.col실측값.Name = "col실측값";
-            this.col실측값.Visible = true;
-            this.col실측값.VisibleIndex = 14;
-            // 
-            // ｅ교정
-            // 
-            this.ｅ교정.AutoHeight = false;
-            this.ｅ교정.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.ｅ교정.Name = "ｅ교정";
-            // 
-            // col검사여부
-            // 
-            this.col검사여부.AppearanceHeader.Options.UseTextOptions = true;
-            this.col검사여부.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col검사여부.Caption = "검사여부";
-            this.col검사여부.FieldName = "검사여부";
-            this.col검사여부.Name = "col검사여부";
-            this.col검사여부.Visible = true;
-            this.col검사여부.VisibleIndex = 16;
             // 
             // barManager1
             // 
@@ -550,9 +604,9 @@ namespace TE1.UI.Controls
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ｅ교정)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.e분류)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind검사분류)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ｅ교정)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
@@ -572,13 +626,6 @@ namespace TE1.UI.Controls
         private MvUtils.CustomGrid GridControl1;
         private System.Windows.Forms.BindingSource 검사설정Bind;
         private MvUtils.CustomView GridView1;
-        private DevExpress.XtraGrid.Columns.GridColumn col검사그룹;
-        private DevExpress.XtraGrid.Columns.GridColumn col측정단위;
-        private DevExpress.XtraGrid.Columns.GridColumn col기준값;
-        private DevExpress.XtraGrid.Columns.GridColumn col최소값;
-        private DevExpress.XtraGrid.Columns.GridColumn col최대값;
-        private DevExpress.XtraGrid.Columns.GridColumn col보정값;
-        private DevExpress.XtraGrid.Columns.GridColumn col검사여부;
         private DevExpress.XtraBars.BarManager barManager1;
         private DevExpress.XtraBars.BarDockControl barDockControlTop;
         private DevExpress.XtraBars.BarDockControl barDockControlBottom;
@@ -586,25 +633,40 @@ namespace TE1.UI.Controls
         private DevExpress.XtraBars.BarDockControl barDockControlRight;
         private DevExpress.XtraEditors.PanelControl panelControl1;
         private DevExpress.XtraEditors.SimpleButton b설정저장;
-        private DevExpress.XtraGrid.Columns.GridColumn col검사장치;
         private System.Windows.Forms.BindingSource 모델자료Bind;
         private DevExpress.XtraEditors.LookUpEdit e모델선택;
-        private DevExpress.XtraGrid.Columns.GridColumn col검사항목;
-        private DevExpress.XtraGrid.Columns.GridColumn col교정값;
-        private DevExpress.XtraGrid.Columns.GridColumn col검사분류;
         private DevExpress.XtraEditors.LookUpEdit b도구설정;
-        private DevExpress.XtraGrid.Columns.GridColumn col실측값;
-        private DevExpress.XtraGrid.Columns.GridColumn col측정값;
         private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit ｅ교정;
         private DevExpress.XtraEditors.SimpleButton b측정정보;
-        private DevExpress.XtraGrid.Columns.GridColumn col검사명칭;
-        private DevExpress.XtraGrid.Columns.GridColumn col마진값;
         private DevExpress.XtraEditors.PopupContainerEdit b분류설정;
         private DevExpress.XtraEditors.PopupContainerControl popupContainerControl1;
         private Categorys e분류자료;
         private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit e분류;
         private System.Windows.Forms.BindingSource Bind검사분류;
+        private DevExpress.XtraGrid.Columns.GridColumn col검사분류;
+        private DevExpress.XtraGrid.Columns.GridColumn col검사명칭;
+        private DevExpress.XtraGrid.Columns.GridColumn col검사일시;
+        private DevExpress.XtraGrid.Columns.GridColumn col검사항목;
+        private DevExpress.XtraGrid.Columns.GridColumn col검사그룹;
+        private DevExpress.XtraGrid.Columns.GridColumn col검사장치;
+        private DevExpress.XtraGrid.Columns.GridColumn col측정단위;
+        private DevExpress.XtraGrid.Columns.GridColumn col최소값;
+        private DevExpress.XtraGrid.Columns.GridColumn col기준값;
+        private DevExpress.XtraGrid.Columns.GridColumn col최대값;
+        private DevExpress.XtraGrid.Columns.GridColumn col보정값;
+        private DevExpress.XtraGrid.Columns.GridColumn col교정값;
+        private DevExpress.XtraGrid.Columns.GridColumn col측정값;
+        private DevExpress.XtraGrid.Columns.GridColumn col결과값;
+        private DevExpress.XtraGrid.Columns.GridColumn col실측값;
+        private DevExpress.XtraGrid.Columns.GridColumn col마진값;
+        private DevExpress.XtraGrid.Columns.GridColumn col측정결과;
+        private DevExpress.XtraGrid.Columns.GridColumn col검사여부;
+        private DevExpress.XtraGrid.Columns.GridColumn col변수명칭;
+        private DevExpress.XtraGrid.Columns.GridColumn col카메라여부;
+        private DevExpress.XtraGrid.Columns.GridColumn col결과부호;
         private DevExpress.XtraGrid.Columns.GridColumn colX;
         private DevExpress.XtraGrid.Columns.GridColumn colY;
+        private DevExpress.XtraGrid.Columns.GridColumn colD;
+        private DevExpress.XtraGrid.Columns.GridColumn col오류문구;
     }
 }

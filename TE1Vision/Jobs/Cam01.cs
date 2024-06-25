@@ -273,7 +273,7 @@ namespace TE1.Cam01
                     if (CalResult(GetTool(item.Key) as CogToolBlock, item.Value, out InsItem r))
                     {
                         results.Add(new Result(item.Key + "X", r.X));
-                        results.Add(new Result(item.Key + "Y", r.Y)); 
+                        results.Add(new Result(item.Key + "Y", r.Y));
                         results.Add(new Result(item.Key + "W", r.D));
                         results.Add(new Result(item.Key + "L", r.H));
                     }
@@ -313,10 +313,21 @@ namespace TE1.Cam01
             if (tool.RunStatus.Result == CogToolResultConstants.Accept)
             {
                 CogCaliperResult r = tool.Results[0];
+
                 if (ins.InsType == InsType.X)
+                {
                     result.D = Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
+
+                    Debug.WriteLine($"기준 : {ins.X} / 측정픽셀 : {r.PositionY} / 보정값 : {r.PositionY * CalibY}");
+                }
+                   
                 else if (ins.InsType == InsType.Y)
+                {
                     result.D = Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
+
+                    Debug.WriteLine($"기준 : {ins.Y} / 측정픽셀 : {r.PositionX} / 보정값 : {r.PositionX * CalibX}");
+                }
+                   
             }
             return true;
         }

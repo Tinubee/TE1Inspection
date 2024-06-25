@@ -510,13 +510,13 @@
     <None Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MvUtils\MvUtils\MvUtils.csproj">
-      <Project>{bdb2ed5c-4a7f-4116-b5a0-1831a1ec0624}</Project>
-      <Name>MvUtils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TE1Vision\TE1Vision.csproj">
       <Project>{df960dc0-b92c-4668-b761-f61251b811ec}</Project>
       <Name>TE1Vision</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\IVM\TE1Vision\MvUtils\MvUtils\MvUtils.csproj">
+      <Project>{bdb2ed5c-4a7f-4116-b5a0-1831a1ec0624}</Project>
+      <Name>MvUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

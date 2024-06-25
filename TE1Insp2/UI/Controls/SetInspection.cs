@@ -105,7 +105,11 @@ namespace TE1.UI.Controls
             검사설정 설정 = this.검사설정;
             if (설정 == null) return;
             if (!Global.Confirm(this.FindForm(), 번역.저장확인)) return;
-            if (설정.Save()) Global.정보로그(검사설정.로그영역.GetString(), 번역.설정저장, 번역.저장완료, true);
+            if (설정.Save())
+            {
+                //Global.피씨통신.검사설정전송(설정);
+                Global.정보로그(검사설정.로그영역.GetString(), 번역.설정저장, 번역.저장완료, true);
+            }
         }
 
         private void 도구설정(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
@@ -134,7 +138,7 @@ namespace TE1.UI.Controls
             if (정보.실측값 == 0) { Global.Notify("Enter the actual value and run it.", 로그영역, AlertControl.AlertTypes.Warning); return; }
             if (정보.측정값 == 0) { Global.Notify("Perform the inspection and then run it.", 로그영역, AlertControl.AlertTypes.Warning); return; }
             if (!Global.Confirm(this.FindForm(), "Want to perform a calibration?")) return;
-            정보.교정계산();
+            정보.교정계산(정보);
             this.GridView1.RefreshRow(this.GridView1.FocusedRowHandle);
         }
 

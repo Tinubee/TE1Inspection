@@ -27,7 +27,7 @@ namespace TE1.Schemas
 
         private Boolean 피씨연결수신(통신자료 자료)
         {
-            검사설정송신(자료.발신, Global.모델자료.선택모델.검사설정);
+            //검사설정송신(자료.발신, Global.모델자료.선택모델.검사설정);
             제품상태전송(Global.상태정보);
             return true;
         }
@@ -59,6 +59,7 @@ namespace TE1.Schemas
                 검사정보 설정 = 모델.검사설정.GetItem(정보.검사항목);
                 설정.Set(정보, DateTime.Now);
             }
+            모델.검사설정.Save();
             return true;
         }
 

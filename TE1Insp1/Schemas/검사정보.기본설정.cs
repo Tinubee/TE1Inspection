@@ -291,6 +291,7 @@ namespace TE1.Schemas
             Boolean ok = SetResultValue(검사, value, out Decimal 결과값, out Decimal 측정값);
             검사.측정값 = 측정값;
             검사.결과값 = 결과값;
+
             검사.측정결과 = ok ? 결과구분.OK : 결과구분.NG;
             return 검사;
         }
@@ -428,7 +429,7 @@ namespace TE1.Schemas
         [NotMapped, JsonIgnore]
         public Double 검사시간 = 0;
         [NotMapped, JsonIgnore]
-        private ResultAttribute Attr = null;
+        public ResultAttribute Attr = null;
         [NotMapped, JsonIgnore]
         public String 변수명칭 => Attr != null ? Attr.변수명칭 : String.Empty;
         [NotMapped, JsonIgnore]
@@ -441,7 +442,8 @@ namespace TE1.Schemas
         public Double Y => Attr != null ? Attr.검사정보.Y : 0;
         [NotMapped, JsonIgnore]
         public Double D => Attr != null ? Attr.검사정보.D : 0;
-
+        [NotMapped, JsonIgnore]
+        public Double H => Attr != null ? Attr.검사정보.H : 0;
         [NotMapped, JsonIgnore]
         public String 오류내용 = String.Empty;
         [NotMapped, JsonIgnore]
@@ -497,11 +499,22 @@ namespace TE1.Schemas
             return this;
         }
 
-        public Boolean 교정계산()
+        public Boolean 교정계산(검사정보 정보)
         {
-            if (this.측정값 <= 0) return false;
-            this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(this.실측값 / this.측정값 * 1000, 9)));
-            //this.교정값 = Convert.ToDecimal(Math.Round(Math.Abs(this.실측값 - this.보정값) / this.측정값 * 1000, 9));
+            InsItem item = 정보.Attr.검사정보;
+            //if (this.측정값 == 0) return false;
+            if (item.InsType == InsType.X || item.InsType == InsType.Y)
+            {
+                Debug.WriteLine($"item.X : {item.X} / item.Y : {item.Y}");
+                Decimal 적용값 = item.InsType == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) +this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
+
+                Debug.WriteLine($"적용값 : {적용값} / 측정값 : {this.측정값}");
+                this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                this.보정값 = item.InsType == InsType.X ? Convert.ToDecimal(item.X) : Convert.ToDecimal(item.Y);
+            }
+            else
+                this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(this.실측값 / this.측정값 * 1000, 9)));
+
             return true;
         }
 

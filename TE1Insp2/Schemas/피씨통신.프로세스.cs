@@ -50,6 +50,7 @@ namespace TE1.Schemas
             모델정보 모델 = Global.모델자료.GetItem((모델구분)자료.번호);
             if (모델 == null) return false;
             모델.검사설정.Load(자료.Get<List<검사정보>>());
+            //모델.검사설정.Save();
             return true;
         }
         public void 검사설정전송(검사설정 설정) => Publish(new 통신자료(피씨명령.검사설정, 설정) { 발신 = 피씨구분, 번호 = 설정.모델번호 }.Get());

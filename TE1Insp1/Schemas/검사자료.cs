@@ -62,12 +62,13 @@ namespace TE1.Schemas
         }
 
         // 현재 검사중인 정보를 검색
-        public 검사결과 검사항목찾기(Int32 검사코드)
+        public 검사결과 검사항목찾기(Int32 검사코드) //신규여부 추가해야될듯
         {
             if (!Global.장치상태.자동수동) return this.수동검사;
             if (검사코드 > 0 && this.검사스플.ContainsKey(검사코드))
                 return this.검사스플[검사코드];
-            Global.오류로그(로그영역.GetString(), "Index", $"[{검사코드}] There is no index.", true);
+
+            //Global.오류로그(로그영역.GetString(), "Index", $"[{검사코드}] There is no index.", true);
             return null;
         }
 

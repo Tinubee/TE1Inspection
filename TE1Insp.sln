@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TE1Insp3", "TE1Insp3\TE1Ins
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TE1Insp2", "TE1Insp2\TE1Insp2.csproj", "{A1D05B53-B9B8-4EDA-B1B1-934A10EC1A34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvUtils", "..\MvUtils\MvUtils\MvUtils.csproj", "{BDB2ED5C-4A7F-4116-B5A0-1831A1EC0624}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvUtils", "C:\IVM\TE1Vision\MvUtils\MvUtils\MvUtils.csproj", "{BDB2ED5C-4A7F-4116-B5A0-1831A1EC0624}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

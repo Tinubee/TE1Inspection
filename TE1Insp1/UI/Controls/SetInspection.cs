@@ -3,6 +3,7 @@ using DevExpress.XtraEditors;
 using DevExpress.XtraGrid.Views.Grid;
 using MvUtils;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TE1.Schemas;
@@ -66,11 +67,13 @@ namespace TE1.UI.Controls
 
         private void 모델선택(object sender, EventArgs e)
         {
-            try { 
+            try
+            {
                 this.GridControl1.DataSource = this.검사설정;
                 if (this.검사설정 != null && this.검사설정.Count > 0)
                 {
-                    Task.Run(() => { 
+                    Task.Run(() =>
+                    {
                         Task.Delay(500).Wait();
                         this.GridView1.MoveFirst();
                         //this.SetEditable(this.GridView1, this.GridView1.FocusedRowHandle);
@@ -78,8 +81,9 @@ namespace TE1.UI.Controls
                     });
                 }
             }
-            catch (Exception ex) {
-                Global.오류로그(검사설정.로그영역.GetString(), 번역.모델선택, $"{번역.모델선택}\r\n{ex.Message}" , true);
+            catch (Exception ex)
+            {
+                Global.오류로그(검사설정.로그영역.GetString(), 번역.모델선택, $"{번역.모델선택}\r\n{ex.Message}", true);
                 this.GridControl1.DataSource = null;
             }
         }
@@ -105,7 +109,11 @@ namespace TE1.UI.Controls
             검사설정 설정 = this.검사설정;
             if (설정 == null) return;
             if (!Global.Confirm(this.FindForm(), 번역.저장확인)) return;
-            if (설정.Save()) Global.정보로그(검사설정.로그영역.GetString(), 번역.설정저장, 번역.저장완료, true);
+            if (설정.Save())
+            {
+                //Global.피씨통신.검사설정송신(설정);
+                Global.정보로그(검사설정.로그영역.GetString(), 번역.설정저장, 번역.저장완료, true);
+            }//Global.정보로그(검사설정.로그영역.GetString(), 번역.설정저장, 번역.저장완료, true);
         }
 
         private void 도구설정(object sender, DevExpress.XtraEditors.Controls.ButtonPressedEventArgs e)
@@ -117,12 +125,13 @@ namespace TE1.UI.Controls
         private void 수동검사알림(카메라구분 카메라, 검사결과 결과)
         {
             if (this.InvokeRequired) { this.BeginInvoke(new Action(() => 수동검사알림(카메라, 결과))); return; }
-            foreach(검사정보 설정 in 검사설정)
+            foreach (검사정보 설정 in 검사설정)
             {
                 if (설정.검사장치 != (장치구분)카메라) continue;
                 검사정보 검사 = 결과.검사내역.Where(e => e.검사항목 == 설정.검사항목).FirstOrDefault();
                 if (검사 == null || 검사.측정결과 <= 결과구분.ER) continue;
                 설정.측정값 = 검사.측정값;
+                설정.결과값 = 검사.결과값;
             }
             this.GridView1.RefreshData();
         }
@@ -131,10 +140,11 @@ namespace TE1.UI.Controls
         {
             검사정보 정보 = this.GridView1.GetFocusedRow() as 검사정보;
             if (정보 == null) return;
-            if (정보.실측값 == 0) { Global.Notify("Enter the actual value and run it.", 로그영역, AlertControl.AlertTypes.Warning); return; }
+            //if (정보.실측값 == 0) { Global.Notify("Enter the actual value and run it.", 로그영역, AlertControl.AlertTypes.Warning); return; }
             if (정보.측정값 == 0) { Global.Notify("Perform the inspection and then run it.", 로그영역, AlertControl.AlertTypes.Warning); return; }
             if (!Global.Confirm(this.FindForm(), "Want to perform a calibration?")) return;
-            정보.교정계산();
+            정보.교정계산(정보);
+
             this.GridView1.RefreshRow(this.GridView1.FocusedRowHandle);
         }
 

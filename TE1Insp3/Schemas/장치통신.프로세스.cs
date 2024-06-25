@@ -279,7 +279,8 @@ namespace TE1.Schemas
             }
             else
             {
-                if (!Global.환경설정.라벨인쇄여부 || 검사.측정결과 == 결과구분.OK)
+                //if (!Global.환경설정.라벨인쇄여부 || 검사.측정결과 == 결과구분.OK)
+                if (검사.측정결과 == 결과구분.OK)
                 {
                     this.입출자료.SetDelay(정보주소.라벨출력, 0, 100);
                     this.라벨부착 = false;

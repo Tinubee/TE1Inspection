@@ -54,6 +54,7 @@ namespace TE1.UI.Controls
             this.col측정단위 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colX = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colY = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colD = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col최소값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col기준값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col최대값 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -78,6 +79,7 @@ namespace TE1.UI.Controls
             this.b분류설정 = new DevExpress.XtraEditors.PopupContainerEdit();
             this.popupContainerControl1 = new DevExpress.XtraEditors.PopupContainerControl();
             this.e분류자료 = new TE1.UI.Controls.Categorys();
+            this.colH = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).BeginInit();
@@ -134,6 +136,8 @@ namespace TE1.UI.Controls
             this.col측정단위,
             this.colX,
             this.colY,
+            this.colD,
+            this.colH,
             this.col최소값,
             this.col기준값,
             this.col최대값,
@@ -262,7 +266,16 @@ namespace TE1.UI.Controls
             this.colY.FieldName = "Y";
             this.colY.Name = "colY";
             this.colY.Visible = true;
-            this.colY.VisibleIndex = 7;
+            this.colY.VisibleIndex = 9;
+            // 
+            // colD
+            // 
+            this.colD.AppearanceHeader.Options.UseTextOptions = true;
+            this.colD.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.colD.FieldName = "D";
+            this.colD.Name = "colD";
+            this.colD.Visible = true;
+            this.colD.VisibleIndex = 7;
             // 
             // col최소값
             // 
@@ -273,7 +286,7 @@ namespace TE1.UI.Controls
             this.col최소값.FieldName = "최소값";
             this.col최소값.Name = "col최소값";
             this.col최소값.Visible = true;
-            this.col최소값.VisibleIndex = 8;
+            this.col최소값.VisibleIndex = 10;
             // 
             // col기준값
             // 
@@ -284,7 +297,7 @@ namespace TE1.UI.Controls
             this.col기준값.FieldName = "기준값";
             this.col기준값.Name = "col기준값";
             this.col기준값.Visible = true;
-            this.col기준값.VisibleIndex = 9;
+            this.col기준값.VisibleIndex = 11;
             // 
             // col최대값
             // 
@@ -295,7 +308,7 @@ namespace TE1.UI.Controls
             this.col최대값.FieldName = "최대값";
             this.col최대값.Name = "col최대값";
             this.col최대값.Visible = true;
-            this.col최대값.VisibleIndex = 10;
+            this.col최대값.VisibleIndex = 12;
             // 
             // col보정값
             // 
@@ -306,7 +319,7 @@ namespace TE1.UI.Controls
             this.col보정값.FieldName = "보정값";
             this.col보정값.Name = "col보정값";
             this.col보정값.Visible = true;
-            this.col보정값.VisibleIndex = 11;
+            this.col보정값.VisibleIndex = 13;
             // 
             // col교정값
             // 
@@ -317,7 +330,7 @@ namespace TE1.UI.Controls
             this.col교정값.FieldName = "교정값";
             this.col교정값.Name = "col교정값";
             this.col교정값.Visible = true;
-            this.col교정값.VisibleIndex = 12;
+            this.col교정값.VisibleIndex = 14;
             // 
             // col마진값
             // 
@@ -328,7 +341,7 @@ namespace TE1.UI.Controls
             this.col마진값.FieldName = "마진값";
             this.col마진값.Name = "col마진값";
             this.col마진값.Visible = true;
-            this.col마진값.VisibleIndex = 15;
+            this.col마진값.VisibleIndex = 17;
             // 
             // col측정값
             // 
@@ -339,7 +352,7 @@ namespace TE1.UI.Controls
             this.col측정값.FieldName = "측정값";
             this.col측정값.Name = "col측정값";
             this.col측정값.Visible = true;
-            this.col측정값.VisibleIndex = 13;
+            this.col측정값.VisibleIndex = 15;
             // 
             // col실측값
             // 
@@ -351,7 +364,7 @@ namespace TE1.UI.Controls
             this.col실측값.FieldName = "실측값";
             this.col실측값.Name = "col실측값";
             this.col실측값.Visible = true;
-            this.col실측값.VisibleIndex = 14;
+            this.col실측값.VisibleIndex = 16;
             // 
             // ｅ교정
             // 
@@ -368,7 +381,7 @@ namespace TE1.UI.Controls
             this.col검사여부.FieldName = "검사여부";
             this.col검사여부.Name = "col검사여부";
             this.col검사여부.Visible = true;
-            this.col검사여부.VisibleIndex = 16;
+            this.col검사여부.VisibleIndex = 18;
             // 
             // barManager1
             // 
@@ -534,6 +547,15 @@ namespace TE1.UI.Controls
             this.e분류자료.Size = new System.Drawing.Size(500, 400);
             this.e분류자료.TabIndex = 0;
             // 
+            // colH
+            // 
+            this.colH.AppearanceHeader.Options.UseTextOptions = true;
+            this.colH.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.colH.FieldName = "H";
+            this.colH.Name = "colH";
+            this.colH.Visible = true;
+            this.colH.VisibleIndex = 8;
+            // 
             // SetInspection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -606,5 +628,7 @@ namespace TE1.UI.Controls
         private System.Windows.Forms.BindingSource Bind검사분류;
         private DevExpress.XtraGrid.Columns.GridColumn colX;
         private DevExpress.XtraGrid.Columns.GridColumn colY;
+        private DevExpress.XtraGrid.Columns.GridColumn colD;
+        private DevExpress.XtraGrid.Columns.GridColumn colH;
     }
 }

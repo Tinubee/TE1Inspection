@@ -292,9 +292,16 @@ namespace TE1.Cam02
             {
                 CogCaliperResult r = tool.Results[0];
                 if (ins.InsType == InsType.X)
-                    result.D = Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
+                {
+                    result.D = r.PositionY;//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
+                    Debug.WriteLine($"기준 : {ins.X} / 기준픽셀 : {Math.Abs(ins.X) / CalibY} / 측정픽셀 : {r.PositionY} / 보정값 : {r.PositionY * CalibY} / result.D : {result.D}");
+                }
                 else if (ins.InsType == InsType.Y)
-                    result.D = Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
+                {
+                    result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
+                    Debug.WriteLine($"기준 : {ins.Y} / 기준픽셀 : {Math.Abs(ins.Y) / CalibX} / 측정픽셀 : {r.PositionX} / 보정값 : {r.PositionX * CalibX} / result.D : {result.D}");
+                }
+                   
             }
             return true;
         }

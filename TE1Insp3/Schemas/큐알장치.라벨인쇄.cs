@@ -39,7 +39,7 @@ namespace TE1.Schemas
 
         private Boolean 명령전송(제어명령 명령, String command)
         {
-            Debug.WriteLine($"{Convert.ToInt32(this.STX[0])}, {Convert.ToInt32(this.ETX)}, {Convert.ToInt32(this.ETB)}, {Convert.ToInt32(this.LF)}");
+            Debug.WriteLine($"라벨명령전송 => [{Convert.ToInt32(this.STX[0])}, {Convert.ToInt32(this.ETX)}, {Convert.ToInt32(this.ETB)}, {Convert.ToInt32(this.LF)}]");
             송신수신알림?.Invoke(통신구분.TX, 명령, command.Trim());
             String mesg = this.SendCommand(command, 1000);
             송신수신알림?.Invoke(통신구분.RX, 명령, mesg);
@@ -50,9 +50,9 @@ namespace TE1.Schemas
         {
             //검사.라벨내용
             if (검사 == null) return false;
+            Debug.WriteLine($"라벨자료전송 => Index {검사.검사번호}");
+            
             String 내용 = 검사.라벨출력내용(검사.라벨내용);
-            //Debug.WriteLine($"{내용}");
-            //String 자료 = $"041C1E{레이아웃}Q{출력장수}{ETB}D{Utils.FormatDate(날짜, 날짜포맷)}{Utils.GetDescription(모델)}D{번호:D4}{LF}T1{LF} {LF} {LF} {LF} {LF} {LF} ??";
             return this.명령전송(제어명령.자료전송, 내용);
         }
 

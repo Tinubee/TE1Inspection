@@ -79,6 +79,8 @@
     <Compile Include="Base\InsItems.cs" />
     <Compile Include="Jobs\Cam01.cs" />
     <Compile Include="Jobs\Cam02.cs" />
+    <Compile Include="Jobs\Cam06.cs" />
+    <Compile Include="Jobs\Cam05.cs" />
     <Compile Include="Jobs\Cam03.cs" />
     <Compile Include="Jobs\Cam04.cs" />
     <Compile Include="MvLibs\Base.cs" />

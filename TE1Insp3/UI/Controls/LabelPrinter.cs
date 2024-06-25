@@ -33,7 +33,9 @@ namespace TE1.UI.Controls
                 this.e통신내역.BeginInvoke(new Action(() => 송신수신알림(통신, 명령, mesg)));
                 return;
             }
-            Debug.WriteLine($"{mesg}");
+
+            Debug.WriteLine($"라벨송신수신알림 => {mesg}");
+
             this.e통신내역.Items.Insert(0, $"{통신.ToString()}: {mesg}");
             this.e통신내역.SelectedIndex = 0;
             while (this.e통신내역.Items.Count > 100)

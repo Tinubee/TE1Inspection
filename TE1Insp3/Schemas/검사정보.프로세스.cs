@@ -60,8 +60,7 @@ namespace TE1.Schemas
             Char[] keys = { 'H', 'T', 'M', 'B', 'F', 'S', 'Q' };
             Char LF = Convert.ToChar(10);
             Char ETB = Convert.ToChar(23);
-            //String 자료 = $"041C1E{레이아웃}Q{출력장수}{ETB}D{Utils.FormatDate(날짜, 날짜포맷)}{Utils.GetDescription(모델)}D{번호:D4}{LF}T1{LF} {LF} {LF} {LF} {LF} {LF} ??";
-
+          
             //1: H , 2:T , 3:B , 4:M , 5:F , 6:S , 7:Q
             Dictionary<Char, String> grouped = 라벨내용
              .GroupBy(item => item[0]) // Group by the first letter
@@ -76,13 +75,12 @@ namespace TE1.Schemas
 
             String 추가항목 = String.Join(LF.ToString(), result);
 
-            //String 내용 = $"041C1E{레이아웃}Q{출력장수}{ETB}D{Utils.GetDescription(모델)}{Utils.FormatDate(날짜, 날짜포맷)}D{검사코드:D4}{LF}{추가항목}??";
             List<String> 인쇄항목 = new List<String>();
             인쇄항목.Add($"041C1E{레이아웃}Q{출력장수}{ETB}D{Utils.GetDescription(모델)}{Utils.FormatDate(날짜, 날짜포맷)}D{검사코드:D4}{LF}");
             인쇄항목.Add(추가항목);
             인쇄항목.Add("??");
             String 내용 = String.Join(String.Empty, 인쇄항목.ToArray());
-            Debug.WriteLine($"라벨출력내용 => {내용}");
+            //Debug.WriteLine($"라벨출력내용 => {내용}");
             return 내용;
         }
     }

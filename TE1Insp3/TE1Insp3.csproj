@@ -508,7 +508,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\MvUtils\MvUtils\MvUtils.csproj">
+    <ProjectReference Include="C:\IVM\TE1Vision\MvUtils\MvUtils\MvUtils.csproj">
       <Project>{bdb2ed5c-4a7f-4116-b5a0-1831a1ec0624}</Project>
       <Name>MvUtils</Name>
     </ProjectReference>
