@@ -110,6 +110,7 @@ namespace TE1.Cam06
             base.AfterToolRun(tool, result);
             if (result != CogToolResultConstants.Accept) return;
             if (tool == LineBC) SetOriginY();
+            else if (tool == LineB) FindDatum();
             else if (tool == OriginPoint) SetOriginX();
         }
 
@@ -127,6 +128,14 @@ namespace TE1.Cam06
         }
 
         internal virtual void SetOriginY()
+        {
+            Double length = -63.0 / CalibX;
+            Point2d p = Base.CalculatePoint(new Point2d(CircleB.Results.GetCircle().CenterX, CircleB.Results.GetCircle().CenterY), length, LineS.Results.GetLine().Rotation);
+            LineB.X = p.X;
+            LineB.Y = p.Y;
+        }
+
+        internal virtual void FindDatum()
         {
             Double length = -63.0 / CalibX;
             Point2d p = Base.CalculatePoint(new Point2d(CircleB.Results.GetCircle().CenterX, CircleB.Results.GetCircle().CenterY), length, LineS.Results.GetLine().Rotation);

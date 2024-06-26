@@ -288,6 +288,18 @@ namespace TE1.Schemas
         {
             if (검사 == null) return null;
             if (Double.IsNaN(value)) { 검사.측정결과 = 결과구분.ER; return 검사; }
+
+            if (검사.검사명칭.Contains("H") && 검사.검사명칭.Contains("L"))
+            {
+                //위치도계산
+                Boolean okL = 위치도계산(검사, value, out Decimal 결과값L, out Decimal 측정값L);
+
+                검사.측정값 = Math.Round(측정값L, 3);
+                검사.결과값 = Math.Round(결과값L, 3);
+                검사.측정결과 = okL ? 결과구분.OK : 결과구분.NG;
+                return 검사;
+            }
+
             Boolean ok = SetResultValue(검사, value, out Decimal 결과값, out Decimal 측정값);
             검사.측정값 = 측정값;
             검사.결과값 = 결과값;
@@ -295,6 +307,27 @@ namespace TE1.Schemas
             검사.측정결과 = ok ? 결과구분.OK : 결과구분.NG;
             return 검사;
         }
+
+        public Boolean 위치도계산(검사정보 검사, Double value, out Decimal 결과값, out Decimal 측정값, Boolean 마진포함 = false)
+        {
+            결과값 = 0;
+            측정값 = 0;
+
+            String xStr = 검사.검사명칭.Substring(0, 3) + "X";
+            String yStr = 검사.검사명칭.Substring(0, 3) + "Y";
+
+            검사정보 정보X = 검사내역.Where(e => e.검사항목.ToString() == xStr).FirstOrDefault();
+            검사정보 정보Y = 검사내역.Where(e => e.검사항목.ToString() == yStr).FirstOrDefault();
+
+            Double 편차X = Convert.ToDouble(Math.Abs(정보X.기준값 - 정보X.결과값));
+            Double 편차Y = Convert.ToDouble(Math.Abs(정보Y.기준값 - 정보Y.결과값));
+
+            결과값 = Convert.ToDecimal(Math.Sqrt(편차X * 편차X + 편차Y * 편차Y)) * 2;
+            측정값 = 결과값;
+
+            return true;
+        }
+
         public 검사정보 SetResult(String name, Double value) => SetResult(검사내역.Where(e => e.검사항목.ToString() == name).FirstOrDefault(), value);
         public 검사정보 SetResult(검사항목 항목, Double value) => SetResult(검사내역.Where(e => e.검사항목 == 항목).FirstOrDefault(), value);
         public void SetResults(카메라구분 카메라, String json)
@@ -506,7 +539,7 @@ namespace TE1.Schemas
             if (item.InsType == InsType.X || item.InsType == InsType.Y)
             {
                 Debug.WriteLine($"item.X : {item.X} / item.Y : {item.Y}");
-                Decimal 적용값 = item.InsType == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) +this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
+                Decimal 적용값 = item.InsType == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
 
                 Debug.WriteLine($"적용값 : {적용값} / 측정값 : {this.측정값}");
                 this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));

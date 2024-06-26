@@ -1,4 +1,5 @@
-﻿using MvUtils;
+﻿using DevExpress.Utils.Extensions;
+using MvUtils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -90,6 +91,8 @@ namespace TE1.Schemas
         }
 
         public 분류정보 GetItem(Int32 코드) => this.Where(e => e.코드 == 코드).FirstOrDefault();
+
+        public List<분류정보> GetItemList(Int32 코드) => this.Where(e => e.코드 == 코드).ToList();
         //public 분류정보 GetName(Int32 코드) => this.Where(e => e.코드 == 코드);
     }
 }

@@ -56,14 +56,15 @@ namespace TE1.UI.Controls
             this.col검사일자 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col검사시간 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col모델구분 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.col검사번호 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col검사코드 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col측정결과 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colCTQ결과 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col외관결과 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col큐알등급 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col큐알내용 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.col불량정보 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col생산코드 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col불량정보 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col중복검사 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
@@ -82,7 +83,7 @@ namespace TE1.UI.Controls
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.emptySpaceItem2 = new DevExpress.XtraLayout.EmptySpaceItem();
             this.layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.col중복검사 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col측정값 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.GridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind검사자료)).BeginInit();
@@ -126,6 +127,7 @@ namespace TE1.UI.Controls
             this.col최대값,
             this.col보정값,
             this.col결과값,
+            this.col측정값,
             this.col검사결과});
             this.GridView2.FooterPanelHeight = 21;
             this.GridView2.GridControl = this.GridControl1;
@@ -374,7 +376,7 @@ namespace TE1.UI.Controls
             this.col검사일자,
             this.col검사시간,
             this.col모델구분,
-            this.col검사번호,
+            this.col검사코드,
             this.col측정결과,
             this.colCTQ결과,
             this.col외관결과,
@@ -450,17 +452,17 @@ namespace TE1.UI.Controls
             // 
             // col검사코드
             // 
-            this.col검사번호.AppearanceCell.Options.UseTextOptions = true;
-            this.col검사번호.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col검사번호.AppearanceHeader.Options.UseTextOptions = true;
-            this.col검사번호.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col검사번호.Caption = "Index";
-            this.col검사번호.DisplayFormat.FormatString = "{0:d4}";
-            this.col검사번호.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
-            this.col검사번호.FieldName = "검사번호";
-            this.col검사번호.Name = "col검사코드";
-            this.col검사번호.Visible = true;
-            this.col검사번호.VisibleIndex = 2;
+            this.col검사코드.AppearanceCell.Options.UseTextOptions = true;
+            this.col검사코드.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사코드.AppearanceHeader.Options.UseTextOptions = true;
+            this.col검사코드.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사코드.Caption = "Index";
+            this.col검사코드.DisplayFormat.FormatString = "{0:d4}";
+            this.col검사코드.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Numeric;
+            this.col검사코드.FieldName = "검사번호";
+            this.col검사코드.Name = "col검사코드";
+            this.col검사코드.Visible = true;
+            this.col검사코드.VisibleIndex = 2;
             // 
             // col측정결과
             // 
@@ -524,6 +526,16 @@ namespace TE1.UI.Controls
             this.col큐알내용.VisibleIndex = 8;
             this.col큐알내용.Width = 300;
             // 
+            // col생산코드
+            // 
+            this.col생산코드.AppearanceHeader.Options.UseTextOptions = true;
+            this.col생산코드.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col생산코드.Caption = "Serial";
+            this.col생산코드.FieldName = "생산코드";
+            this.col생산코드.Name = "col생산코드";
+            this.col생산코드.Visible = true;
+            this.col생산코드.VisibleIndex = 6;
+            // 
             // col불량정보
             // 
             this.col불량정보.AppearanceHeader.Options.UseTextOptions = true;
@@ -535,15 +547,16 @@ namespace TE1.UI.Controls
             this.col불량정보.VisibleIndex = 10;
             this.col불량정보.Width = 300;
             // 
-            // col생산코드
+            // col중복검사
             // 
-            this.col생산코드.AppearanceHeader.Options.UseTextOptions = true;
-            this.col생산코드.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col생산코드.Caption = "Serial";
-            this.col생산코드.FieldName = "생산코드";
-            this.col생산코드.Name = "col생산코드";
-            this.col생산코드.Visible = true;
-            this.col생산코드.VisibleIndex = 6;
+            this.col중복검사.AppearanceHeader.Options.UseTextOptions = true;
+            this.col중복검사.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col중복검사.Caption = "QR Dup.";
+            this.col중복검사.FieldName = "중복검사";
+            this.col중복검사.Name = "col중복검사";
+            this.col중복검사.ToolTip = "QR Duplicate Checked";
+            this.col중복검사.Visible = true;
+            this.col중복검사.VisibleIndex = 9;
             // 
             // barManager1
             // 
@@ -759,16 +772,14 @@ namespace TE1.UI.Controls
             this.layoutControlItem5.Text = "End";
             this.layoutControlItem5.TextSize = new System.Drawing.Size(25, 15);
             // 
-            // col중복검사
+            // col측정값
             // 
-            this.col중복검사.AppearanceHeader.Options.UseTextOptions = true;
-            this.col중복검사.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col중복검사.Caption = "QR Dup.";
-            this.col중복검사.FieldName = "중복검사";
-            this.col중복검사.Name = "col중복검사";
-            this.col중복검사.ToolTip = "QR Duplicate Checked";
-            this.col중복검사.Visible = true;
-            this.col중복검사.VisibleIndex = 9;
+            this.col측정값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col측정값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col측정값.FieldName = "측정값";
+            this.col측정값.Name = "col측정값";
+            this.col측정값.Visible = true;
+            this.col측정값.VisibleIndex = 9;
             // 
             // Results
             // 
@@ -859,5 +870,7 @@ namespace TE1.UI.Controls
         private DevExpress.XtraGrid.Columns.GridColumn col검출크기;
         private DevExpress.XtraGrid.Columns.GridColumn col생산코드;
         private DevExpress.XtraGrid.Columns.GridColumn col중복검사;
+        private DevExpress.XtraGrid.Columns.GridColumn col측정값;
+        private DevExpress.XtraGrid.Columns.GridColumn col검사코드;
     }
 }

@@ -84,6 +84,7 @@ namespace TE1.Schemas
 
         private Boolean 평탄검사수신(통신자료 자료)
         {
+            Debug.WriteLine("평탄검사수신 들어옴");
             평탄측정번호 = 자료.번호;
             new Thread(() => {
                 검사결과 검사 = Global.검사자료.검사항목찾기(평탄측정번호);

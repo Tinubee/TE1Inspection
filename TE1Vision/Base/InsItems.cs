@@ -159,9 +159,9 @@ namespace TE1
         //public static InsItem M55 = new InsItem(3, InsType.S, 0, 0);
         //public static InsItem M56 = new InsItem(3, InsType.S, 0, 0);
         //public static InsItem M57 = new InsItem(3, InsType.S, 0, 0);
-        public static InsItem M58 = new InsItem(6, InsType.S, -645.00, 181.94, 99, 20);
-        public static InsItem M59 = new InsItem(6, InsType.S, -740.00, 181.94, 99, 20);
-        public static InsItem M60 = new InsItem(6, InsType.S, -835.00, 181.94, 99, 20);
+        //public static InsItem M58 = new InsItem(6, InsType.S, -645.00, 181.94, 99, 20);
+        //public static InsItem M59 = new InsItem(6, InsType.S, -740.00, 181.94, 99, 20);
+        //public static InsItem M60 = new InsItem(6, InsType.S, -835.00, 181.94, 99, 20);
 
         public static InsItem GetItem(String name)
         {
@@ -205,6 +205,7 @@ namespace TE1
         public Double R => D / 2;            // Radius
         public Double CalX = Double.NaN;
         public Double CalY = Double.NaN;
+        public Double L = Double.NaN; //위치도
 
         public InsItem() { }
         public InsItem(Int32 cam, InsType ins) { Camera = cam; InsType = ins; }
