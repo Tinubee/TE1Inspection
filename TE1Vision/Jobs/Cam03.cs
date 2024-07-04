@@ -269,9 +269,9 @@ namespace TE1.Cam03
 
 
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
-            tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DarkToLight;
-            tool.RunParams.ContrastThreshold = 10;
-            tool.RunParams.FilterHalfSizeInPixels = 5;
+            //tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DarkToLight;
+            //tool.RunParams.ContrastThreshold = 10;
+            //tool.RunParams.FilterHalfSizeInPixels = 5;
         }
 
         internal virtual void SetCaliper(CogCaliperTool tool, InsItem p)
@@ -292,8 +292,8 @@ namespace TE1.Cam03
             }
 
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
-            tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DarkToLight;
-            tool.RunParams.ContrastThreshold = 10;
+            //tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DarkToLight;
+            //tool.RunParams.ContrastThreshold = 10;
         }
 
         internal virtual void CalResults()
@@ -319,7 +319,7 @@ namespace TE1.Cam03
                 {
                     if (CalResult(GetTool(item.Key) as CogCaliperTool, item.Value, out InsItem r))
                     {
-                        //Debug.WriteLine($"{item.Key} : {r.D}");
+                        Debug.WriteLine($"{item.Key} : {r.D}");
                         results.Add(new Result(item.Key, r.D));
                     }
 

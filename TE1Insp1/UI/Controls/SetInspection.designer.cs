@@ -62,6 +62,7 @@ namespace TE1.UI.Controls
             this.col측정값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col결과값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col실측값 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.ｅ교정 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.col마진값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col측정결과 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col검사여부 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -69,7 +70,6 @@ namespace TE1.UI.Controls
             this.col카메라여부 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col결과부호 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col오류문구 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.ｅ교정 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.e분류 = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
             this.Bind검사분류 = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
@@ -182,6 +182,7 @@ namespace TE1.UI.Controls
             // 
             this.col검사분류.AppearanceHeader.Options.UseTextOptions = true;
             this.col검사분류.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사분류.ColumnEdit = this.e분류;
             this.col검사분류.FieldName = "검사분류";
             this.col검사분류.Name = "col검사분류";
             this.col검사분류.Visible = true;
@@ -334,13 +335,20 @@ namespace TE1.UI.Controls
             // 
             // col실측값
             // 
-            this.col실측값.ColumnEdit = this.ｅ교정;
             this.col실측값.AppearanceHeader.Options.UseTextOptions = true;
             this.col실측값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col실측값.ColumnEdit = this.ｅ교정;
             this.col실측값.FieldName = "실측값";
             this.col실측값.Name = "col실측값";
             this.col실측값.Visible = true;
             this.col실측값.VisibleIndex = 16;
+            // 
+            // ｅ교정
+            // 
+            this.ｅ교정.AutoHeight = false;
+            this.ｅ교정.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.ｅ교정.Name = "ｅ교정";
             // 
             // col마진값
             // 
@@ -398,13 +406,6 @@ namespace TE1.UI.Controls
             this.col오류문구.FieldName = "오류문구";
             this.col오류문구.Name = "col오류문구";
             this.col오류문구.OptionsColumn.ReadOnly = true;
-            // 
-            // ｅ교정
-            // 
-            this.ｅ교정.AutoHeight = false;
-            this.ｅ교정.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.ｅ교정.Name = "ｅ교정";
             // 
             // e분류
             // 

@@ -169,6 +169,7 @@ namespace TE1.Cam01
         private Double CenterX => InputImage.Width / 2 - Input<Double>("CenterX");
         internal virtual void InitTools()
         {
+           
             CogCreateLineTool centerV = GetTool("CenterV") as CogCreateLineTool;
             if (centerV != null) centerV.Line.X = CenterX;
 
@@ -177,11 +178,11 @@ namespace TE1.Cam01
             {
                 if (item.Value.InsType == InsType.H)
                 {
-                    CogBlobTool tool;
-                    if (ToolBlock.Tools.Contains(item.Key)) tool = GetTool(item.Key) as CogBlobTool;
+                    CogFindCircleTool tool;
+                    if (ToolBlock.Tools.Contains(item.Key)) tool = GetTool(item.Key) as CogFindCircleTool;
                     else
                     {
-                        tool = new CogBlobTool();
+                        tool = new CogFindCircleTool();
                         tool.Name = item.Key;
                         this.ToolBlock.Tools.Add(tool);
                     }
@@ -209,7 +210,7 @@ namespace TE1.Cam01
             Double y = -p.X / CalibY;
             tool.Region.CenterX = x;
             tool.Region.CenterY = y;
-            tool.Region.SideXLength = 160;
+            tool.Region.SideXLength = 200;
             tool.Region.SideYLength = 50;
             if (p.InsType == InsType.X)
             {
@@ -221,29 +222,29 @@ namespace TE1.Cam01
             }
 
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
-            tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
-            tool.RunParams.ContrastThreshold = 16;
-            tool.RunParams.FilterHalfSizeInPixels = 4;
+            //tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
+            //tool.RunParams.ContrastThreshold = 16;
+            //tool.RunParams.FilterHalfSizeInPixels = 4;
         }
 
-        internal virtual void SetCircle(CogBlobTool tool, InsItem p)
+        internal virtual void SetCircle(CogFindCircleTool tool, InsItem p)
         {
             Double x = -p.Y / CalibX;
             Double y = -p.X / CalibY;
             Double r = p.R / CalibY;
 
-            tool.RunParams.RegionMode = CogRegionModeConstants.PixelAlignedBoundingBoxAdjustMask;
+            tool.RunParams.ExpectedCircularArc.CenterX = x;
+            tool.RunParams.ExpectedCircularArc.CenterY = y;
+            tool.RunParams.ExpectedCircularArc.Radius = r;
 
-            CogRectangleAffine rect = new CogRectangleAffine();
+            tool.RunParams.CaliperSearchLength = 150;
+            tool.RunParams.CaliperProjectionLength = 10;
+            tool.RunParams.CaliperSearchDirection = CogFindCircleSearchDirectionConstants.Outward;
+            tool.RunParams.CaliperRunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
+            tool.RunParams.CaliperRunParams.ContrastThreshold = 10;
+            tool.RunParams.CaliperRunParams.FilterHalfSizeInPixels = 5;
 
-            rect.CenterX = x;
-            rect.CenterY = y;
-            rect.SideXLength = 600;
-            rect.SideYLength = 600;
-
-            tool.Region = rect;
-            tool.RunParams.ConnectivityMinPixels = 10000;
-            tool.RunParams.SegmentationParams.HardFixedThreshold = 150;
+            tool.RunParams.NumCalipers = 15;
         }
 
         internal virtual void SetRectangle(CogToolBlock tool, InsItem p)
@@ -261,7 +262,7 @@ namespace TE1.Cam01
             {
                 if (item.Value.InsType == InsType.H)
                 {
-                    if (CalResult(GetTool(item.Key) as CogBlobTool, item.Value, out InsItem r))
+                    if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
                     {
                         results.Add(new Result(item.Key + "X", r.X));
                         results.Add(new Result(item.Key + "Y", r.Y));
@@ -293,18 +294,25 @@ namespace TE1.Cam01
             Output("Results", JsonConvert.SerializeObject(results));
         }
 
-        internal virtual Boolean CalResult(CogBlobTool tool, InsItem ins, out InsItem result)
+        internal virtual Boolean CalResult(CogFindCircleTool tool, InsItem ins, out InsItem result)
         {
             result = new InsItem() { InsType = ins.InsType };
             if (tool == null) return false;
             if (tool.RunStatus.Result == CogToolResultConstants.Accept)
             {
-                CogBlobResult r = this.GetBlob(tool, 0);
-                CogRectangleAffine a = r.GetBoundingBox(CogBlobAxisConstants.SelectedSpace);
+                CogCircle c = tool.Results.GetCircle();
+                result.X = -Math.Round(c.CenterY, 3);
+                result.Y = -Math.Round(c.CenterX, 3);
 
-                result.X = -Math.Round(a.CenterY, 3);
-                result.Y = -Math.Round(a.CenterX, 3);
-                result.D = Math.Round(a.SideXLength, 3);
+                //List<Double> radiusXY = new List<Double>
+                //{
+                //    c.RadiusX,
+                //    c.RadiusY
+                //};
+
+                //Debug.WriteLine($"{tool.Name} => X:{c.RadiusX} / Y:{c.RadiusY} / Aver:{radiusXY.Average()}");
+
+                result.D = Math.Round(c.Radius * 2, 3);
                 result.L = 0;
             }
             return true;
@@ -331,16 +339,14 @@ namespace TE1.Cam01
 
                 if (ins.InsType == InsType.X)
                 {
-                    result.D = Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
-
-                    Debug.WriteLine($"기준 : {ins.X} / 측정픽셀 : {r.PositionY} / 보정값 : {r.PositionY * CalibY}");
+                    result.D = r.PositionY;//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
+                    Debug.WriteLine($"{tool.Name} => 기준 : {ins.X} / 측정픽셀 : {r.PositionY} / 보정값 : {r.PositionY * CalibY}");
                 }
 
                 else if (ins.InsType == InsType.Y)
                 {
-                    result.D = Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
-
-                    Debug.WriteLine($"기준 : {ins.Y} / 측정픽셀 : {r.PositionX} / 보정값 : {r.PositionX * CalibX}");
+                    result.D = r.PositionX; //Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
+                    Debug.WriteLine($"{tool.Name} => 기준 : {ins.Y} / 측정픽셀 : {r.PositionX} / 보정값 : {r.PositionX * CalibX}");
                 }
 
             }

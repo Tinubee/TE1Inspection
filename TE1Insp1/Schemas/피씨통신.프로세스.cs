@@ -69,22 +69,7 @@ namespace TE1.Schemas
             검사결과 검사 = Global.검사자료.검사시작(자료.번호);
             return 검사 != null;
         }
-
-        //public void 검사설정송신(검사설정 자료)
-        //{
-        //    검사설정송신(Hosts.Server, 자료);
-        //    검사설정송신(Hosts.Surface, 자료);
-        //}
-        //public void 검사설정송신(Hosts host, 검사설정 자료)
-        //{
-        //    List<검사정보> 설정 = new List<검사정보>();
-        //    foreach (검사정보 정보 in 자료)
-        //    {
-        //        if (DeviceInfoAttribute.GetHost(정보.검사장치) != host) continue;
-        //        설정.Add(정보);
-        //    }
-        //    Publish(new 통신자료(피씨명령.검사설정, 설정) { 발신 = 피씨구분, 번호 = 자료.모델번호 }.Get());
-        //}
+        
         public Boolean 상부치수수신(통신자료 자료)
         {
             상부치수번호 = 자료.번호;

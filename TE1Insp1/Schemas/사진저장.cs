@@ -102,7 +102,7 @@ namespace TE1.Schemas
             if (정보 == null || mat == null || String.IsNullOrEmpty(file)) return;
             Boolean result = false;
             String error = String.Empty;
-            if (정보.사본유형 == 사진형식.Jpg) result = Common.ImageSaveJpeg(mat, file, out error, 정보.사진품질);
+            if (정보.사본유형 == 사진형식.Jpg) result = Common.ImageSaveJpeg(mat, file, out error, 100); //정보.사진품질
             //else if (정보.사본유형 == 사진형식.Png) result = Common.ImageSavePng(mat, file, out error);
             //else if (정보.사본유형 == 사진형식.Bmp) result = Common.ImageSaveBmp(mat, file, out error);
             else return;
