@@ -167,7 +167,9 @@ namespace TE1.Cam03
             CogCreateLineTool centerV = GetTool("CenterV") as CogCreateLineTool;
             if (centerV != null) centerV.Line.X = CenterX;
 
+            //InsItems.LoadMica();  //위치 Setting을 위한 임시 생성.
             Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
+
             foreach (var item in items)
             {
                 if (item.Value.InsType == InsType.H)
@@ -184,18 +186,23 @@ namespace TE1.Cam03
                 }
                 if (item.Value.InsType == InsType.S)
                 {
-                    //for (Int32 lop = 1; lop <= 4; lop++)
-                    //{
-                    //    CogCaliperTool tool;
-                    //    if (ToolBlock.Tools.Contains($"{item.Key}_{lop}")) tool = GetTool($"{item.Key}_{lop}") as CogCaliperTool;
-                    //    else
-                    //    {
-                    //        tool = new CogCaliperTool();
-                    //        tool.Name = $"{item.Key}_{lop}"; ;
-                    //        this.ToolBlock.Tools.Add(tool);
-                    //    }
-                    //    SetMicaCaliper(tool, item.Value, lop);
-                    //}
+                    Debug.WriteLine($"{item.Key} => offsetX1:{item.Value.offsetX1} / offsetY2:{item.Value.offsetY2} / offsetX3:{item.Value.offsetX3}/ offsetY4:{item.Value.offsetY4}");
+                    for (Int32 lop = 1; lop <= 4; lop++)
+                    {
+                        CogCaliperTool tool;
+
+                        String checkPos = lop % 2 == 0 ? "Y" : "X";
+
+                        if (ToolBlock.Tools.Contains($"{item.Key}{checkPos}{lop}")) tool = GetTool($"{item.Key}{checkPos}{lop}") as CogCaliperTool;
+                        else
+                        {
+                            tool = new CogCaliperTool();
+                            tool.Name = $"{item.Key}{checkPos}{lop}";
+                            this.ToolBlock.Tools.Add(tool);
+                        }
+                        //tool.InputImage = Input<CogImage8Grey>("InputImage");
+                        SetMicaCaliper(tool, item.Value, lop);
+                    }
                 }
                 if (item.Value.InsType == InsType.X || item.Value.InsType == InsType.Y)
                 {
@@ -244,18 +251,18 @@ namespace TE1.Cam03
             {
                 case 1:
                     tool.Region.CenterX = x;
-                    tool.Region.CenterY = y - (p.D / 2 / CalibX) - 450;
+                    tool.Region.CenterY = y - (p.D / 2 / CalibX) + p.offsetX1;
                     break;
                 case 2:
-                    tool.Region.CenterX = x + (p.H / 2 / CalibY) + 200;
+                    tool.Region.CenterX = x + (p.H / 2 / CalibY) + p.offsetY2;
                     tool.Region.CenterY = y;
                     break;
                 case 3:
-                    tool.Region.CenterX = x; 
-                    tool.Region.CenterY = y + (p.D / 2 / CalibX) + 200;
+                    tool.Region.CenterX = x;
+                    tool.Region.CenterY = y + (p.D / 2 / CalibX) + p.offsetX3;
                     break;
                 case 4:
-                    tool.Region.CenterX = x - (p.H / 2 / CalibY) - 200;
+                    tool.Region.CenterX = x - (p.H / 2 / CalibY) + p.offsetY4;
                     tool.Region.CenterY = y;
                     break;
             }
@@ -263,12 +270,17 @@ namespace TE1.Cam03
             //1,2,3,4
             //tool.Region.SideXLength = 160;
             //tool.Region.SideYLength = 50;
-            tool.Region.SideXLength = 160;//lop%2 != 1 ? 50 : 160;
-            tool.Region.SideYLength = 50;//lop % 2 != 1 ? 160 : 50;
+            tool.Region.SideXLength = lop % 2 == 0 ? 50 : 10;
+            tool.Region.SideYLength = lop % 2 == 0 ? 150 : 50;
             tool.Region.Rotation = lop % 2 == 1 ? -Math.PI / 2 : 0;
 
 
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
+            tool.LastRunRecordDiagEnable = CogCaliperLastRunRecordDiagConstants.InputImageByReference | CogCaliperLastRunRecordDiagConstants.Region;
+
+            //tool.LastRunRecordDiagEnable = CogCaliperLastRunRecordDiagConstants.Region;
+
+            //tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DontCare;
             //tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DarkToLight;
             //tool.RunParams.ContrastThreshold = 10;
             //tool.RunParams.FilterHalfSizeInPixels = 5;
@@ -326,13 +338,15 @@ namespace TE1.Cam03
                 }
                 else if (item.Value.InsType == InsType.S)
                 {
-                    //if (CalResult(GetTool(item.Key) as CogToolBlock, item.Value, out InsItem r))
-                    //{
-                    //    results.Add(new Result(item.Key + "X", r.X));
-                    //    results.Add(new Result(item.Key + "Y", r.Y));
-                    //    results.Add(new Result(item.Key + "W", r.D));
-                    //    results.Add(new Result(item.Key + "L", r.H));
-                    //}
+                    for (int lop = 1; lop <= 4; lop++)
+                    {
+                        String pos = lop % 2 == 0 ? "Y" : "X";
+                        InsType type = lop % 2 == 0 ? InsType.Y : InsType.X;
+                        if (CalResult(GetTool(item.Key + $"{pos}{lop}") as CogCaliperTool, item.Value, type, lop, out InsItem r))
+                        {
+                            results.Add(new Result(item.Key + $"{pos}{lop}", r.D));
+                        }
+                    }
                 }
             }
             //Debug.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
@@ -370,10 +384,38 @@ namespace TE1.Cam03
                     result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
                     Debug.WriteLine($"{tool.Name} : X : {r.PositionX} / ins.Y : {ins.Y} /  CalibX : {Math.Abs(ins.Y) / CalibX}");
                 }
+            }
+            return true;
+        }
+
+        internal virtual Boolean CalResult(CogCaliperTool tool, InsItem ins, InsType type, Int32 lop, out InsItem result)
+        {
+            result = new InsItem() { InsType = type };
+            if (tool == null) return false;
+            if (tool.RunStatus.Result == CogToolResultConstants.Accept)
+            {
+                CogCaliperResult r = tool.Results[0];
+                if (type == InsType.X)
+                {
+                    //if (lop == 1) result.X1 = r.PositionY;
+                    //else result.X3 = r.PositionY;
+                    //result.DList.Add(r.PositionY);//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
+                    result.D = r.PositionY;
+                    //Debug.WriteLine($"{tool.Name} : X : {r.PositionY} / ins.X : {ins.X} /  CalibX : {Math.Abs(ins.X) / CalibY}");
+                }
+                else if (type == InsType.Y)
+                {
+                    //if (lop == 2) result.Y2 = r.PositionX;
+                    //else result.Y4 = r.PositionX;
+                    //result.DList.Add(r.PositionX);
+                    result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
+                    //Debug.WriteLine($"{tool.Name} : X : {r.PositionX} / ins.Y : {ins.Y} /  CalibX : {Math.Abs(ins.Y) / CalibX}");
+                }
 
             }
             return true;
         }
+
 
         internal virtual Boolean CalResult(CogToolBlock tool, InsItem ins, out InsItem result)
         {

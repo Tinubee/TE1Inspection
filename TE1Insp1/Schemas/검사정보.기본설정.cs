@@ -25,9 +25,9 @@ namespace TE1.Schemas
         Cam03 = 3,
         [Description("Surface Bottom")]
         Cam04 = 4,
-        [Description("Surface Left")]
-        Cam05 = 5,
         [Description("Surface Right")]
+        Cam05 = 5,
+        [Description("Surface Left")]
         Cam06 = 6,
     }
 
@@ -536,14 +536,21 @@ namespace TE1.Schemas
         {
             InsItem item = 정보.Attr.검사정보;
             //if (this.측정값 == 0) return false;
-            if (item.InsType == InsType.X || item.InsType == InsType.Y)
+            if (item.InsType == InsType.X || item.InsType == InsType.Y || item.InsType == InsType.S)
             {
-                Debug.WriteLine($"item.X : {item.X} / item.Y : {item.Y}");
-                Decimal 적용값 = item.InsType == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
+                if(item.InsType == InsType.S)
+                {
+                    Debug.WriteLine($"item.X : {item.X} / item.Y : {item.Y} / item.X1 : {item.offsetX1} / item.Y2 : {item.offsetY2} / 측정값 : {this.측정값}");
+                }
+                else
+                {
+                    Debug.WriteLine($"item.X : {item.X} / item.Y : {item.Y}");
+                    Decimal 적용값 = item.InsType == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
 
-                Debug.WriteLine($"적용값 : {적용값} / 측정값 : {this.측정값}");
-                this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
-                this.보정값 = item.InsType == InsType.X ? Convert.ToDecimal(item.X) : Convert.ToDecimal(item.Y);
+                    Debug.WriteLine($"적용값 : {적용값} / 측정값 : {this.측정값}");
+                    this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                    this.보정값 = item.InsType == InsType.X ? Convert.ToDecimal(item.X) : Convert.ToDecimal(item.Y);
+                }
             }
             else
                 this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(this.실측값 / this.측정값 * 1000, 9)));
