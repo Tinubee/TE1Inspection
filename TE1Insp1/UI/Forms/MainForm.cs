@@ -23,8 +23,24 @@ namespace TE1
             this.p검사내역.Enabled = false;
             this.Shown += MainFormShown;
             this.FormClosing += MainFormClosing;
+            this.KeyPreview = true;
+            this.KeyDown += MainForm_KeyDown;
             //this.TabFormControl.SelectedPageChanged += SelectedPageChanged;
             //this.t환경설정.SelectedPageChanged += SelectedTabPageChanged;
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            //Test용
+            if (e.KeyCode == Keys.T)
+            {
+               
+            }
+            if (e.KeyCode == Keys.Y)
+            {
+                Debug.WriteLine("뷰어 초기화");
+                this.e결과뷰어.ReloadModel();
+            }
         }
 
         private void ShowWaitForm()

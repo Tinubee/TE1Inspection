@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace TE1.Schemas
 {
@@ -56,14 +57,52 @@ namespace TE1.Schemas
             //});
 
             Rect3D r = MainModel.Bounds;
-            //Debug.WriteLine($"{r.SizeY}, {r.SizeX}, {r.SizeZ}", "Rectangle3D"); // 217, 562.16
+            Debug.WriteLine($"{r.SizeY}, {r.SizeX}, {r.SizeZ}", "Rectangle3D"); // 217, 562.16
             Double hx = r.SizeX / 2;
             Double hy = r.SizeY / 2;
-            //Double tz = 0.5;
+            Double tz = 10;
+            Double originX = -hx;
+            Double originY = 0;
 
             AddText3D(new Point3D(-hx - 60, 0, 0), "L", 48, MajorColors.FrameColor);
             AddText3D(new Point3D(+hx + 60, 0, 0), "R", 48, MajorColors.FrameColor);
+            //AddArrowLine(new Point3D(-hx - 30, 75, tz), new Point3D(-hx, 75, tz), MajorColors.FrameColor);
+            //AddArrowLine(new Point3D(-hx, 75, tz), new Point3D(-hx, 105, tz), MajorColors.FrameColor);
+            AddArrowLine(new Point3D(-hx - 30, 0, tz), new Point3D(hx + 30, 0, tz), MajorColors.FrameColor);
 
+            foreach (검사항목 항목 in Enum.GetValues(typeof(검사항목)))
+            {
+                if (항목.ToString().Contains("H"))
+                {
+                    if (항목.ToString().Contains("X"))
+                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = 5 });
+                    else if (항목.ToString().Contains("Y"))
+                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 5, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = 5 });
+                    else if (항목.ToString().Contains("D"))
+                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 10, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = 5 });
+                    else if (항목.ToString().Contains("L"))
+                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 15, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = 5 });
+                }
+                else if (항목.ToString().Contains("F"))
+                    InspItems.Add(new Circle3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = 8 });
+                else if (항목.ToString().Contains("T"))
+                {
+                    if (항목.ToString().Substring(0, 2) == "T1" || 항목.ToString().Substring(0, 2) == "T4" || 항목.ToString().Substring(0, 2) == "T6")
+                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y + 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Up, FontHeight = 10 });
+                    else if (항목.ToString().Substring(0, 2) == "T2")
+                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Down, FontHeight = 10 });
+                    else if (항목.ToString().Substring(0, 2) == "T7")
+                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X - 30, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Left, FontHeight = 10 });
+                    else if (항목.ToString().Substring(0, 2) == "T8")
+                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X + 30, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Right, FontHeight = 10 });
+                    else
+                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Down, FontHeight = 10 });
+                }
+                else if (항목.ToString().Contains("M"))
+                {
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = 8 });
+                }
+            }
 
             InspItems.ForEach(e => e.Create(Children));
         }
@@ -72,7 +111,7 @@ namespace TE1.Schemas
         public virtual Color GetColor(결과구분 결과) => 결과 == 결과구분.OK ? MajorColors.GoodColor : MajorColors.BadColor;
         public void SetResults(검사결과 결과)
         {
-            foreach(Base3D 항목 in InspItems)
+            foreach (Base3D 항목 in InspItems)
             {
                 검사정보 정보 = 결과.GetItem(항목.Type);
                 if (정보 == null)
@@ -86,9 +125,9 @@ namespace TE1.Schemas
                 }
                 catch (Exception ex) { Debug.WriteLine(ex.Message); }
             }
-            foreach(var item in SurfaceItems)
+            foreach (var item in SurfaceItems)
                 Remove(item);
-            foreach(var item in 결과.표면불량)
+            foreach (var item in 결과.표면불량)
             {
                 //카메라구분 카메라 = (카메라구분)item.장치구분;
                 //변환정보 cf = 변환정보.Get(카메라);

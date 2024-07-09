@@ -40,6 +40,18 @@ namespace TE1.UI.Controls
             this.e큐알코드.ButtonClick += (object sender, ButtonPressedEventArgs e) => Clipboard.SetText(this.e큐알코드.Text);
         }
 
+        public void ReloadModel()
+        {
+            Model3D = new UPR3P24S3D()
+            {
+                CameraPosition = new Point3D(0, 0, 1400),
+                CameraLookDirection = new Vector3D(0, 0, -1400),
+                CameraUpDirection = new Vector3D(0, 1, 0),
+            };
+            this.e결과뷰어.Init(Model3D);
+            this.e결과뷰어.RefreshViewport();
+        }
+
         public void Close() { }
 
         public void 검사완료알림(검사결과 결과)

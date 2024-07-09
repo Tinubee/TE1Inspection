@@ -38,6 +38,8 @@ namespace TE1.Schemas
         public ICogImage OutputImage => 비전검사.Output<ICogImage>(this.AlignTools, "OutputImage");
         public String ViewerRecodName => "AlignTools.Fixture.OutputImage";
 
+        public String FilterName => "DetectTools.CogIPOneImageTool1.OutputImage";
+
         private Boolean 컬러여부 => false;
         public DateTime 검사시작 = DateTime.Today;
         public DateTime 검사종료 = DateTime.Today;
@@ -72,7 +74,7 @@ namespace TE1.Schemas
             Debug.WriteLine(this.도구경로, this.카메라.ToString());
             if (File.Exists(this.도구경로))
             {
-                 this.Job = CogSerializer.LoadObjectFromFile(this.도구경로) as CogJob;
+                this.Job = CogSerializer.LoadObjectFromFile(this.도구경로) as CogJob;
                 this.Job.Name = $"Job{도구명칭}";
                 this.ToolBlock = (this.Job.VisionTool as CogToolGroup).Tools[0] as CogToolBlock;
             }
@@ -117,7 +119,7 @@ namespace TE1.Schemas
         private void DisposeTool(CogToolBlock block)
         {
             if (block == null) return;
-            foreach(ICogTool tool in block.Tools)
+            foreach (ICogTool tool in block.Tools)
             {
                 if (tool.GetType() == typeof(CogCNLSearchTool))
                     DisposeTool(tool as CogCNLSearchTool);
@@ -227,7 +229,7 @@ namespace TE1.Schemas
         #endregion
 
         #region Display
-        public void DisplayResult(검사결과 결과)
+        public void DisplayResult(검사결과 결과, 카메라구분 구분)
         {
             try
             {
@@ -235,7 +237,13 @@ namespace TE1.Schemas
                 ICogRecord records = this.ToolBlock.CreateLastRunRecord();
                 ICogRecord record = null;
                 if (records != null && records.SubRecords != null && records.SubRecords.ContainsKey(this.ViewerRecodName))
-                    record = records.SubRecords[this.ViewerRecodName];
+                {
+                    if (구분 == 카메라구분.Cam03)
+                        record = records.SubRecords[this.FilterName];
+                    else
+                        record = records.SubRecords[this.ViewerRecodName];
+                }
+
 
                 if (this.OutputImage != null)
                 {
@@ -304,7 +312,7 @@ namespace TE1.Schemas
                 this.표면검사(검사);
                 this.검사종료 = DateTime.Now;
                 //Debug.WriteLine($"{this.카메라.ToString()} => {(검사종료 - 검사시작).TotalMilliseconds.ToString("#,0")}", "검사시간");
-                DisplayResult(검사);
+                DisplayResult(검사, this.카메라);
                 Global.캘리브?.AddNew(this.ToolBlock, this.카메라, 검사.검사번호);
                 검사완료체크(검사);
             }
@@ -325,6 +333,7 @@ namespace TE1.Schemas
                 Debug.WriteLine($"----------------------------------------{검사.검사번호} 검사결과----------------------------------------");
                 foreach (검사정보 정보 in 검사.검사내역)
                 {
+                    검사.SetResult(정보.검사항목, (Double)정보.측정값);
                     Debug.WriteLine($"{정보.검사항목} : {정보.측정값}");
                 }
                 Debug.WriteLine($"-------------------------------------------------------------------------------------------------------");

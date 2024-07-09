@@ -21,8 +21,6 @@ namespace TE1.UI.Controls
             this.GridView1.OptionsView.NewItemRowPosition = NewItemRowPosition.None;
             //this.GridView1.OptionsSelection.MultiSelectMode = GridMultiSelectMode.RowSelect;
             this.GridView1.OptionsSelection.MultiSelect = true;
-            //this.GridView1.ActiveFilter.Clear();
-            //this.GridView1.ActiveFilter.Add(this.col결과분류, new ColumnFilterInfo($"[{nameof(검사정보.결과분류)}] = {(Int32)결과분류.Summary}", $"[{Localization.GetString(typeof(검사정보).GetProperty(nameof(검사정보.결과분류)))}] = {결과분류.Summary}"));
             this.GridView2.Init(this.barManager1);
             this.GridView2.OptionsBehavior.Editable = false;
             this.GridView2.OptionsView.NewItemRowPosition = NewItemRowPosition.None;

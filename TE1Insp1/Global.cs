@@ -100,17 +100,17 @@ namespace TE1
             Boolean r = false;
             try
             {
-                검사자료.Close();
-                조명제어.Close();
-                피씨통신.Close();
-                유저자료.Close();
-                환경설정.Close();
-                그랩제어.Close();
-                비전검사.Close();
-                사진자료.Close();
-                모델자료.Close();
-                로그자료.Close();
-                캘리브.Close();
+                검사자료?.Close();
+                조명제어?.Close();
+                피씨통신?.Close();
+                유저자료?.Close();
+                환경설정?.Close();
+                그랩제어?.Close();
+                비전검사?.Close();
+                사진자료?.Close();
+                모델자료?.Close();
+                로그자료?.Close();
+                캘리브?.Close();
                
                 Properties.Settings.Default.Save();
                 Debug.WriteLine("시스템 종료");

@@ -41,7 +41,7 @@ namespace TE1.Schemas
                 String val = Utils.FormatNumeric(Value, Global.환경설정.결과표현);
                 if (String.IsNullOrEmpty(Name)) return val;
                 if (LabelStyle == NamePrintType.Up || LabelStyle == NamePrintType.Down) return val;
-                return $"{Name}: {val}";
+                return $"{Name}:{val}";
             }
         }
 
@@ -194,7 +194,7 @@ namespace TE1.Schemas
 
         public class Circle3D : Label3D
         {
-            public Double Radius { get; set; } = 14;
+            public Double Radius { get; set; } = 10;
             public PieSliceVisual3D Circle = null;
 
             public Circle3D(검사항목 항목) : base(항목) { }

@@ -470,9 +470,9 @@ namespace TE1.Schemas
         [NotMapped, JsonIgnore]
         public Int32 결과부호 => Attr != null ? Attr.결과부호 : 1;
         [NotMapped, JsonIgnore]
-        public Double X => Attr != null ? Attr.검사정보.X : 0;
+        public Double X  { get; set; } //Attr != null ? Attr.검사정보.X : 0;
         [NotMapped, JsonIgnore]
-        public Double Y => Attr != null ? Attr.검사정보.Y : 0;
+        public Double Y  { get; set; } //Attr != null ? Attr.검사정보.Y : 0;
         [NotMapped, JsonIgnore]
         public Double D => Attr != null ? Attr.검사정보.D : 0;
         [NotMapped, JsonIgnore]
@@ -494,6 +494,20 @@ namespace TE1.Schemas
         {
             Attr = Utils.GetAttribute<ResultAttribute>(this.검사항목);
             if (String.IsNullOrEmpty(this.검사명칭)) this.검사명칭 = this.검사항목.ToString();
+
+      
+            this.X = InsItems.GetItem(this.검사명칭).X;
+            this.Y = InsItems.GetItem(this.검사명칭).Y;
+            if (this.검사명칭.Contains("M"))
+            {
+                this.교정값 = 29;
+                Int32 type = Convert.ToInt32(this.검사명칭.Substring(this.검사명칭.Length - 1));
+                if(type%2 == 1)
+                {
+                    this.보정값 = Convert.ToDecimal(InsItems.GetItem(this.검사명칭).X);
+                }else
+                    this.보정값 = Convert.ToDecimal(InsItems.GetItem(this.검사명칭).Y);
+            }
             //String name = 검사항목.ToString();
             //if (name.StartsWith("H") && 기준값 == 0)
             //{
@@ -524,6 +538,7 @@ namespace TE1.Schemas
                     p.SetValue(this, v);
                 }
             }
+       
             this.검사일시 = 일시;
             this.측정값 = 0;
             this.결과값 = 0;
@@ -540,7 +555,11 @@ namespace TE1.Schemas
             {
                 if(item.InsType == InsType.S)
                 {
-                    Debug.WriteLine($"item.X : {item.X} / item.Y : {item.Y} / item.X1 : {item.offsetX1} / item.Y2 : {item.offsetY2} / 측정값 : {this.측정값}");
+                    InsType check = 정보.검사명칭.Contains("X") == true ? InsType.X : InsType.Y;
+
+                    Decimal 적용값 = check == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
+                    this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                    this.보정값 = check == InsType.X ? Convert.ToDecimal(item.X) : Convert.ToDecimal(item.Y);
                 }
                 else
                 {
