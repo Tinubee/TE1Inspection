@@ -216,19 +216,19 @@ namespace TE1.Schemas
         [Result(검사그룹.치수, 장치구분.Cam02, "T603")] T603 = 2603,
         [Result(검사그룹.치수, 장치구분.Cam02, "T604")] T604 = 2604,
 
-        [Result(검사그룹.치수, 장치구분.Cam03, "T701")] T701 = 2701,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T702")] T702 = 2702,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T703")] T703 = 2703,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T705")] T705 = 2705,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T706")] T706 = 2706,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T707")] T707 = 2707,
+        [Result(검사그룹.치수, 장치구분.Cam02, "T701")] T701 = 2701,
+        [Result(검사그룹.치수, 장치구분.Cam02, "T702")] T702 = 2702,
+        [Result(검사그룹.치수, 장치구분.Cam02, "T703")] T703 = 2703,
+        [Result(검사그룹.치수, 장치구분.Cam01, "T705")] T705 = 2705,
+        [Result(검사그룹.치수, 장치구분.Cam01, "T706")] T706 = 2706,
+        [Result(검사그룹.치수, 장치구분.Cam01, "T707")] T707 = 2707,
 
-        [Result(검사그룹.치수, 장치구분.Cam03, "T801")] T801 = 2801,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T803")] T803 = 2803,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T804")] T804 = 2804,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T806")] T806 = 2806,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T807")] T807 = 2807,
-        [Result(검사그룹.치수, 장치구분.Cam03, "T808")] T808 = 2808,
+        [Result(검사그룹.치수, 장치구분.Cam02, "T801")] T801 = 2801,
+        [Result(검사그룹.치수, 장치구분.Cam02, "T803")] T803 = 2803,
+        [Result(검사그룹.치수, 장치구분.Cam02, "T804")] T804 = 2804,
+        [Result(검사그룹.치수, 장치구분.Cam01, "T806")] T806 = 2806,
+        [Result(검사그룹.치수, 장치구분.Cam01, "T807")] T807 = 2807,
+        [Result(검사그룹.치수, 장치구분.Cam01, "T808")] T808 = 2808,
 
         // 3. Bolt
 
@@ -546,6 +546,14 @@ namespace TE1.Schemas
         // 6. Thickness
         [Result(검사그룹.치수, 장치구분.Thickness)] Thickness = 6010,
 
+        // 7. 각인
+        //[Result(검사그룹.치수, 장치구분.Cam03, "ImTopPlus")] ImTopPlus = 7001,
+        //[Result(검사그룹.표면, 장치구분.Cam03, "ImBottomPlus")] ImBottomPlus = 7002,
+        //[Result(검사그룹.표면, 장치구분.Cam03, "ImTopMinus")] ImTopMinus = 7003,
+        //[Result(검사그룹.표면, 장치구분.Cam03, "ImBottomMinus")] ImBottomMinus = 7004,
+        //[Result(검사그룹.표면, 장치구분.Cam03, "ImMiddle1")] ImMiddle1 = 7005,
+        //[Result(검사그룹.표면, 장치구분.Cam03, "ImMiddle2")] ImMiddle2 = 7006,
+        //[Result(검사그룹.표면, 장치구분.Cam03, "ImMiddle3")] ImMiddle3 = 7007,
         // 8. Surface
         [Result(검사그룹.표면, 장치구분.Cameras)] Surface = 8010,
         // 9. Others

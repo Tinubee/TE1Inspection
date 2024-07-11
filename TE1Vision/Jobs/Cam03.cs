@@ -10,6 +10,8 @@ using OpenCvSharp;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Linq;
+using Cognex.VisionPro.PMAlign;
+using System.IO;
 
 namespace TE1.Cam03
 {
@@ -208,9 +210,36 @@ namespace TE1.Cam03
                     }
                     SetCaliper(tool, item.Value);
                 }
+                if (item.Value.InsType == InsType.I)
+                {
+                    CogPMAlignTool tool;
+                    if (ToolBlock.Tools.Contains(item.Key))
+                    {
+                        tool = GetTool(item.Key) as CogPMAlignTool;
+                        String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", tool.Name);
+
+                        if (!Base.LoadTrainImage(tool, $"{trainImagePath}.bmp"))
+                            Debug.WriteLine("Train Image Load Fail");
+
+                        /* tool.Pattern.TrainImage = */
+                    }
+                    else
+                    {
+                        tool = new CogPMAlignTool();
+                        tool.Name = item.Key;
+                        this.ToolBlock.Tools.Add(tool);
+                    }
+                    //SetPMAlign(tool, item.Value);
+                }
             }
         }
+        internal virtual void SetPMAlign(CogPMAlignTool tool, InsItem p)
+        {
+            Double x = -p.Y / CalibX;
+            Double y = -p.X / CalibY;
+            Double r = p.R / CalibY;
 
+        }
         internal virtual void SetCircle(CogFindCircleTool tool, InsItem p)
         {
             Double x = -p.Y / CalibX;
@@ -244,34 +273,9 @@ namespace TE1.Cam03
             tool.Region.CenterX = x;
             tool.Region.CenterY = y;
             //예외사항들
-            if (tool.Name == "M03X3") tool.Region.CenterY = y - 50;
-            //else if (tool.Name == "M31X1") tool.Region.CenterY = y + 20;
-            else if (tool.Name == "M32X3") tool.Region.CenterY = y - 50;
-            //switch (lop)
-            //{
-            //    case 1:
-            //        tool.Region.CenterX = x;
-            //        tool.Region.CenterY = y;
-            //        break;
-            //    case 2:
-            //        tool.Region.CenterX = x;
-            //        tool.Region.CenterY = y;
-            //        break;
-            //    case 3:
-            //        tool.Region.CenterX = x;
-            //        tool.Region.CenterY = y;
-            //        break;
-            //    case 4:
-            //        tool.Region.CenterX = x;
-            //        tool.Region.CenterY = y;
-            //        break;
-            //}
+            if (tool.Name == "M03X3") tool.Region.CenterY = y - 30;
+            else if (tool.Name == "M32X3") tool.Region.CenterY = y - 30;
 
-            //1,2,3,4
-            //tool.Region.SideXLength = 350;
-            //tool.Region.SideYLength = 350;
-            //tool.Region.SideXLength = lop % 2 == 0 ? 350 : 100;
-            //tool.Region.SideYLength = lop % 2 == 0 ? 150 : 50;
             tool.Region.Rotation = lop % 2 == 1 ? -Math.PI / 2 : 0;
 
             //if(lop == 3) tool.Region.Rotation = Math.PI / 2;
@@ -279,9 +283,6 @@ namespace TE1.Cam03
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
             tool.LastRunRecordDiagEnable = CogCaliperLastRunRecordDiagConstants.InputImageByReference | CogCaliperLastRunRecordDiagConstants.Region;
 
-            //tool.LastRunRecordDiagEnable = CogCaliperLastRunRecordDiagConstants.Region;
-
-            //tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DontCare;
             if (lop <= 2)
                 tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
             else
@@ -460,4 +461,91 @@ namespace TE1.Cam03
             return true;
         }
     }
+
+    //public class ImprintTools : BaseTool
+    //{
+    //    public ImprintTools(CogToolBlock tool) : base(tool) { }
+    //    public override Cameras Camera => Cameras.Cam03;
+    //    internal Double CalibX => Input<Double>("CalibX");
+    //    internal Double CalibY => Input<Double>("CalibY");
+
+    //    public override void StartedRun()
+    //    {
+    //        base.StartedRun();
+    //        InitTools();
+    //    }
+
+    //    public override void FinistedRun()
+    //    {
+    //        base.FinistedRun();
+    //        CalResults();
+    //    }
+
+    //    private Double CenterX => InputImage.Width / 2 - Input<Double>("CenterX");
+    //    internal virtual void InitTools()
+    //    {
+    //        CogCreateLineTool centerV = GetTool("CenterV") as CogCreateLineTool;
+    //        if (centerV != null) centerV.Line.X = CenterX;
+
+    //        //InsItems.LoadMica();  //위치 Setting을 위한 임시 생성.
+    //        Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
+
+    //        foreach (var item in items)
+    //        {
+    //            if (item.Value.InsType == InsType.I)
+    //            {
+    //                //CogPMAlignTool tool;
+    //                //if (ToolBlock.Tools.Contains(item.Key))
+    //                //{
+    //                //    tool = GetTool(item.Key) as CogPMAlignTool;
+    //                //    //if(tool.RunParams.)
+    //                //}
+    //                //else
+    //                //{
+    //                //    tool = new CogPMAlignTool();
+    //                //    tool.Name = item.Key;
+    //                //    this.ToolBlock.Tools.Add(tool);
+    //                //}
+    //                //SetPMAlign(tool, item.Value);
+    //            }
+    //        }
+    //    }
+    //    internal virtual void SetPMAlign(CogPMAlignTool tool, InsItem p)
+    //    {
+    //        //Double x = -p.Y / CalibX;
+    //        //Double y = -p.X / CalibY;
+    //        //Double r = p.R / CalibY;
+
+    //    }
+
+    //    internal virtual void CalResults()
+    //    {
+    //        List<Result> results = new List<Result>();
+    //        Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
+    //        foreach (var item in items)
+    //        {
+    //            if (item.Value.InsType == InsType.I)
+    //            {
+
+    //            }
+    //        }
+    //        //Debug.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
+    //        Output("Results", JsonConvert.SerializeObject(results));
+    //    }
+
+    //    internal virtual Boolean CalResult(CogPMAlignTool tool, InsItem ins, out InsItem result)
+    //    {
+    //        result = new InsItem() { InsType = ins.InsType };
+    //        if (tool == null) return false;
+    //        if (tool.RunStatus.Result == CogToolResultConstants.Accept)
+    //        {
+    //            //Double score = tool.Pattern.
+    //            //CogCircle c = tool.Results.GetCircle();
+    //            //result.X = -Math.Round(c.CenterY, 3);
+    //            //result.Y = -Math.Round(c.CenterX, 3);
+    //            //result.D = Math.Round(c.Radius * 2, 3);
+    //        }
+    //        return true;
+    //    }
+    //}
 }

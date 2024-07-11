@@ -1,4 +1,6 @@
-﻿using HelixToolkit.Wpf;
+﻿using DevExpress.Utils.Extensions;
+using DevExpress.XtraBars.ViewInfo;
+using HelixToolkit.Wpf;
 using MvUtils;
 using System;
 using System.Diagnostics;
@@ -25,6 +27,7 @@ namespace TE1.Schemas
 
             public Base3D(검사항목 항목) { Type = 항목; }
             public abstract void Create(Visual3DCollection collectioin);
+            public abstract void Clear(Visual3DCollection collectioin);
             public abstract void Draw();
             public virtual void Draw(Decimal value, 결과구분 결과)
             {
@@ -56,6 +59,11 @@ namespace TE1.Schemas
             public ArrowVisual3D Indicator = null;
 
             public Label3D(검사항목 항목) : base(항목) { }
+
+            public override void Clear(Visual3DCollection collectioin)
+            {
+                //collectioin.Clear();
+            }
             public override void Create(Visual3DCollection collectioin)
             {
                 Label = CreateLabelText();
@@ -182,13 +190,13 @@ namespace TE1.Schemas
             public override void Create(Visual3DCollection collectioin)
             {
                 base.Create(collectioin);
-                Rect = CreateRectangle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Width, Height, BackColor, Normal);
+                Rect = CreateRectangle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Width, Height, Colors.Yellow, Normal);
                 collectioin.Add(Rect);
             }
             public override void Draw()
             {
                 base.Draw();
-                Rect.Fill = new SolidColorBrush(BackColor);
+                Rect.Fill = new SolidColorBrush(Colors.Yellow);
             }
         }
 

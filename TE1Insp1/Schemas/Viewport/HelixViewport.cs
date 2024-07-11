@@ -88,7 +88,7 @@ namespace TE1.Schemas
             return new Point3D(rect.X + rect.SizeX / 2, rect.Y + rect.SizeY / 2, rect.Z + rect.SizeZ / 2);
         }
 
-        internal virtual void InitModel() { }
+        public virtual void InitModel() { }
         internal void InitCamera() 
         {
             if (CameraPosition != default(Point3D)) Camera.Position = CameraPosition;

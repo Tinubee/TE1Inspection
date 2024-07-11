@@ -6,6 +6,9 @@ using TE1.Schemas;
 using System;
 using System.Windows.Media.Media3D;
 using System.Windows;
+using System.Diagnostics;
+using DevExpress.XtraBars.Docking2010.DragEngine;
+using HelixToolkit.Wpf;
 
 namespace TE1.UI.Controls
 {
@@ -30,6 +33,7 @@ namespace TE1.UI.Controls
             };
 
             this.e결과뷰어.Init(Model3D);
+            this.e결과목록.검사항목선택변경 += 검사항목선택변경;
             this.e결과목록.Init();
 
             if (this.RunType == ViewTypes.Auto)
@@ -38,6 +42,16 @@ namespace TE1.UI.Controls
                 검사완료알림(Global.검사자료.현재검사찾기());
             }
             this.e큐알코드.ButtonClick += (object sender, ButtonPressedEventArgs e) => Clipboard.SetText(this.e큐알코드.Text);
+        }
+
+        private void 검사항목선택변경(검사정보 정보)
+        {
+            Debug.WriteLine($"{정보.검사명칭}");
+            //ModelVisual.Content = ModelGroup;
+            //Children.Add(new DefaultLights());
+            //Children.Add(ModelVisual);
+            //this.Model3D.InitModel();
+            //this.Model3D.Init(out String err, true);
         }
 
         public void Close() { }

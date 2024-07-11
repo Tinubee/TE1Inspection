@@ -68,7 +68,7 @@ namespace TE1.Schemas
             this.Add(new 분류정보 { 코드 = 86, 순번 = 23, 그룹 = 검사그룹.표면, 명칭 = "Surface6", 라벨 = "S6" });
             this.Add(new 분류정보 { 코드 = 91, 순번 = 24, 그룹 = 검사그룹.표면, 명칭 = "QR Code", 라벨 = "Q1" });
             this.Add(new 분류정보 { 코드 = 92, 순번 = 25, 그룹 = 검사그룹.표면, 명칭 = "Imprinted", 라벨 = "Q2" });
-
+            //this.Add(new 분류정보 { 코드 = 71, 순번 = 26, 그룹 = 검사그룹.표면, 명칭 = "각인", 라벨 = "각인" });
             if (!File.Exists(this.저장파일)) return;
             try
             {

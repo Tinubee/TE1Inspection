@@ -42,14 +42,14 @@ namespace TE1.UI.Controls
 
         public void ReloadModel()
         {
-            Model3D = new UPR3P24S3D()
-            {
-                CameraPosition = new Point3D(0, 0, 1400),
-                CameraLookDirection = new Vector3D(0, 0, -1400),
-                CameraUpDirection = new Vector3D(0, 1, 0),
-            };
-            this.e결과뷰어.Init(Model3D);
-            this.e결과뷰어.RefreshViewport();
+            //Model3D = new UPR3P24S3D()
+            //{
+            //    CameraPosition = new Point3D(0, 0, 1400),
+            //    CameraLookDirection = new Vector3D(0, 0, -1400),
+            //    CameraUpDirection = new Vector3D(0, 1, 0),
+            //};
+            //this.e결과뷰어.Init(Model3D);
+            //this.e결과뷰어.RefreshViewport();
         }
 
         public void Close() { }

@@ -29,8 +29,8 @@ namespace TE1.Schemas
 
         public Boolean Init()
         {
-            Dalsa16K cam1 = new Dalsa16K(카메라구분.Cam01) { DriverIndex = 0, AcquisitionMode = AcquisitionMode.PAGE, PageLength_Ln = 59500 };
-            Dalsa16K cam2 = new Dalsa16K(카메라구분.Cam02) { DriverIndex = 2, AcquisitionMode = AcquisitionMode.PAGE, PageLength_Ln = 59500 };
+            Dalsa16K cam1 = new Dalsa16K(카메라구분.Cam01) { DriverIndex = 0, AcquisitionMode = AcquisitionMode.PAGE, PageLength_Ln = 61000 };
+            Dalsa16K cam2 = new Dalsa16K(카메라구분.Cam02) { DriverIndex = 2, AcquisitionMode = AcquisitionMode.PAGE, PageLength_Ln = 61000 };
             Dalsa16K cam3 = new Dalsa16K(카메라구분.Cam03) { DriverIndex = 1, AcquisitionMode = AcquisitionMode.PAGE, PageLength_Ln = 35000 };
             this.카메라1 = new EuresysLink(cam1) { 코드 = "H2583969", 가로 = 16384, 세로 = cam1.PageLength_Ln };
             this.카메라2 = new EuresysLink(cam2) { 코드 = "H2583945", 가로 = 16384, 세로 = cam2.PageLength_Ln };

@@ -3,6 +3,7 @@ using Cognex.VisionPro.Blob;
 using Cognex.VisionPro.CalibFix;
 using Cognex.VisionPro.CNLSearch;
 using Cognex.VisionPro.ImageProcessing;
+using Cognex.VisionPro.PMAlign;
 using Cognex.VisionPro.QuickBuild;
 using Cognex.VisionPro.ToolBlock;
 using Cognex.VisionPro.ToolGroup;
@@ -121,14 +122,16 @@ namespace TE1.Schemas
             if (block == null) return;
             foreach (ICogTool tool in block.Tools)
             {
-                if (tool.GetType() == typeof(CogCNLSearchTool))
-                    DisposeTool(tool as CogCNLSearchTool);
+                //if (tool.GetType() == typeof(CogCNLSearchTool))
+                //    DisposeTool(tool as CogCNLSearchTool);
                 //else if (tool.GetType() == typeof(CogMaskCreatorTool))
                 //    DisposeTool(tool as CogMaskCreatorTool);
-                else if (tool.GetType() == typeof(CogBlobTool))
+                if (tool.GetType() == typeof(CogBlobTool))
                     DisposeTool(tool as CogBlobTool);
                 else if (tool.GetType() == typeof(CogToolBlock))
                     DisposeTool(tool as CogToolBlock);
+                else if (tool.GetType() == typeof(CogPMAlignTool))
+                    DisposeTool(tool as CogPMAlignTool);
             }
         }
         private void DisposeTool(CogCNLSearchTool tool)
@@ -151,7 +154,10 @@ namespace TE1.Schemas
             tool.RunParams.InputImageMask?.Dispose();
             tool.RunParams.InputImageMask = null;
         }
-
+        private void DisposeTool(CogPMAlignTool tool)
+        {
+            if (tool == null || tool.Pattern == null) return;
+        }
         public void SetVeriables()
         {
             그랩장치 장치 = this.그랩장치;

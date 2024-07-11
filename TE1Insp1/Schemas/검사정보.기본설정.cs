@@ -256,7 +256,11 @@ namespace TE1.Schemas
         {
             Decimal result = PixelToMeter(검사, value);
             result += 검사.보정값;
-            result *= 검사.결과부호;
+            if (검사.보정값 == 0 && 검사.검사명칭.StartsWith("T"))
+                result *= -1;
+            else
+                result *= 검사.결과부호;
+
             Boolean r = result >= 검사.최소값 && result <= 검사.최대값;
             결과값 = result;
             측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
@@ -470,9 +474,9 @@ namespace TE1.Schemas
         [NotMapped, JsonIgnore]
         public Int32 결과부호 => Attr != null ? Attr.결과부호 : 1;
         [NotMapped, JsonIgnore]
-        public Double X  { get; set; } //Attr != null ? Attr.검사정보.X : 0;
+        public Double X { get; set; } //Attr != null ? Attr.검사정보.X : 0;
         [NotMapped, JsonIgnore]
-        public Double Y  { get; set; } //Attr != null ? Attr.검사정보.Y : 0;
+        public Double Y { get; set; } //Attr != null ? Attr.검사정보.Y : 0;
         [NotMapped, JsonIgnore]
         public Double D => Attr != null ? Attr.검사정보.D : 0;
         [NotMapped, JsonIgnore]
@@ -495,17 +499,18 @@ namespace TE1.Schemas
             Attr = Utils.GetAttribute<ResultAttribute>(this.검사항목);
             if (String.IsNullOrEmpty(this.검사명칭)) this.검사명칭 = this.검사항목.ToString();
 
-      
+
             this.X = InsItems.GetItem(this.검사명칭).X;
             this.Y = InsItems.GetItem(this.검사명칭).Y;
             if (this.검사명칭.Contains("M"))
             {
                 this.교정값 = 29;
                 Int32 type = Convert.ToInt32(this.검사명칭.Substring(this.검사명칭.Length - 1));
-                if(type%2 == 1)
+                if (type % 2 == 1)
                 {
                     this.보정값 = Convert.ToDecimal(InsItems.GetItem(this.검사명칭).X);
-                }else
+                }
+                else
                     this.보정값 = Convert.ToDecimal(InsItems.GetItem(this.검사명칭).Y);
             }
             //String name = 검사항목.ToString();
@@ -538,7 +543,7 @@ namespace TE1.Schemas
                     p.SetValue(this, v);
                 }
             }
-       
+
             this.검사일시 = 일시;
             this.측정값 = 0;
             this.결과값 = 0;
@@ -553,7 +558,7 @@ namespace TE1.Schemas
             //if (this.측정값 == 0) return false;
             if (item.InsType == InsType.X || item.InsType == InsType.Y || item.InsType == InsType.S)
             {
-                if(item.InsType == InsType.S)
+                if (item.InsType == InsType.S)
                 {
                     InsType check = 정보.검사명칭.Contains("X") == true ? InsType.X : InsType.Y;
 
@@ -567,7 +572,12 @@ namespace TE1.Schemas
                     Decimal 적용값 = item.InsType == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
 
                     Debug.WriteLine($"적용값 : {적용값} / 측정값 : {this.측정값}");
+
+                    //if(item.InsType == InsType.X && item.X == 0)
+                    //    this.교정값 = Convert.ToDecimal(Math.Round(적용값 / this.측정값 * 1000, 9));
+                    //else
                     this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+
                     this.보정값 = item.InsType == InsType.X ? Convert.ToDecimal(item.X) : Convert.ToDecimal(item.Y);
                 }
             }
