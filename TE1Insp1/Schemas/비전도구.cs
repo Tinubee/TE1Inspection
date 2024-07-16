@@ -314,11 +314,14 @@ namespace TE1.Schemas
                 this.ToolBlock.Run();
                 accepted = this.IsAccepted();
                 //검사?.SetResults(this.카메라, this.GetResults());
-                검사?.SetResults(this.카메라, Output<String>("Results"));
+                카메라구분 구분 = this.카메라 == 카메라구분.Cam01 ? 카메라구분.Cam02 : this.카메라;
+                검사?.SetResults(구분, Output<String>("Results"));
+                //검사?.SetResults(this.카메라, Output<String>("Results"));
                 this.표면검사(검사);
                 this.검사종료 = DateTime.Now;
                 //Debug.WriteLine($"{this.카메라.ToString()} => {(검사종료 - 검사시작).TotalMilliseconds.ToString("#,0")}", "검사시간");
-                DisplayResult(검사, this.카메라);
+                DisplayResult(검사, 구분);
+                //DisplayResult(검사, this.카메라);
                 Global.캘리브?.AddNew(this.ToolBlock, this.카메라, 검사.검사번호);
                 검사완료체크(검사);
             }
@@ -330,7 +333,7 @@ namespace TE1.Schemas
         {
             if (검사 == null || Global.장치상태.자동수동 && 검사.검사완료.Contains(카메라)) return;
             if (!검사.검사완료.Contains(this.카메라)) 검사.검사완료.Add(this.카메라);
-            검사.검사완료여부 = 검사.검사완료.Count >= 3;
+            검사.검사완료여부 = 검사.검사완료.Count >= 2;
             if (검사.검사완료여부)
             {
                 Debug.WriteLine($"TE1 Vision 검사완료 => {검사.검사번호}");

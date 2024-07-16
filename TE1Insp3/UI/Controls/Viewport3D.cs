@@ -3,6 +3,10 @@ using TE1.Schemas;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using DevExpress.XtraBars.Docking2010.DragEngine;
+using HelixToolkit.Wpf;
+using System.Windows.Media.Media3D;
+using System.Collections.Generic;
 
 namespace TE1.UI.Controls
 {
@@ -39,6 +43,19 @@ namespace TE1.UI.Controls
             if (this.InvokeRequired) { this.BeginInvoke(new Action(() => { SetResults(결과); })); return; }
             this.Model3D.BeginInit();
             this.Model3D.SetResults(결과);
+            this.Model3D.EndInit();
+            this.Invalidate();
+        }
+
+        public void SelectItem(List<검사항목> 항목들)
+        {
+            if (항목들.Count == 0) return;
+            //List<검사항목> 항목들 = new List<검사항목>();
+            //항목들.Add(정보.검사항목);
+            if (this.InvokeRequired) { this.BeginInvoke(new Action(() => { SelectItem(항목들); })); return; }
+            this.Model3D.BeginInit();
+            //if (!Model3D.Init(out String err2, 항목들, true)) { Debug.WriteLine(err2, "Model3D Error"); }
+            //this.Model3D.InitCamera();
             this.Model3D.EndInit();
             this.Invalidate();
         }

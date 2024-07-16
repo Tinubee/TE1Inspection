@@ -1,6 +1,7 @@
 ﻿using Euresys.MultiCam;
 using MvUtils;
 using Newtonsoft.Json;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -84,22 +85,53 @@ namespace TE1.Schemas
         }
         public void Active(카메라구분 구분) => this.GetItem(구분)?.Active();
 
+        Mat 좌측이미지 = new Mat();
+        Mat 우측이미지 = new Mat();
+
         public void 그랩완료(그랩장치 장치)
         {
             if (장치.구분 == 카메라구분.Cam03)
                 new Thread(() => Global.조명제어.TurnOff()).Start();
+
+            if (장치.구분 == 카메라구분.Cam01 || 장치.구분 == 카메라구분.Cam02)
+            {
+                if (장치.구분 == 카메라구분.Cam01) 좌측이미지 = 장치.MatImage();
+                if (장치.구분 == 카메라구분.Cam02) 우측이미지 = 장치.MatImage();
+            }
 
             if (Global.장치상태.자동수동)
             {
                 Int32 검사번호 = Global.피씨통신.상부치수번호; //Global.장치통신.촬영위치번호(장치.구분);
                 검사결과 검사 = Global.검사자료.검사항목찾기(검사번호);
                 if (검사 == null) return;
-                Global.비전검사.Run(장치, 검사);
-                //Global.피씨통신.Publish(검사번호, 검사.검사내역, 피씨명령.상부완료);
+
+                if (장치.구분 == 카메라구분.Cam01 || 장치.구분 == 카메라구분.Cam02)
+                {
+                    if (!검사.그랩완료.Contains(장치.구분)) 검사.그랩완료.Add(장치.구분);
+
+                    if (검사.그랩완료.Count == 2)
+                    {
+                        Mat 합성이미지 = 장치.MergeImages(좌측이미지, 우측이미지, 15898, 2314);
+                        Global.비전검사.Run(장치, 검사, 합성이미지);
+                    }
+                }
+                else
+                    Global.비전검사.Run(장치, 검사);
             }
             else
             {
-                Global.비전검사.Run(장치.구분, 장치.CogImage(), Global.검사자료.수동검사);
+                if (!Global.검사자료.수동검사.그랩완료.Contains(장치.구분)) Global.검사자료.수동검사.그랩완료.Add(장치.구분);
+                if (장치.구분 == 카메라구분.Cam01 || 장치.구분 == 카메라구분.Cam02)
+                {
+                    if (Global.검사자료.수동검사.그랩완료.Count == 2)
+                    {
+                        Mat 합성이미지 = 장치.MergeImages(좌측이미지, 우측이미지, 15898, 2314);
+                        Global.비전검사.Run(장치, Global.검사자료.수동검사, 합성이미지);
+                    }
+                }
+                else
+                    Global.비전검사.Run(장치, Global.검사자료.수동검사);
+              
                 this.그랩완료보고?.Invoke(장치);
             }
         }

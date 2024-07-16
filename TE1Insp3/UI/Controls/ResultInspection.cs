@@ -9,6 +9,7 @@ using System.Windows;
 using System.Diagnostics;
 using DevExpress.XtraBars.Docking2010.DragEngine;
 using HelixToolkit.Wpf;
+using System.Collections.Generic;
 
 namespace TE1.UI.Controls
 {
@@ -44,9 +45,10 @@ namespace TE1.UI.Controls
             this.e큐알코드.ButtonClick += (object sender, ButtonPressedEventArgs e) => Clipboard.SetText(this.e큐알코드.Text);
         }
 
-        private void 검사항목선택변경(검사정보 정보)
+        private void 검사항목선택변경(List<검사항목> 항목들)
         {
-            Debug.WriteLine($"{정보.검사명칭}");
+            //Debug.WriteLine($"{정보.검사명칭}");
+            this.e결과뷰어.SelectItem(항목들);
             //ModelVisual.Content = ModelGroup;
             //Children.Add(new DefaultLights());
             //Children.Add(ModelVisual);

@@ -89,10 +89,10 @@ namespace TE1.Schemas
         }
 
         // Live 검사
-        public Boolean Run(그랩장치 장치, 검사결과 결과)
+        public Boolean Run(그랩장치 장치 ,검사결과 결과, Mat Image = null)
         {
             if (장치 == null || 결과 == null) return false;
-            Boolean r = Run(장치.구분, 장치.CogImage(), 결과);
+            Boolean r = Image == null ? Run(장치.구분, 장치.CogImage(), 결과) : Run(카메라구분.Cam02, Common.ToCogImage(Image), 결과);
             Global.사진자료.SaveImage(장치, 결과);
             return r;
         }
@@ -105,6 +105,7 @@ namespace TE1.Schemas
             }
             if (!this.ContainsKey(카메라)) return false;
             비전도구 도구 = this[카메라];
+            //Global.사진자료.SaveImage(장치, 결과);
             return 도구.Run(image, 검사);
         }
         #endregion

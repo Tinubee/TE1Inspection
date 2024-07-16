@@ -29,10 +29,25 @@ namespace TE1.Schemas
             public abstract void Create(Visual3DCollection collectioin);
             public abstract void Clear(Visual3DCollection collectioin);
             public abstract void Draw();
-            public virtual void Draw(Decimal value, 결과구분 결과)
+            public virtual void Draw(Base3D 항목, Decimal value, 결과구분 결과)
             {
                 Value = value;
-                Color = ToColor(환경설정.ResultColor(결과));
+                String name = 항목.Name.Substring(0, 1);
+                switch (name)
+                {
+                    case "H":
+                        Color = ToColor(환경설정.HoleResultColor(결과));
+                        break;
+                    case "T":
+                        Color = ToColor(환경설정.TrimResultColor(결과));
+                        break;
+                    case "M":
+                        Color = ToColor(환경설정.MicaResultColor(결과));
+                        break;
+                    case "F":
+                        Color = ToColor(환경설정.FlatnessResultColor(결과));
+                        break;
+                }
                 Label = CreateLabelText();
                 Draw();
             }
@@ -59,10 +74,13 @@ namespace TE1.Schemas
             public ArrowVisual3D Indicator = null;
 
             public Label3D(검사항목 항목) : base(항목) { }
-
+           
             public override void Clear(Visual3DCollection collectioin)
             {
-                //collectioin.Clear();
+                collectioin.Remove(TextName);
+                collectioin.Remove(TextLabel);
+                collectioin.Remove(Indicator);
+               //collectioin.InternalRemoveAt(0);
             }
             public override void Create(Visual3DCollection collectioin)
             {
@@ -110,7 +128,7 @@ namespace TE1.Schemas
                     if (TextName != null) TextName.Foreground = brush;
                     if (Indicator != null) Indicator.Fill = brush;
                 }
-                catch(Exception ex) { Debug.WriteLine(ex.Message); }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); }
             }
         }
 
@@ -209,7 +227,7 @@ namespace TE1.Schemas
             public override void Create(Visual3DCollection collectioin)
             {
                 base.Create(collectioin);
-                Circle = CreateCircle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Radius, BackColor);
+                Circle = CreateCircle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Radius, Colors.SkyBlue);
                 collectioin.Add(Circle);
             }
             public override void Draw()

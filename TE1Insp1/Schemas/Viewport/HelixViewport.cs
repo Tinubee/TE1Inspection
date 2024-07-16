@@ -30,17 +30,19 @@ namespace TE1.Schemas
 
         public virtual Point3D CameraPosition { get; set; } = default(Point3D);
         public virtual Vector3D CameraLookDirection { get; set; } = default(Vector3D);
-        public virtual Vector3D CameraUpDirection { get; set;} = default(Vector3D);
+        public virtual Vector3D CameraUpDirection { get; set; } = default(Vector3D);
 
         public Boolean Init(out String error)
         {
+            //this.Children.Clear();
+            error = String.Empty;
+            //if (!변경)
+            //{
             ModelGroup.SetName(nameof(ModelGroup));
             PanGesture.MouseAction = MouseAction.LeftClick;
             PanGesture2.MouseAction = MouseAction.LeftClick;
             MouseDoubleClick += ViewportMouseDoubleClick;
-            //CameraChanged += ViewportCameraChanged;
 
-            error = String.Empty;
             try { LoadStl(); }
             catch (Exception ex)
             {
@@ -51,6 +53,8 @@ namespace TE1.Schemas
             ModelVisual.Content = ModelGroup;
             Children.Add(new DefaultLights());
             Children.Add(ModelVisual);
+            //}
+
             InitModel();
             InitCamera();
             return String.IsNullOrEmpty(error);
@@ -89,7 +93,7 @@ namespace TE1.Schemas
         }
 
         public virtual void InitModel() { }
-        internal void InitCamera() 
+        internal void InitCamera()
         {
             if (CameraPosition != default(Point3D)) Camera.Position = CameraPosition;
             if (CameraLookDirection != default(Vector3D)) Camera.LookDirection = CameraLookDirection;
@@ -117,6 +121,7 @@ namespace TE1.Schemas
 
         internal virtual Visual3D Add(Visual3D item) { Children.Add(item); return item; }
         internal virtual Boolean Remove(Visual3D item) => Children.Remove(item);
+        //internal virtual Boolean Remove(Base3D item) => Children.Remove(item);
         internal virtual Boolean Remove(GeometryModel3D item) => ModelGroup.Children.Remove(item);
 
         internal virtual void AddArrowLine(Point3D s, Point3D e, Color color)
@@ -154,7 +159,8 @@ namespace TE1.Schemas
         public static Color ToColor(System.Drawing.Color color) => Color.FromArgb(color.A, color.R, color.G, color.B);
 
         public static BillboardTextVisual3D CreateText3D(Point3D point, String text, Double size, Color color) =>
-            new BillboardTextVisual3D() {
+            new BillboardTextVisual3D()
+            {
                 Text = text,
                 Position = point,
                 FontSize = size,
@@ -166,7 +172,8 @@ namespace TE1.Schemas
             };
 
         public static TextVisual3D CreateLabel(Point3D point, String text, Double height, Color color) =>
-            new TextVisual3D() {
+            new TextVisual3D()
+            {
                 Text = text,
                 Position = point,
                 Height = height,
@@ -180,7 +187,7 @@ namespace TE1.Schemas
                 VerticalAlignment = System.Windows.VerticalAlignment.Center,
             };
 
-        public static ArrowVisual3D CreateArrowLine(Point3D s, Point3D e, Color color) => 
+        public static ArrowVisual3D CreateArrowLine(Point3D s, Point3D e, Color color) =>
             new ArrowVisual3D() { Point1 = s, Point2 = e, Diameter = 1, HeadLength = 4, Fill = new SolidColorBrush(color) };
 
         public static RectangleVisual3D CreateRectangle(Point3D origin, Double width, Double height, Color color, Vector3D normal) =>
@@ -197,5 +204,9 @@ namespace TE1.Schemas
         public static Color GoodColor => Colors.Green;
         public static Color BadColor => Colors.Red;
         public static Color WarningColor => Colors.Magenta;
+        public static Color LimeColor => Colors.Lime;
+        public static Color GoldColor => Colors.Gold;
+        public static Color SkyBlueColor => Colors.SkyBlue;
+
     }
 }

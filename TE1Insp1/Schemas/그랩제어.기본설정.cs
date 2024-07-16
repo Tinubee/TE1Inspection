@@ -5,9 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Imaging;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using TE1.Multicam;
+using OpenCvSharp.Extensions;
 
 namespace TE1.Schemas
 {
@@ -137,6 +140,7 @@ namespace TE1.Schemas
                     this.ImageWidth = width;
                     this.ImageHeight = height;
                 }
+
                 Global.그랩제어.그랩완료(this);
             }
             catch (Exception ex)
@@ -180,6 +184,88 @@ namespace TE1.Schemas
             if (this.Image != null) return this.Image;
             if (BufferAddress == IntPtr.Zero) return null;
             return new Mat(ImageHeight, ImageWidth, ImageType, BufferAddress);
+        }
+
+        public Mat MergeImages(Mat 좌측이미지, Mat 우측이미지, int x1, int x2, int cropSize = 145)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
+            // 이미지 로드
+            using (Bitmap leftImg = 좌측이미지.ToBitmap())
+            using (Bitmap rightImg = 우측이미지.ToBitmap())
+            {
+                // 이미지 크기 확인
+                if (leftImg.Height != rightImg.Height)
+                    throw new ArgumentException("두 이미지의 높이가 같아야 합니다.");
+
+                // 이미지 자르기
+                Rectangle leftRect = new Rectangle(0, cropSize, leftImg.Width, leftImg.Height - cropSize);
+                Rectangle rightRect = new Rectangle(0, 0, rightImg.Width, rightImg.Height - cropSize);
+
+                using (Bitmap croppedLeftImg = leftImg.Clone(leftRect, leftImg.PixelFormat))
+                using (Bitmap croppedRightImg = rightImg.Clone(rightRect, rightImg.PixelFormat))
+                {
+                    // 합성할 오른쪽 이미지의 폭 계산
+                    int rightWidth = croppedRightImg.Width - x2;
+
+                    // 새로운 이미지 크기 계산
+                    int newWidth = Math.Max(croppedLeftImg.Width, x1 + rightWidth);
+                    int height = croppedLeftImg.Height;
+
+                    // 합성 이미지 생성
+                    using (Bitmap mergedImg = new Bitmap(newWidth, height, PixelFormat.Format8bppIndexed))
+                    {
+                        // 팔레트 설정 (그레이스케일)
+                        ColorPalette palette = mergedImg.Palette;
+                        for (int i = 0; i < 256; i++)
+                            palette.Entries[i] = Color.FromArgb(i, i, i);
+                        mergedImg.Palette = palette;
+
+                        // 이미지 데이터 복사
+                        BitmapData mergedData = mergedImg.LockBits(new Rectangle(0, 0, mergedImg.Width, mergedImg.Height), ImageLockMode.WriteOnly, mergedImg.PixelFormat);
+                        BitmapData leftData = croppedLeftImg.LockBits(new Rectangle(0, 0, croppedLeftImg.Width, croppedLeftImg.Height), ImageLockMode.ReadOnly, croppedLeftImg.PixelFormat);
+                        BitmapData rightData = croppedRightImg.LockBits(new Rectangle(x2, 0, rightWidth, croppedRightImg.Height), ImageLockMode.ReadOnly, croppedRightImg.PixelFormat);
+
+                        unsafe
+                        {
+                            byte* mergedPtr = (byte*)mergedData.Scan0;
+                            byte* leftPtr = (byte*)leftData.Scan0;
+                            byte* rightPtr = (byte*)rightData.Scan0;
+
+                            // 왼쪽 이미지 복사
+                            for (int y = 0; y < height; y++)
+                            {
+                                for (int x = 0; x < croppedLeftImg.Width; x++)
+                                {
+                                    mergedPtr[x + y * mergedData.Stride] = leftPtr[x + y * leftData.Stride];
+                                }
+                            }
+
+                            // 오른쪽 이미지 부분 복사 및 합성
+                            for (int y = 0; y < height; y++)
+                            {
+                                for (int x = 0; x < rightWidth; x++)
+                                {
+                                    mergedPtr[(x1 + x) + y * mergedData.Stride] = rightPtr[x + y * rightData.Stride];
+                                }
+                            }
+                        }
+
+                        croppedLeftImg.UnlockBits(leftData);
+                        croppedRightImg.UnlockBits(rightData);
+                        mergedImg.UnlockBits(mergedData);
+
+                        // 결과 이미지 저장
+                        //mergedImg.Save(outputPath, ImageFormat.Png);
+                        stopwatch.Stop();
+                        Debug.WriteLine($"Final image dimensions: {mergedImg.Width}x{mergedImg.Height}");
+                        Debug.WriteLine($"Execution time: {stopwatch.Elapsed.TotalSeconds:F2} seconds");
+
+                        Bitmap bit = new Bitmap(mergedImg);
+                        return bit.ToMat();
+                    }
+                }
+            }
         }
         #endregion
     }

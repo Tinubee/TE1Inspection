@@ -5,12 +5,13 @@ using TE1.UI.Forms;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace TE1.UI.Controls
 {
     public partial class ResultGrid : XtraUserControl
     {
-        public delegate void 검사항목변경대리자(검사정보 정보);
+        public delegate void 검사항목변경대리자(List<검사항목> 항목들);
         public event 검사항목변경대리자 검사항목선택변경;
         public 검사정보 선택정보 = null;
 
@@ -32,20 +33,45 @@ namespace TE1.UI.Controls
             this.GridView2.Init(this.barManager1);
             this.GridView2.OptionsBehavior.Editable = false;
             this.GridView2.OptionsView.NewItemRowPosition = NewItemRowPosition.None;
+            this.GridView1.ColumnFilterChanged += FilterChanged;
             Localization.SetColumnCaption(this.GridView1, typeof(검사정보));
             Localization.SetColumnCaption(this.GridView2, typeof(표면불량));
         }
 
+        private void FilterChanged(object sender, EventArgs e)
+        {
+            List<검사정보> filteredItems = new List<검사정보>();
+            GridView view = sender as GridView;
+            for (int i = 0; i < view.RowCount; i++)
+            {
+                int rowHandle = view.GetVisibleRowHandle(i);
+                if (view.IsDataRow(rowHandle))
+                {
+                    검사정보 cellValue = view.GetRow(rowHandle) as 검사정보;
+                    filteredItems.Add(cellValue);
+                }
+            }
+
+            //foreach (검사정보 item in filteredItems)
+            //    Debug.WriteLine($"{item.검사명칭}");
+         
+        }
+
         private void GridView1_RowClick(object sender, RowClickEventArgs e)
         {
+            List<검사항목> 항목들 = new List<검사항목>();
             if (선택정보 != null)
+            {
                 InsItems.GetItem(선택정보.검사명칭).FontSize = 5;
+                항목들.Add(선택정보.검사항목);
+            }
 
             GridView view = sender as GridView;
             선택정보 = view.GetRow(e.RowHandle) as 검사정보;
             InsItems.GetItem(선택정보.검사명칭).FontSize = 20;
+            항목들.Add(선택정보.검사항목);
             //Debug.WriteLine($"{정보.검사명칭}");
-            this.검사항목선택변경?.Invoke(선택정보);
+            this.검사항목선택변경?.Invoke(항목들);
         }
 
         public void RefreshData()

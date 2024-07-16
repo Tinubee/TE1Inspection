@@ -227,10 +227,14 @@ namespace TE1
             if (!File.Exists(path)) return null;
             try
             {
-                using (Bitmap bitmap = new Bitmap(path))
+                Bitmap bmp = new Bitmap(29958, 60855, System.Drawing.Imaging.PixelFormat.Format8bppIndexed);
+
+                //bmp = (Bitmap)Image.FromFile(path);
+
+                using (bmp = (Bitmap)Image.FromFile(path))
                 {
-                    if (Colored) return new CogImage24PlanarColor(bitmap);
-                    return new CogImage8Grey(bitmap);
+                    if (Colored) return new CogImage24PlanarColor(bmp);
+                    return new CogImage8Grey(bmp);
                 }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message, "LoadImage"); }

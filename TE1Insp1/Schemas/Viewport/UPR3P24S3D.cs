@@ -1,9 +1,12 @@
-﻿using HelixToolkit.Wpf;
+﻿using DevExpress.Utils.Extensions;
+using HelixToolkit.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
@@ -36,6 +39,7 @@ namespace TE1.Schemas
 
         #region 기본 설정
         private List<Base3D> InspItems = new List<Base3D>();
+        private List<Base3D> changeInspItems = new List<Base3D>();
         private List<GeometryModel3D> SurfaceItems = new List<GeometryModel3D>();
         private Material SurfaceMaterial = MaterialHelper.CreateMaterial(Colors.Red, 0.5);
         internal String InspectionName(검사항목 항목)
@@ -47,8 +51,6 @@ namespace TE1.Schemas
         public override void InitModel()
         {
             if (MainModel == null) return;
-            if (InspItems.Count != 0) InspItems.ForEach(e => e.Clear(Children));
-            InspItems.Clear();
 
             Rect3D r = MainModel.Bounds;
             Debug.WriteLine($"{r.SizeY}, {r.SizeX}, {r.SizeZ}", "Rectangle3D"); // 217, 562.16
@@ -60,7 +62,10 @@ namespace TE1.Schemas
 
             AddText3D(new Point3D(-hx - 60, 0, 0), "L", 48, MajorColors.FrameColor);
             AddText3D(new Point3D(+hx + 60, 0, 0), "R", 48, MajorColors.FrameColor);
-            AddText3D(new Point3D(hx, hy + 80, 0), $"T : 트림\r\nH : 홀\r\nM : MICA\r\nF : 평면도", 24, MajorColors.StaticColor);
+            AddText3D(new Point3D(hx, hy + 120, 0), $"H : 홀", 24, Colors.Lime);
+            AddText3D(new Point3D(hx, hy + 100, 0), $"T : 트림", 24, Colors.RoyalBlue);
+            AddText3D(new Point3D(hx, hy + 80, 0), $"M : MICA", 24, Colors.Yellow);
+            AddText3D(new Point3D(hx, hy + 60, 0), $"F : 평면도", 24, Colors.Aqua);
             AddArrowLine(new Point3D(-hx - 30, 0, tz), new Point3D(hx + 30, 0, tz), MajorColors.FrameColor);
 
             foreach (검사항목 항목 in Enum.GetValues(typeof(검사항목)))
@@ -103,7 +108,6 @@ namespace TE1.Schemas
                         InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
                 }
             }
-
             InspItems.ForEach(e => e.Create(Children));
         }
         #endregion
@@ -116,12 +120,12 @@ namespace TE1.Schemas
                 검사정보 정보 = 결과.GetItem(항목.Type);
                 if (정보 == null)
                 {
-                    항목.Draw(Decimal.MinValue, 결과구분.PS);
+                    항목.Draw(항목, Decimal.MinValue, 결과구분.PS);
                     continue;
                 }
                 try
                 {
-                    항목.Draw(정보.결과값, 정보.측정결과);
+                    항목.Draw(항목, 정보.결과값, 정보.측정결과);
                 }
                 catch (Exception ex) { Debug.WriteLine(ex.Message); }
             }
@@ -142,6 +146,38 @@ namespace TE1.Schemas
                 //foreach (var p in r.Points()) points.Add(new Point3D(p.X, p.Y, cf.위치.Z));
                 //SurfaceItems.Add(AddPolygon(points, SurfaceMaterial));
             }
+        }
+        public void SetFontSize(검사정보 정보)
+        {
+            foreach (Base3D 항목 in InspItems)
+            {
+                try
+                {
+                    if (항목.Name == 정보.검사명칭)
+                    {
+                        항목.Draw(항목, 정보.결과값, 정보.측정결과);
+                    }
+
+                }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            }
+            foreach (var item in SurfaceItems)
+                Remove(item);
+            //foreach (var item in 결과.표면불량)
+            //{
+            //카메라구분 카메라 = (카메라구분)item.장치구분;
+            //변환정보 cf = 변환정보.Get(카메라);
+            //Single w = item.가로길이 * cf.비율X;
+            //Single h = item.세로길이 * cf.비율Y;
+            //Single x = item.가로중심 * cf.비율X;
+            //Single y = item.세로중심 * cf.비율Y;
+
+            //Point2f c = RotateClockwise(new Point2f((Single)(x * cf.위치.X), (Single)(y * cf.위치.Y)), cf.각도);
+            //RotatedRect r = new RotatedRect(c, new Size2f(w, h), 90 - item.회전각도);
+            //List<Point3D> points = new List<Point3D>();
+            //foreach (var p in r.Points()) points.Add(new Point3D(p.X, p.Y, cf.위치.Z));
+            //SurfaceItems.Add(AddPolygon(points, SurfaceMaterial));
+            // }
         }
         // 점들을 중심을 기준으로 시계 방향으로 회전하는 함수
         private System.Drawing.PointF RotateClockwise(System.Drawing.PointF point, Double radian)

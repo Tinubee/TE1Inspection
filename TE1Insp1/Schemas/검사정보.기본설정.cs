@@ -155,6 +155,8 @@ namespace TE1.Schemas
         [NotMapped, JsonIgnore]
         public List<카메라구분> 검사완료 = new List<카메라구분>();
         [NotMapped, JsonIgnore]
+        public List<카메라구분> 그랩완료 = new List<카메라구분>();
+        [NotMapped, JsonIgnore]
         public Boolean 검사완료여부 = false;
 
         public 검사결과()
@@ -176,6 +178,7 @@ namespace TE1.Schemas
             this.검사내역.Clear();
             this.표면불량.Clear();
             this.검사완료.Clear();
+            this.그랩완료.Clear();
 
             검사설정 자료 = Global.모델자료.GetItem(this.모델구분)?.검사설정;
             if (자료 != null)
