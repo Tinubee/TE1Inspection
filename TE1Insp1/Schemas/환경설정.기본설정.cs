@@ -64,7 +64,8 @@ namespace TE1.Schemas
 
         [JsonProperty("CurrentModel")]
         public 모델구분 선택모델 { get; set; } = 모델구분.UPR3P24S;
-
+        [JsonIgnore]
+        public Boolean VIP모드 { get; set; } = false;
         [JsonIgnore]
         public String Format => "#,0." + String.Empty.PadLeft(this.결과자릿수, '0');
         [JsonIgnore]

@@ -111,6 +111,7 @@ namespace TE1.Schemas
 
                     if (검사.그랩완료.Count == 2)
                     {
+                        Debug.WriteLine("Cam01 / Cam02 그랩완료");
                         Mat 합성이미지 = 장치.MergeImages(좌측이미지, 우측이미지, 15898, 2314);
                         Global.비전검사.Run(장치, 검사, 합성이미지);
                     }

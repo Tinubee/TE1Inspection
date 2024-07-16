@@ -105,6 +105,7 @@ namespace TE1.Schemas
             }
             if (!this.ContainsKey(카메라)) return false;
             비전도구 도구 = this[카메라];
+            Debug.WriteLine($"{카메라} 도구 Run 들어옴");
             //Global.사진자료.SaveImage(장치, 결과);
             return 도구.Run(image, 검사);
         }
