@@ -17,6 +17,7 @@ namespace TE1.Schemas
             if (자료.명령 == 피씨명령.검사설정) return 검사설정수신(자료);
             if (자료.명령 == 피씨명령.평탄완료) return 평탄완료수신(자료);
             if (자료.명령 == 피씨명령.상부완료) return 치수완료수신(자료);
+            //if (자료.명령 == 피씨명령.VIP모드) return VIP모드수신(자료);
             return false;
         }
 
@@ -108,6 +109,7 @@ namespace TE1.Schemas
         public void 하부표면전송(Int32 검사번호) => Publish(검사번호, 피씨명령.하부표면, Hosts.Surface);
         public void 상부표면전송(Int32 검사번호) => Publish(검사번호, 피씨명령.상부표면, Hosts.Surface);
         public void 제품상태전송(상태정보 정보) => Publish(정보 , 피씨명령.상태정보);
+        public void VIP모드상태전송(Boolean 모드) => Publish(모드, 피씨명령.VIP모드);
         #endregion
     }
 }

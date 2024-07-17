@@ -184,6 +184,7 @@ namespace TE1.Cam02
                     }
                     SetCircle(tool, item.Value);
                 }
+                if (item.Value.InsType == InsType.R) SetRectangle(GetTool(item.Key) as CogToolBlock, item.Value);
                 else if (item.Value.InsType == InsType.X || item.Value.InsType == InsType.Y)
                 {
                     CogCaliperTool tool;
@@ -197,6 +198,13 @@ namespace TE1.Cam02
                     SetCaliper(tool, item.Value);
                 }
             }
+        }
+
+        internal virtual void SetRectangle(CogToolBlock tool, InsItem p)
+        {
+            if (tool == null) return;
+            Base.Input(tool, "X", -p.Y / CalibX);
+            Base.Input(tool, "Y", -p.X / CalibY);
         }
 
         internal virtual void SetCircle(CogFindCircleTool tool, InsItem p)
@@ -255,11 +263,18 @@ namespace TE1.Cam02
                         results.Add(new Result(item.Key + "X", r.X));
                         results.Add(new Result(item.Key + "Y", r.Y));
                         results.Add(new Result(item.Key + "D", r.D));
+                        results.Add(new Result(item.Key + "L", r.L));
                     }
                 }
                 else if (item.Value.InsType == InsType.R)
                 {
-
+                    if (CalResult(GetTool(item.Key) as CogToolBlock, item.Value, out InsItem r))
+                    {
+                        results.Add(new Result(item.Key + "X", r.X));
+                        results.Add(new Result(item.Key + "Y", r.Y));
+                        results.Add(new Result(item.Key + "W", r.D));
+                        results.Add(new Result(item.Key + "L", r.H));
+                    }
                 }
                 else if (item.Value.InsType == InsType.X || item.Value.InsType == InsType.Y)
                 {
@@ -274,7 +289,19 @@ namespace TE1.Cam02
             //Debug.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
             Output("Results", JsonConvert.SerializeObject(results));
         }
-
+        internal virtual Boolean CalResult(CogToolBlock tool, InsItem ins, out InsItem result)
+        {
+            result = new InsItem() { InsType = ins.InsType };
+            if (tool == null) return false;
+            if (tool.RunStatus.Result == CogToolResultConstants.Accept)
+            {
+                result.X = -Math.Round(Base.Output<Double>(tool, "Y"), 3);
+                result.Y = -Math.Round(Base.Output<Double>(tool, "X"), 3);
+                result.H = Math.Round(Base.Output<Double>(tool, "Width"), 3);
+                result.D = Math.Round(Base.Output<Double>(tool, "Height"), 3);
+            }
+            return true;
+        }
         internal virtual Boolean CalResult(CogFindCircleTool tool, InsItem ins, out InsItem result)
         {
             result = new InsItem() { InsType = ins.InsType };
@@ -285,17 +312,8 @@ namespace TE1.Cam02
                 result.X = -Math.Round(c.CenterY, 3);
                 result.Y = -Math.Round(c.CenterX, 3);
 
-                //List<Double> radiusXY = new List<Double>
-                //{
-                //    c.RadiusX,
-                //    c.RadiusY
-                //};
-
-                //Debug.WriteLine($"{tool.Name} => X:{c.RadiusX} / Y:{c.RadiusY} / Aver:{radiusXY.Average()}");
-
                 result.D = Math.Round(c.Radius * 2, 3);
                 result.L = 0;
-                //Debug.WriteLine($"[{tool.Name}] => X:{a.CenterX} / Y:{a.CenterY} / Length X:{a.SideXLength} / Length Y:{a.SideYLength}");
             }
             return true;
         }
@@ -319,12 +337,12 @@ namespace TE1.Cam02
                 if (ins.InsType == InsType.X)
                 {
                     result.D = r.PositionY;//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
-                    Debug.WriteLine($"{tool.Name} => 기준 : {ins.X} / 기준픽셀 : {Math.Abs(ins.X) / CalibY} / 측정픽셀 : {r.PositionY} / 보정값 : {r.PositionY * CalibY} / result.D : {result.D}");
+                    //Debug.WriteLine($"{tool.Name} => 기준 : {ins.X} / 기준픽셀 : {Math.Abs(ins.X) / CalibY} / 측정픽셀 : {r.PositionY} / 보정값 : {r.PositionY * CalibY} / result.D : {result.D}");
                 }
                 else if (ins.InsType == InsType.Y)
                 {
                     result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
-                    Debug.WriteLine($"{tool.Name} => 기준 : {ins.Y} / 기준픽셀 : {Math.Abs(ins.Y) / CalibX} / 측정픽셀 : {r.PositionX} / 보정값 : {r.PositionX * CalibX} / result.D : {result.D}");
+                    //Debug.WriteLine($"{tool.Name} => 기준 : {ins.Y} / 기준픽셀 : {Math.Abs(ins.Y) / CalibX} / 측정픽셀 : {r.PositionX} / 보정값 : {r.PositionX * CalibX} / result.D : {result.D}");
                 }
                    
             }

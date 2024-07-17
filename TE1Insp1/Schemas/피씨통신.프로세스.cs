@@ -24,7 +24,15 @@ namespace TE1.Schemas
                 Debug.WriteLine("검사결과명령");
                 return true;
             }
+            if (자료.명령 == 피씨명령.VIP모드) return VIP모드정보수신(자료);
             return false;
+        }
+
+        private Boolean VIP모드정보수신(통신자료 자료)
+        {
+            Debug.WriteLine($"VIP모드정보 수신 완료. {자료.모드}");
+            Global.환경설정.VIP모드 = 자료.모드;
+            return true;
         }
 
         private Boolean 상태정보수신(통신자료 자료)

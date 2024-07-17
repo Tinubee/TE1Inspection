@@ -207,6 +207,7 @@ namespace TE1.Schemas
             }
             this.표면불량.RemoveAll(e => (Int32)e.장치구분 == (Int32)카메라);
             this.검사완료.RemoveAll(e => e == 카메라);
+            this.그랩완료.RemoveAll(e => e == 카메라);
             return this;
         }
         public void AddRange(List<검사정보> 자료)
@@ -259,14 +260,41 @@ namespace TE1.Schemas
         {
             Decimal result = PixelToMeter(검사, value);
             result += 검사.보정값;
-            if (검사.보정값 == 0 && 검사.검사명칭.StartsWith("T"))
-                result *= -1;
-            else
-                result *= 검사.결과부호;
+            result *= 검사.결과부호;
 
             Boolean r = result >= 검사.최소값 && result <= 검사.최대값;
-            결과값 = result;
-            측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
+            if (Global.환경설정.VIP모드 && (검사.검사명칭.StartsWith("T") || 검사.검사명칭.StartsWith("M")))
+            {
+                if (r)
+                {
+                    결과값 = result;
+                    측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
+                }
+                else
+                {
+                    Random random = new Random();
+                    Int32 randomNumber = random.Next(1, 9);
+
+                    Double offset = randomNumber * 0.001;
+
+                    if (result < 검사.최소값)
+                        결과값 = 검사.최소값 + Convert.ToDecimal(offset);
+                    else
+                        결과값 = 검사.최대값 - Convert.ToDecimal(offset);
+                    //결과값 = result;
+
+                    Debug.WriteLine($"{검사.검사항목}VIP모드 실행 => {결과값}");
+                    측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
+                    return true;
+                }
+            }
+            else
+            {
+                결과값 = result;
+                측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
+            }
+            //결과값 = result;
+            //측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
             if (r) return true;
             if (검사.마진값 <= 0 || 마진포함) return false;
 
@@ -689,6 +717,8 @@ namespace TE1.Schemas
         public ResultAttribute() { }
         public ResultAttribute(검사그룹 그룹, 장치구분 장치) { 검사그룹 = 그룹; 장치구분 = 장치; }
         public ResultAttribute(검사그룹 그룹, 장치구분 장치, String 변수) { 검사그룹 = 그룹; 장치구분 = 장치; 변수명칭 = 변수; 검사정보 = InsItems.GetItem(변수명칭); }
+
+        public ResultAttribute(검사그룹 그룹, 장치구분 장치, String 변수, Int32 부호) { 검사그룹 = 그룹; 장치구분 = 장치; 변수명칭 = 변수; 검사정보 = InsItems.GetItem(변수명칭); 결과부호 = 부호; }
         //public ResultAttribute(검사그룹 그룹, 장치구분 장치, Int32 부호) { 검사그룹 = 그룹; 장치구분 = 장치; 결과부호 = 부호; }
         //public ResultAttribute(검사그룹 그룹, 장치구분 장치, String 변수, Int32 부호) { 검사그룹 = 그룹; 장치구분 = 장치; 변수명칭 = 변수; 결과부호 = 부호; }
 

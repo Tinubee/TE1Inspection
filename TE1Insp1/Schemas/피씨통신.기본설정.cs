@@ -33,6 +33,7 @@ namespace TE1.Schemas
         //큐알각인 = 57,
         //큐알리딩 = 58,
         //라벨출력 = 59,
+        VIP모드 = 99
     }
 
     public partial class 피씨통신
@@ -159,6 +160,9 @@ namespace TE1.Schemas
         public void Publish(Int32 번호, 피씨명령 명령, Hosts 수신) => Publish(수신, new 통신자료(명령) { 발신 = 피씨구분, 번호 = 번호 }.Get());
         public void Publish(Int32 번호, Object 자료, 피씨명령 명령) => Publish(new 통신자료(명령, 자료) { 발신 = 피씨구분, 번호 = 번호 }.Get());
         public void Publish(Object 자료, 피씨명령 명령) => Publish(new 통신자료(명령, 자료) { 발신 = 피씨구분}.Get());
+
+        public void Publish(Boolean 모드, 피씨명령 명령) => Publish(new 통신자료(명령, 모드) { 발신 = 피씨구분, 모드 = 모드 }.Get());
+
         //public void Publish(Object 자료, 피씨명령 명령, 피씨구분 수신) => Publish(수신, new 피씨자료(명령, 자료) { 발신 = 피씨구분 }.Get());
         //public void Publish(Object 자료, 피씨명령 명령, IEnumerable<피씨구분> 수신) => Publish(수신, new 피씨자료(명령, 자료) { 발신 = 피씨구분 }.Get());
 
@@ -199,6 +203,7 @@ namespace TE1.Schemas
         [ProtoMember(3)] public 피씨명령  명령 = 피씨명령.통신핑퐁;
         [ProtoMember(4)] public Byte[]   자료 = null;
         [ProtoMember(5)] public Int32    번호 = 0;
+        [ProtoMember(6)] public Boolean 모드 = false;
 
         public 통신자료() { }
         public 통신자료(피씨명령 type) => 명령 = type;

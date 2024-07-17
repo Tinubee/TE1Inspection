@@ -49,7 +49,7 @@ namespace TE1.Schemas
 
         public void Close()
         {
-            foreach(비전도구 도구 in this.Values)
+            foreach (비전도구 도구 in this.Values)
                 도구.Job?.Shutdown();
             this.Manager?.Shutdown();
             this.Manager = null;
@@ -89,11 +89,15 @@ namespace TE1.Schemas
         }
 
         // Live 검사
-        public Boolean Run(그랩장치 장치 ,검사결과 결과, Mat Image = null)
+        public Boolean Run(그랩장치 장치, 검사결과 결과, Boolean Merged = false)
         {
             if (장치 == null || 결과 == null) return false;
-            Boolean r = Image == null ? Run(장치.구분, 장치.CogImage(), 결과) : Run(카메라구분.Cam02, Common.ToCogImage(Image), 결과);
-            Global.사진자료.SaveImage(장치, 결과);
+
+            Boolean r = Merged == false ? Run(장치.구분, 장치.CogImage(), 결과) : Run(카메라구분.Cam02, Global.그랩제어.GetItem(카메라구분.Cam02).MergeCogImage(), 결과);
+            //Global.사진자료.SaveImage(장치, 결과);
+            if (Merged == false) Global.사진자료.SaveImage(장치, 결과);
+            else Global.사진자료.SaveImage(장치, 결과, Global.그랩제어.GetItem(카메라구분.Cam02).합성이미지);
+
             return r;
         }
         public Boolean Run(카메라구분 카메라, ICogImage image, 검사결과 검사)

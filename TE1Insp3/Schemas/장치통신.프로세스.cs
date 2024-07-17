@@ -171,8 +171,8 @@ namespace TE1.Schemas
         private void 두께측정수행()
         {
             if (!검사번호확인(정보주소.두께측정, out 검사결과 검사, Replys.Yes)) return;
-            검사.SetResult(검사항목.Thickness, 제품두께);
-            Debug.WriteLine($"두께측정: {검사.검사번호} => {제품두께}");
+            검사.SetResult(검사항목.Thickness, 제품두께 * 0.001);
+            Debug.WriteLine($"두께측정: {검사.검사번호} => {제품두께 * 0.001}");
         }
 
         private void 큐알각인시작전송(검사결과 검사)

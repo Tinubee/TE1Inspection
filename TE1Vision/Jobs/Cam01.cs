@@ -46,13 +46,6 @@ namespace TE1.Cam01
             try
             {
                 List<DisplayResult> results = JsonConvert.DeserializeObject<List<DisplayResult>>(Results);
-                //foreach (DisplayResult r in results.Where(r => r.KeyName == DefectsName).ToList())
-                //{
-                //    var rect = new CogRectangleAffine() { CenterX = r.Rect[0], CenterY = r.Rect[1], SideXLength = r.Rect[2], SideYLength = r.Rect[3], Rotation = r.Rect[4], Color = r.Color, TipText = r.Display, LineWidthInScreenPixels = 2 };
-                //    ToolBlock.AddGraphicToRunRecord(rect, lastRecord, ViewerRecodName, r.Display);
-                //    //var label = new CogGraphicLabel() { Text = r.Display, TipText = r.Display, X = r.Rect[0], Y = r.Rect[1], Alignment = CogGraphicLabelAlignmentConstants.BaselineCenter };
-                //    //ToolBlock.AddGraphicToRunRecord(label, lastRecord, ViewerRecodName, r.Display);
-                //}
                 AddDefectsGraphics(lastRecord, results);
 
                 Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
@@ -303,14 +296,6 @@ namespace TE1.Cam01
                 CogCircle c = tool.Results.GetCircle();
                 result.X = -Math.Round(c.CenterY, 3);
                 result.Y = -Math.Round(c.CenterX, 3);
-
-                //List<Double> radiusXY = new List<Double>
-                //{
-                //    c.RadiusX,
-                //    c.RadiusY
-                //};
-
-                //Debug.WriteLine($"{tool.Name} => X:{c.RadiusX} / Y:{c.RadiusY} / Aver:{radiusXY.Average()}");
 
                 result.D = Math.Round(c.Radius * 2, 3);
                 result.L = 0;

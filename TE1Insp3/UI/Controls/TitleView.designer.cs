@@ -30,7 +30,7 @@ namespace TE1.UI.Controls
         private void InitializeComponent()
         {
             this.label5 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
+            this.lb모드 = new DevExpress.XtraEditors.LabelControl();
             this.SuspendLayout();
             // 
             // label5
@@ -52,21 +52,21 @@ namespace TE1.UI.Controls
             this.label5.TabIndex = 70;
             this.label5.Text = "TE1 MICA Attacher";
             // 
-            // labelControl1
+            // lb모드
             // 
-            this.labelControl1.Appearance.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelControl1.Appearance.ForeColor = DevExpress.LookAndFeel.DXSkinColors.ForeColors.Question;
-            this.labelControl1.Appearance.Options.UseFont = true;
-            this.labelControl1.Appearance.Options.UseForeColor = true;
-            this.labelControl1.Appearance.Options.UseTextOptions = true;
-            this.labelControl1.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.labelControl1.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.labelControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelControl1.Location = new System.Drawing.Point(3, 3);
-            this.labelControl1.Name = "labelControl1";
-            this.labelControl1.Size = new System.Drawing.Size(214, 66);
-            this.labelControl1.TabIndex = 71;
-            this.labelControl1.Text = "Car Tech";
+            this.lb모드.Appearance.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lb모드.Appearance.ForeColor = DevExpress.LookAndFeel.DXSkinColors.ForeColors.Question;
+            this.lb모드.Appearance.Options.UseFont = true;
+            this.lb모드.Appearance.Options.UseForeColor = true;
+            this.lb모드.Appearance.Options.UseTextOptions = true;
+            this.lb모드.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.lb모드.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
+            this.lb모드.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lb모드.Location = new System.Drawing.Point(3, 3);
+            this.lb모드.Name = "lb모드";
+            this.lb모드.Size = new System.Drawing.Size(214, 66);
+            this.lb모드.TabIndex = 71;
+            this.lb모드.Text = "Car Tech";
             // 
             // TitleView
             // 
@@ -74,7 +74,7 @@ namespace TE1.UI.Controls
             this.Appearance.Options.UseBackColor = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.labelControl1);
+            this.Controls.Add(this.lb모드);
             this.Controls.Add(this.label5);
             this.Name = "TitleView";
             this.Padding = new System.Windows.Forms.Padding(3);
@@ -86,6 +86,6 @@ namespace TE1.UI.Controls
         #endregion
 
         private DevExpress.XtraEditors.LabelControl label5;
-        private DevExpress.XtraEditors.LabelControl labelControl1;
+        private DevExpress.XtraEditors.LabelControl lb모드;
     }
 }

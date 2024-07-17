@@ -77,6 +77,8 @@ namespace TE1.Schemas
 
         #region 사진저장
         public void SaveImage(그랩장치 장치, 검사결과 결과) => SaveImage(장치.구분, 장치.MatImage(), 결과.검사일시, 결과.검사번호);
+
+        public void SaveImage(그랩장치 장치, 검사결과 결과, Mat 합성이미지) => SaveImage(장치.구분, 합성이미지, 결과.검사일시, 결과.검사번호);
         public void SaveImage(카메라구분 카메라, Mat image, DateTime 시간, Int32 번호)
         {
             if (!this.ContainsKey(카메라)) return;

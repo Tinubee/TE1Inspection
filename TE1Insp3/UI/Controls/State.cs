@@ -51,8 +51,11 @@ namespace TE1.UI.Controls
             this.e모델선택.Refresh();
             this.e장치상태.Init();
             this.e저장용량.EditValue = Global.환경설정.저장비율;
+            //this.titleView1.Click += TitleView1_Click;
+            this.titleView1.Init();
         }
 
+        //private void TitleView1_Click(object sender, EventArgs e) => Global.환경설정.VIP모드변경요청();
         public void Close() { }
 
         private void 선택모델표현(object sender, DevExpress.XtraEditors.Controls.CustomDisplayTextEventArgs e)

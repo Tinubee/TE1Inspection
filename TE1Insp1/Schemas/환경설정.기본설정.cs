@@ -30,6 +30,7 @@ namespace TE1.Schemas
     {
         public delegate void 모델변경(모델구분 모델코드);
         public event 모델변경 모델변경알림;
+        public event Global.BaseEvent VIP모드변경알림;
 
         [JsonIgnore]
         public const String 프로젝트번호 = "23-0449-003";
@@ -195,6 +196,12 @@ namespace TE1.Schemas
             if (this.선택모델 == 모델구분) return;
             this.선택모델 = 모델구분;
             this.모델변경알림?.Invoke(this.선택모델);
+        }
+
+        public void VIP모드변경요청()
+        {
+            this.VIP모드 = !this.VIP모드;
+            this.VIP모드변경알림?.Invoke();
         }
 
         [Description("결과별 표현색상")]

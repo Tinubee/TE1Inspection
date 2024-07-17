@@ -11,6 +11,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using TE1.Multicam;
 using OpenCvSharp.Extensions;
+using Cognex.VisionPro.ImageFile;
+using System.Windows.Media.Media3D;
 
 namespace TE1.Schemas
 {
@@ -47,15 +49,25 @@ namespace TE1.Schemas
         [JsonIgnore]
         internal Int32 ImageHeight = 0;
         [JsonIgnore]
+        internal Int32 mergeImageWidth = 0;
+        [JsonIgnore]
+        internal Int32 mergeImageHeight = 0;
+        [JsonIgnore]
         internal Object BufferLock = new Object();
         [JsonIgnore]
         internal UInt32 BufferSize = 0;
         [JsonIgnore]
         internal IntPtr BufferAddress = IntPtr.Zero;
         [JsonIgnore]
+        internal IntPtr mergeBufferAddress = IntPtr.Zero;
+        [JsonIgnore]
         internal Queue<Mat> Images = new Queue<Mat>();
         [JsonIgnore]
         internal Mat Image => Images.LastOrDefault<Mat>();
+        [JsonIgnore]
+        internal Queue<Mat> 합성이미지들 = new Queue<Mat>();
+        [JsonIgnore]
+        internal Mat 합성이미지 => 합성이미지들.LastOrDefault<Mat>();
         [JsonIgnore]
         public const String 로그영역 = "Camera";
 
@@ -63,6 +75,11 @@ namespace TE1.Schemas
         {
             while (this.Images.Count > 3)
                 this.Dispose(this.Images.Dequeue());
+        }
+        public void MergedImageDispose()
+        {
+            while (this.합성이미지들.Count > 1)
+                this.Dispose(this.합성이미지들.Dequeue());
         }
         internal void Dispose(Mat image)
         {
@@ -85,6 +102,8 @@ namespace TE1.Schemas
         {
             while (this.Images.Count > 0)
                 this.Dispose(this.Images.Dequeue());
+            while (this.합성이미지들.Count > 0)
+                this.Dispose(this.합성이미지들.Dequeue());
             return true;
         }
         public virtual void TurnOn() => Global.조명제어.TurnOn(this.구분);
@@ -140,7 +159,7 @@ namespace TE1.Schemas
                     this.ImageWidth = width;
                     this.ImageHeight = height;
                 }
-
+                this.MergedImageDispose();
                 Global.그랩제어.그랩완료(this);
             }
             catch (Exception ex)
@@ -179,6 +198,27 @@ namespace TE1.Schemas
             }
             return null;
         }
+        public ICogImage MergeCogImage()
+        {
+            return Common.ToCogImage(this.합성이미지);
+            //try
+            //{
+            //    //if (this.Image != null) return Common.ToCogImage(this.Image);
+            //    if (this.mergeBufferAddress == IntPtr.Zero) return null;
+            //    using (CogImage8Root cogImage8Root = new CogImage8Root())
+            //    {
+            //        CogImage8Grey image = new CogImage8Grey();
+            //        cogImage8Root.Initialize(mergeImageWidth, mergeImageHeight, mergeBufferAddress, mergeImageWidth, null);
+            //        image.SetRoot(cogImage8Root);
+            //        return image;
+            //    }
+            //}
+            //catch (Exception e)
+            //{
+            //    Global.오류로그(로그영역, "Acquisition", $"[{this.구분.ToString()}] {e.Message}", true);
+            //}
+            //return null;
+        }
         public Mat MatImage()
         {
             if (this.Image != null) return this.Image;
@@ -186,90 +226,115 @@ namespace TE1.Schemas
             return new Mat(ImageHeight, ImageWidth, ImageType, BufferAddress);
         }
 
-        public Mat MergeImages(Mat 좌측이미지, Mat 우측이미지, int x1, int x2, int cropSize = 145)
+        public Mat MergeImage()
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
-            // 이미지 로드
-            using (Bitmap leftImg = 좌측이미지.ToBitmap())
-            using (Bitmap rightImg = 우측이미지.ToBitmap())
-            {
-                // 이미지 크기 확인
-                if (leftImg.Height != rightImg.Height)
-                    throw new ArgumentException("두 이미지의 높이가 같아야 합니다.");
-
-                // 이미지 자르기
-                Rectangle leftRect = new Rectangle(0, cropSize, leftImg.Width, leftImg.Height - cropSize);
-                Rectangle rightRect = new Rectangle(0, 0, rightImg.Width, rightImg.Height - cropSize);
-
-                using (Bitmap croppedLeftImg = leftImg.Clone(leftRect, leftImg.PixelFormat))
-                using (Bitmap croppedRightImg = rightImg.Clone(rightRect, rightImg.PixelFormat))
-                {
-                    // 합성할 오른쪽 이미지의 폭 계산
-                    int rightWidth = croppedRightImg.Width - x2;
-
-                    // 새로운 이미지 크기 계산
-                    int newWidth = Math.Max(croppedLeftImg.Width, x1 + rightWidth);
-                    int height = croppedLeftImg.Height;
-
-                    // 합성 이미지 생성
-                    using (Bitmap mergedImg = new Bitmap(newWidth, height, PixelFormat.Format8bppIndexed))
-                    {
-                        // 팔레트 설정 (그레이스케일)
-                        ColorPalette palette = mergedImg.Palette;
-                        for (int i = 0; i < 256; i++)
-                            palette.Entries[i] = Color.FromArgb(i, i, i);
-                        mergedImg.Palette = palette;
-
-                        // 이미지 데이터 복사
-                        BitmapData mergedData = mergedImg.LockBits(new Rectangle(0, 0, mergedImg.Width, mergedImg.Height), ImageLockMode.WriteOnly, mergedImg.PixelFormat);
-                        BitmapData leftData = croppedLeftImg.LockBits(new Rectangle(0, 0, croppedLeftImg.Width, croppedLeftImg.Height), ImageLockMode.ReadOnly, croppedLeftImg.PixelFormat);
-                        BitmapData rightData = croppedRightImg.LockBits(new Rectangle(x2, 0, rightWidth, croppedRightImg.Height), ImageLockMode.ReadOnly, croppedRightImg.PixelFormat);
-
-                        unsafe
-                        {
-                            byte* mergedPtr = (byte*)mergedData.Scan0;
-                            byte* leftPtr = (byte*)leftData.Scan0;
-                            byte* rightPtr = (byte*)rightData.Scan0;
-
-                            // 왼쪽 이미지 복사
-                            for (int y = 0; y < height; y++)
-                            {
-                                for (int x = 0; x < croppedLeftImg.Width; x++)
-                                {
-                                    mergedPtr[x + y * mergedData.Stride] = leftPtr[x + y * leftData.Stride];
-                                }
-                            }
-
-                            // 오른쪽 이미지 부분 복사 및 합성
-                            for (int y = 0; y < height; y++)
-                            {
-                                for (int x = 0; x < rightWidth; x++)
-                                {
-                                    mergedPtr[(x1 + x) + y * mergedData.Stride] = rightPtr[x + y * rightData.Stride];
-                                }
-                            }
-                        }
-
-                        croppedLeftImg.UnlockBits(leftData);
-                        croppedRightImg.UnlockBits(rightData);
-                        mergedImg.UnlockBits(mergedData);
-
-                        // 결과 이미지 저장
-                        //mergedImg.Save(outputPath, ImageFormat.Png);
-                        stopwatch.Stop();
-                        Debug.WriteLine($"Final image dimensions: {mergedImg.Width}x{mergedImg.Height}");
-                        Debug.WriteLine($"Execution time: {stopwatch.Elapsed.TotalSeconds:F2} seconds");
-
-                        Bitmap bit = new Bitmap(mergedImg);
-                        return bit.ToMat();
-                    }
-                }
-            }
+            if (this.Image != null) return this.Image;
+            if (BufferAddress == IntPtr.Zero) return null;
+            return new Mat(mergeImageHeight, mergeImageWidth, ImageType, mergeBufferAddress);
         }
-        #endregion
-    }
 
+        public void MergeImages(Mat 좌측이미지, Mat 우측이미지, int LeftX, int RightX, int cropSize = 145)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            Double leftAngle = 0.279972;
+            Double rightAngle = 0.216211;
+
+            Console.WriteLine("Processing left image:");
+            Mat leftProcessed = ProcessImage(좌측이미지, leftAngle);
+
+            Console.WriteLine("\nProcessing right image:");
+            Mat rightProcessed = ProcessImage(우측이미지, rightAngle);
+            //Stopwatch stopwatch = Stopwatch.StartNew();
+            Mat mergedImage = 이미지합성(leftProcessed, rightProcessed, LeftX, RightX);
+            this.합성이미지들.Enqueue(mergedImage);
+            stopwatch.Stop();
+            Console.WriteLine($"Total processing time: {stopwatch.ElapsedMilliseconds} ms");
+        }
+        public Mat 이미지합성(Mat leftImg, Mat rightImg, int leftX, int rightX)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            Mat leftImgCropped = CropImage(leftImg, true);
+            Mat rightImgCropped = CropImage(rightImg, false);
+
+            int mergedWidth = leftX + (rightImgCropped.Cols - rightX);
+            int mergedHeight = Math.Max(leftImgCropped.Rows, rightImgCropped.Rows);
+
+            Mat mergedImg = new Mat(mergedHeight, mergedWidth, MatType.CV_8UC1, Scalar.Black);
+
+            // Define the rows and columns for left image cropping
+            int leftStartRow = 0;
+            int leftEndRow = leftImgCropped.Rows;
+            int leftStartCol = 0;
+            int leftEndCol = leftX;
+
+            // Define the rows and columns for merging left image into merged image
+            int mergeLeftStartRow = 0;
+            int mergeLeftEndRow = mergedImg.Rows;
+            int mergeLeftStartCol = 0;
+            int mergeLeftEndCol = leftX;
+
+            // Copy left image to merged image
+            leftImgCropped.SubMat(leftStartRow, leftEndRow, leftStartCol, leftEndCol)
+                .CopyTo(mergedImg.SubMat(mergeLeftStartRow, mergeLeftEndRow, mergeLeftStartCol, mergeLeftEndCol));
+
+            // Define the rows and columns for right image cropping
+            int rightStartRow = 0;
+            int rightEndRow = rightImgCropped.Rows;
+            int rightStartCol = rightX;
+            int rightEndCol = rightImgCropped.Cols;
+
+            // Define the rows and columns for merging right image into merged image
+            int mergeRightStartRow = 0;
+            int mergeRightEndRow = mergedImg.Rows;
+            int mergeRightStartCol = leftX;
+            int mergeRightEndCol = mergedImg.Cols;
+
+            // Copy right image to merged image
+            rightImgCropped.SubMat(rightStartRow, rightEndRow, rightStartCol, rightEndCol)
+                .CopyTo(mergedImg.SubMat(mergeRightStartRow, mergeRightEndRow, mergeRightStartCol, mergeRightEndCol));
+
+            stopwatch.Stop();
+            Console.WriteLine($"Merge time: {stopwatch.ElapsedMilliseconds} ms");
+
+            return mergedImg;
+        }
+        public Mat CropImage(Mat image, bool isLeft)
+        {
+            int startRow = isLeft ? 42 : 0;
+            int endRow = isLeft ? image.Rows : image.Rows - 42;
+            int startCol = 0;
+            int endCol = image.Cols;
+
+            return image.SubMat(startRow, endRow, startCol, endCol);
+            //return isLeft ? image[42.., ..] : image[..^42, ..];
+        }
+        public Mat ProcessImage(Mat Image, Double angle)
+        {
+            Double scaleFactor = 0.5;
+            Mat resizedImg = ResizeImage(Image, scaleFactor);
+            Mat rotatedImg = RotateImage(resizedImg, angle);
+            return rotatedImg;
+        }
+
+        public Mat ResizeImage(Mat image, double scaleFactor)
+        {
+            var newSize = new OpenCvSharp.Size(image.Width * scaleFactor, image.Height * scaleFactor);
+            return image.Resize(newSize, 0, 0, InterpolationFlags.Area);
+        }
+        public Mat RotateImage(Mat image, double angle)
+        {
+            Point2f center = new Point2f(image.Cols / 2f, image.Rows / 2f);
+            Mat rotMatrix = Cv2.GetRotationMatrix2D(center, angle, 1.0);
+            Mat rotated = new Mat();
+            Cv2.WarpAffine(image, rotated, rotMatrix, image.Size(), InterpolationFlags.Linear, BorderTypes.Constant, Scalar.Black);
+            return rotated;
+        }
+    }
+    #endregion
     public class EuresysLink : 그랩장치
     {
         [JsonIgnore]

@@ -47,13 +47,6 @@ namespace TE1.Cam03
             try
             {
                 List<DisplayResult> results = JsonConvert.DeserializeObject<List<DisplayResult>>(Results);
-                //foreach (DisplayResult r in results.Where(r => r.KeyName == DefectsName).ToList())
-                //{
-                //    var rect = new CogRectangleAffine() { CenterX = r.Rect[0], CenterY = r.Rect[1], SideXLength = r.Rect[2], SideYLength = r.Rect[3], Rotation = r.Rect[4], Color = r.Color, TipText = r.Display, LineWidthInScreenPixels = 2 };
-                //    ToolBlock.AddGraphicToRunRecord(rect, lastRecord, ViewerRecodName, r.Display);
-                //    //var label = new CogGraphicLabel() { Text = r.Display, TipText = r.Display, X = r.Rect[0], Y = r.Rect[1], Alignment = CogGraphicLabelAlignmentConstants.BaselineCenter };
-                //    //ToolBlock.AddGraphicToRunRecord(label, lastRecord, ViewerRecodName, r.Display);
-                //}
                 AddDefectsGraphics(lastRecord, results);
 
                 Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
@@ -219,7 +212,7 @@ namespace TE1.Cam03
                         String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", tool.Name);
 
                         if (!Base.LoadTrainImage(tool, $"{trainImagePath}.bmp"))
-                            Debug.WriteLine("Train Image Load Fail");
+                            Debug.WriteLine($"{trainImagePath}.bmp Train Image Load Fail");
 
                         /* tool.Pattern.TrainImage = */
                     }
@@ -277,9 +270,6 @@ namespace TE1.Cam03
             else if (tool.Name == "M32X3") tool.Region.CenterY = y - 30;
 
             tool.Region.Rotation = lop % 2 == 1 ? -Math.PI / 2 : 0;
-
-            //if(lop == 3) tool.Region.Rotation = Math.PI / 2;
-
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
             tool.LastRunRecordDiagEnable = CogCaliperLastRunRecordDiagConstants.InputImageByReference | CogCaliperLastRunRecordDiagConstants.Region;
 
@@ -287,9 +277,6 @@ namespace TE1.Cam03
                 tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
             else
                 tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DarkToLight;
-
-            //tool.RunParams.ContrastThreshold = 10;
-            //tool.RunParams.FilterHalfSizeInPixels = 5;
         }
 
         internal virtual void SetCaliper(CogCaliperTool tool, InsItem p)
@@ -337,7 +324,7 @@ namespace TE1.Cam03
                 {
                     if (CalResult(GetTool(item.Key) as CogCaliperTool, item.Value, out InsItem r))
                     {
-                        Debug.WriteLine($"{item.Key} : {r.D}");
+                        //Debug.WriteLine($"{item.Key} : {r.D}");
                         results.Add(new Result(item.Key, r.D));
                     }
 
@@ -346,18 +333,9 @@ namespace TE1.Cam03
                 {
                     if (CalResult(GetTool(item.Key) as CogCaliperTool, item.Value, out InsItem r))
                     {
-                        Debug.WriteLine($"{item.Key} : {r.D}");
+                        //Debug.WriteLine($"{item.Key} : {r.D}");
                         results.Add(new Result(item.Key, r.D));
                     }
-                    //for (int lop = 1; lop <= 4; lop++)
-                    //{
-                    //    String pos = lop % 2 == 0 ? "Y" : "X";
-                    //    InsType type = lop % 2 == 0 ? InsType.Y : InsType.X;
-                    //    if (CalResult(GetTool(item.Key + $"{pos}{lop}") as CogCaliperTool, item.Value, type, lop, out InsItem r))
-                    //    {
-                    //        results.Add(new Result(item.Key + $"{pos}{lop}", r.D));
-                    //    }
-                    //}
                 }
             }
             //Debug.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
@@ -431,7 +409,7 @@ namespace TE1.Cam03
                     //else result.X3 = r.PositionY;
                     //result.DList.Add(r.PositionY);//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
                     result.D = r.PositionY;
-                    //Debug.WriteLine($"{tool.Name} : X : {r.PositionY} / ins.X : {ins.X} /  CalibX : {Math.Abs(ins.X) / CalibY}");
+                    Debug.WriteLine($"{tool.Name} : X : {r.PositionY} / ins.X : {ins.X} /  CalibX : {Math.Abs(ins.X) / CalibY}");
                 }
                 else if (type == InsType.Y)
                 {
@@ -439,7 +417,7 @@ namespace TE1.Cam03
                     //else result.Y4 = r.PositionX;
                     //result.DList.Add(r.PositionX);
                     result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
-                    //Debug.WriteLine($"{tool.Name} : X : {r.PositionX} / ins.Y : {ins.Y} /  CalibX : {Math.Abs(ins.Y) / CalibX}");
+                    Debug.WriteLine($"{tool.Name} : X : {r.PositionX} / ins.Y : {ins.Y} /  CalibX : {Math.Abs(ins.Y) / CalibX}");
                 }
 
             }

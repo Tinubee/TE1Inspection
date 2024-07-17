@@ -25,6 +25,7 @@ namespace TE1
             this.FormClosing += MainFormClosing;
             this.KeyPreview = true;
             this.KeyDown += MainForm_KeyDown;
+
             //this.TabFormControl.SelectedPageChanged += SelectedPageChanged;
             //this.t환경설정.SelectedPageChanged += SelectedTabPageChanged;
         }
@@ -34,8 +35,27 @@ namespace TE1
             //Test용
             if (e.KeyCode == Keys.T)
             {
-               
+                Debug.WriteLine("test Success");
+                for (int i = 0; i < 100; i++)
+                {
+                    //DateTime startTime = DateTime.Now;
+                    Global.조명제어.TurnOn();
+                    //Task.Delay(20).Wait();
+                    Global.조명제어.TurnOff();
+                    //Task.Delay(20).Wait();
+                    //DateTime EndTime = DateTime.Now;
+
+                    //Debug.WriteLine($"{EndTime - startTime}");
+                }
+                
+                
             }
+
+
+
+
+
+
             if (e.KeyCode == Keys.Y)
             {
                 Debug.WriteLine("뷰어 초기화");
