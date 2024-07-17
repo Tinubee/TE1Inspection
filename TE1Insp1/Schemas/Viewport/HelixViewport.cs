@@ -32,7 +32,7 @@ namespace TE1.Schemas
         public virtual Vector3D CameraLookDirection { get; set; } = default(Vector3D);
         public virtual Vector3D CameraUpDirection { get; set; } = default(Vector3D);
 
-        public Boolean Init(out String error)
+        public Boolean Init(Hosts pc ,out String error)
         {
             //this.Children.Clear();
             error = String.Empty;
@@ -55,7 +55,7 @@ namespace TE1.Schemas
             Children.Add(ModelVisual);
             //}
 
-            InitModel();
+            InitModel(pc);
             InitCamera();
             return String.IsNullOrEmpty(error);
         }
@@ -92,7 +92,7 @@ namespace TE1.Schemas
             return new Point3D(rect.X + rect.SizeX / 2, rect.Y + rect.SizeY / 2, rect.Z + rect.SizeZ / 2);
         }
 
-        public virtual void InitModel() { }
+        public virtual void InitModel(Hosts pc) { }
         internal void InitCamera()
         {
             if (CameraPosition != default(Point3D)) Camera.Position = CameraPosition;

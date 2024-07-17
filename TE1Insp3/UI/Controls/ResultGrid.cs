@@ -59,19 +59,19 @@ namespace TE1.UI.Controls
 
         private void GridView1_RowClick(object sender, RowClickEventArgs e)
         {
-            List<검사항목> 항목들 = new List<검사항목>();
-            if (선택정보 != null)
-            {
-                InsItems.GetItem(선택정보.검사명칭).FontSize = 5;
-                항목들.Add(선택정보.검사항목);
-            }
+            //List<검사항목> 항목들 = new List<검사항목>();
+            //if (선택정보 != null)
+            //{
+            //    InsItems.GetItem(선택정보.검사명칭).FontSize = 5;
+            //    항목들.Add(선택정보.검사항목);
+            //}
 
-            GridView view = sender as GridView;
-            선택정보 = view.GetRow(e.RowHandle) as 검사정보;
-            InsItems.GetItem(선택정보.검사명칭).FontSize = 20;
-            항목들.Add(선택정보.검사항목);
-            //Debug.WriteLine($"{정보.검사명칭}");
-            this.검사항목선택변경?.Invoke(항목들);
+            //GridView view = sender as GridView;
+            //선택정보 = view.GetRow(e.RowHandle) as 검사정보;
+            //InsItems.GetItem(선택정보.검사명칭).FontSize = 20;
+            //항목들.Add(선택정보.검사항목);
+            ////Debug.WriteLine($"{정보.검사명칭}");
+            //this.검사항목선택변경?.Invoke(항목들);
         }
 
         public void RefreshData()

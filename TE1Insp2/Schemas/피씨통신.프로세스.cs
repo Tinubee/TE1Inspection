@@ -89,6 +89,7 @@ namespace TE1.Schemas
             new Thread(() => {
                 검사결과 검사 = Global.검사자료.검사항목찾기(평탄측정번호);
                 센서자료 센서 = Global.평탄센서.측정하기(검사);
+                Global.검사자료.검사수행알림(검사);
                 Publish(평탄측정번호, 센서, 피씨명령.평탄완료);
             }).Start();
             return true;

@@ -1,5 +1,6 @@
 ﻿using DevExpress.Utils.Extensions;
 using HelixToolkit.Wpf;
+using MvUtils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -48,7 +49,59 @@ namespace TE1.Schemas
             if (정보 == null) return String.Empty;
             return 정보.검사명칭;
         }
-        public override void InitModel()
+
+        public void 검사항목표시(검사항목 항목,Double originX, Double originY, Double tz)
+        {
+            if (항목.ToString().StartsWith("H"))
+            {
+                if (항목.ToString().Contains("X"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                else if (항목.ToString().Contains("Y"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 5, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                else if (항목.ToString().Contains("D"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 10, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                else if (항목.ToString().Contains("L"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 15, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+            }
+            else if (항목.ToString().StartsWith("F"))
+                InspItems.Add(new Circle3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+            else if (항목.ToString().StartsWith("T"))
+            {
+                if (항목.ToString().Substring(0, 2) == "T1" || 항목.ToString().Substring(0, 2) == "T4" || 항목.ToString().Substring(0, 2) == "T6")
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y + 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Up, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                else if (항목.ToString().Substring(0, 2) == "T2")
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Down, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                else if (항목.ToString().Substring(0, 2) == "T7")
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X - 30, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Left, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                else if (항목.ToString().Substring(0, 2) == "T8")
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X + 30, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Right, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                else
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Down, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+            }
+            else if (항목.ToString().StartsWith("M"))
+            {
+                if (항목.ToString().Contains("X1"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Right, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                if (항목.ToString().Contains("Y2"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - InsItems.GetItem(항목.ToString()).FontSize, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                if (항목.ToString().Contains("X3"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Left, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                if (항목.ToString().Contains("Y4"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+            }
+            else if (항목.ToString().StartsWith("B"))
+            {
+                if (항목.ToString().Contains("X"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz + 10), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                else if (항목.ToString().Contains("Y"))
+                    InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 5, tz + 10), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+            }
+            else if (항목.ToString().StartsWith("P"))
+            {
+                InspItems.Add(new Circle3D(항목) { Point = new Point3D(originX + 20, originY + 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = 5 });
+            }
+        }
+        public override void InitModel(Hosts pcType)
         {
             if (MainModel == null) return;
 
@@ -72,54 +125,16 @@ namespace TE1.Schemas
 
             foreach (검사항목 항목 in Enum.GetValues(typeof(검사항목)))
             {
-                if (항목.ToString().StartsWith("H"))
+                ResultAttribute a = Utils.GetAttribute<ResultAttribute>(항목);
+
+                if(pcType == Hosts.Server)
+                    검사항목표시(항목, originX, originY, tz);
+                else
                 {
-                    if (항목.ToString().Contains("X"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    else if (항목.ToString().Contains("Y"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 5, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    else if (항목.ToString().Contains("D"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 10, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    else if (항목.ToString().Contains("L"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 15, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
+                    if (a.피씨구분 == pcType)
+                        검사항목표시(항목, originX, originY, tz);
                 }
-                else if (항목.ToString().StartsWith("F"))
-                    InspItems.Add(new Circle3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                else if (항목.ToString().StartsWith("T"))
-                {
-                    if (항목.ToString().Substring(0, 2) == "T1" || 항목.ToString().Substring(0, 2) == "T4" || 항목.ToString().Substring(0, 2) == "T6")
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y + 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Up, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    else if (항목.ToString().Substring(0, 2) == "T2")
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Down, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    else if (항목.ToString().Substring(0, 2) == "T7")
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X - 30, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Left, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    else if (항목.ToString().Substring(0, 2) == "T8")
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X + 30, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Right, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    else
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Origin = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Down, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                }
-                else if (항목.ToString().StartsWith("M"))
-                {
-                    if (항목.ToString().Contains("X1"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Right, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    if (항목.ToString().Contains("Y2"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - InsItems.GetItem(항목.ToString()).FontSize, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    if (항목.ToString().Contains("X3"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Left, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    if (항목.ToString().Contains("Y4"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                }
-                else if (항목.ToString().StartsWith("B"))
-                {
-                    if (항목.ToString().Contains("X"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y, tz + 10), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                    else if (항목.ToString().Contains("Y"))
-                        InspItems.Add(new Label3D(항목) { Point = new Point3D(originX - InsItems.GetItem(항목.ToString()).X, originY - InsItems.GetItem(항목.ToString()).Y - 5, tz + 10), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = InsItems.GetItem(항목.ToString()).FontSize });
-                }
-                else if (항목.ToString().StartsWith("P"))
-                {
-                    InspItems.Add(new Circle3D(항목) { Point = new Point3D(originX + 20, originY + 30, tz), Name = $"{항목}", LabelStyle = NamePrintType.Center, FontHeight = 5 });
-                }
+                
             }
             InspItems.ForEach(e => e.Create(Children));
         }

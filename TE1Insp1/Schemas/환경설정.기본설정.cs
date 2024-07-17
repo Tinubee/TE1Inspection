@@ -15,9 +15,9 @@ namespace TE1.Schemas
     public enum Hosts
     {
         None = 0,
-        Server = 1,
-        Measure = 2,
-        Surface = 3,
+        Server = 1, //3번
+        Measure = 2, //1번
+        Surface = 3, //2번
     }
 
     public enum 동작구분

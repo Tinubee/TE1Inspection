@@ -505,6 +505,8 @@ namespace TE1.Schemas
         [NotMapped, JsonIgnore]
         public ResultAttribute Attr = null;
         [NotMapped, JsonIgnore]
+        public Hosts 피씨구분 => Attr != null ? Attr.피씨구분 : Hosts.None;
+        [NotMapped, JsonIgnore]
         public String 변수명칭 => Attr != null ? Attr.변수명칭 : String.Empty;
         [NotMapped, JsonIgnore]
         public Boolean 카메라여부 => Attr != null ? DeviceInfoAttribute.IsCamera(Attr.장치구분) : false;
@@ -720,11 +722,12 @@ namespace TE1.Schemas
         public String 변수명칭 = String.Empty;
         public Int32 결과부호 = 1;
         public InsItem 검사정보 = new InsItem();
+        public Hosts 피씨구분 = Hosts.Server;
         public ResultAttribute() { }
         public ResultAttribute(검사그룹 그룹, 장치구분 장치) { 검사그룹 = 그룹; 장치구분 = 장치; }
-        public ResultAttribute(검사그룹 그룹, 장치구분 장치, String 변수) { 검사그룹 = 그룹; 장치구분 = 장치; 변수명칭 = 변수; 검사정보 = InsItems.GetItem(변수명칭); }
+        public ResultAttribute(검사그룹 그룹, 장치구분 장치, String 변수, Hosts pc = Hosts.Server) { 검사그룹 = 그룹; 장치구분 = 장치; 변수명칭 = 변수; 검사정보 = InsItems.GetItem(변수명칭); 피씨구분 = pc; }
 
-        public ResultAttribute(검사그룹 그룹, 장치구분 장치, String 변수, Int32 부호) { 검사그룹 = 그룹; 장치구분 = 장치; 변수명칭 = 변수; 검사정보 = InsItems.GetItem(변수명칭); 결과부호 = 부호; }
+        public ResultAttribute(검사그룹 그룹, 장치구분 장치, String 변수, Int32 부호, Hosts pc = Hosts.Server) { 검사그룹 = 그룹; 장치구분 = 장치; 변수명칭 = 변수; 검사정보 = InsItems.GetItem(변수명칭); 결과부호 = 부호; 피씨구분 = pc; }
         //public ResultAttribute(검사그룹 그룹, 장치구분 장치, Int32 부호) { 검사그룹 = 그룹; 장치구분 = 장치; 결과부호 = 부호; }
         //public ResultAttribute(검사그룹 그룹, 장치구분 장치, String 변수, Int32 부호) { 검사그룹 = 그룹; 장치구분 = 장치; 변수명칭 = 변수; 결과부호 = 부호; }
 
@@ -739,6 +742,13 @@ namespace TE1.Schemas
             ResultAttribute a = GetAttribute<ResultAttribute>(항목);
             if (a == null) return 1;
             return a.결과부호;
+        }
+
+        public static Hosts GetPCType(검사항목 항목)
+        {
+            ResultAttribute a = GetAttribute<ResultAttribute>(항목);
+            if (a == null) return Hosts.None;
+            return a.피씨구분;
         }
     }
     #endregion

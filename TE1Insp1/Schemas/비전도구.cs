@@ -322,6 +322,7 @@ namespace TE1.Schemas
                 //DisplayResult(검사, this.카메라);
                 Global.캘리브?.AddNew(this.ToolBlock, this.카메라, 검사.검사번호);
                 검사완료체크(검사);
+                //this.검사완료알림?.Invoke(검사);
             }
             catch (Exception ex) { Global.오류로그(로그영역, "Run", $"[{this.카메라.ToString()}] {ex.Message}", true); }
             return accepted;
@@ -334,6 +335,7 @@ namespace TE1.Schemas
             검사.검사완료여부 = 검사.검사완료.Count >= 2;
             if (검사.검사완료여부)
             {
+                Global.검사자료.검사수행알림(검사);
                 Debug.WriteLine($"TE1 Vision 검사완료신호전송 => {검사.검사번호}");
                 Global.피씨통신.Publish(검사.검사번호, 검사.검사내역, 피씨명령.상부완료);
 

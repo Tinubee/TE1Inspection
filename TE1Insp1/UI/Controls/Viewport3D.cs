@@ -19,7 +19,7 @@ namespace TE1.UI.Controls
         public void Init(UPR3P24S3D model)
         {
             this.Model3D = model;
-            if (!Model3D.Init(out String err2)) { Debug.WriteLine(err2, "Model3D Error"); }
+            if (!Model3D.Init(Hosts.Measure, out String err2)) { Debug.WriteLine(err2, "Model3D Error"); }
             this.Controls.Add(Model3D.CreateHost());
             this.Export = MvUtils.Utils.GetSaveFileDialog("png", "PNG|*.png", Global.모델자료.선택모델.모델구분.ToString());
             this.Export.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
