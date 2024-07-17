@@ -233,7 +233,7 @@ namespace TE1.Schemas
             return new Mat(mergeImageHeight, mergeImageWidth, ImageType, mergeBufferAddress);
         }
 
-        public void MergeImages(Mat 좌측이미지, Mat 우측이미지, int LeftX, int RightX, int cropSize = 145)
+        public void MergeImages(Mat 좌측이미지, Mat 우측이미지, int LeftX, int RightX)
         {
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -241,68 +241,59 @@ namespace TE1.Schemas
             Double leftAngle = 0.279972;
             Double rightAngle = 0.216211;
 
-            Console.WriteLine("Processing left image:");
             Mat leftProcessed = ProcessImage(좌측이미지, leftAngle);
-
-            Console.WriteLine("\nProcessing right image:");
             Mat rightProcessed = ProcessImage(우측이미지, rightAngle);
-            //Stopwatch stopwatch = Stopwatch.StartNew();
+      
             Mat mergedImage = 이미지합성(leftProcessed, rightProcessed, LeftX, RightX);
             this.합성이미지들.Enqueue(mergedImage);
             stopwatch.Stop();
             Console.WriteLine($"Total processing time: {stopwatch.ElapsedMilliseconds} ms");
         }
-        public Mat 이미지합성(Mat leftImg, Mat rightImg, int leftX, int rightX)
+        public Mat 이미지합성(Mat leftImg, Mat rightImg, Int32 leftX, Int32 rightX)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             Mat leftImgCropped = CropImage(leftImg, true);
             Mat rightImgCropped = CropImage(rightImg, false);
 
-            int mergedWidth = leftX + (rightImgCropped.Cols - rightX);
-            int mergedHeight = Math.Max(leftImgCropped.Rows, rightImgCropped.Rows);
+            Int32 mergedWidth = leftX + (rightImgCropped.Cols - rightX);
+            Int32 mergedHeight = Math.Max(leftImgCropped.Rows, rightImgCropped.Rows);
 
             Mat mergedImg = new Mat(mergedHeight, mergedWidth, MatType.CV_8UC1, Scalar.Black);
 
             // Define the rows and columns for left image cropping
-            int leftStartRow = 0;
-            int leftEndRow = leftImgCropped.Rows;
-            int leftStartCol = 0;
-            int leftEndCol = leftX;
+            Int32 leftStartRow = 0;
+            Int32 leftEndRow = leftImgCropped.Rows;
+            Int32 leftStartCol = 0;
+            Int32 leftEndCol = leftX;
 
             // Define the rows and columns for merging left image into merged image
-            int mergeLeftStartRow = 0;
-            int mergeLeftEndRow = mergedImg.Rows;
-            int mergeLeftStartCol = 0;
-            int mergeLeftEndCol = leftX;
+            Int32 mergeLeftStartRow = 0;
+            Int32 mergeLeftEndRow = mergedImg.Rows;
+            Int32 mergeLeftStartCol = 0;
+            Int32 mergeLeftEndCol = leftX;
 
             // Copy left image to merged image
             leftImgCropped.SubMat(leftStartRow, leftEndRow, leftStartCol, leftEndCol)
                 .CopyTo(mergedImg.SubMat(mergeLeftStartRow, mergeLeftEndRow, mergeLeftStartCol, mergeLeftEndCol));
 
             // Define the rows and columns for right image cropping
-            int rightStartRow = 0;
-            int rightEndRow = rightImgCropped.Rows;
-            int rightStartCol = rightX;
-            int rightEndCol = rightImgCropped.Cols;
+            Int32 rightStartRow = 0;
+            Int32 rightEndRow = rightImgCropped.Rows;
+            Int32 rightStartCol = rightX;
+            Int32 rightEndCol = rightImgCropped.Cols;
 
             // Define the rows and columns for merging right image into merged image
-            int mergeRightStartRow = 0;
-            int mergeRightEndRow = mergedImg.Rows;
-            int mergeRightStartCol = leftX;
-            int mergeRightEndCol = mergedImg.Cols;
+            Int32 mergeRightStartRow = 0;
+            Int32 mergeRightEndRow = mergedImg.Rows;
+            Int32 mergeRightStartCol = leftX;
+            Int32 mergeRightEndCol = mergedImg.Cols;
 
             // Copy right image to merged image
             rightImgCropped.SubMat(rightStartRow, rightEndRow, rightStartCol, rightEndCol)
                 .CopyTo(mergedImg.SubMat(mergeRightStartRow, mergeRightEndRow, mergeRightStartCol, mergeRightEndCol));
 
-            stopwatch.Stop();
-            Console.WriteLine($"Merge time: {stopwatch.ElapsedMilliseconds} ms");
-
             return mergedImg;
         }
-        public Mat CropImage(Mat image, bool isLeft)
+        public Mat CropImage(Mat image, Boolean isLeft)
         {
             int startRow = isLeft ? 42 : 0;
             int endRow = isLeft ? image.Rows : image.Rows - 42;
@@ -320,12 +311,12 @@ namespace TE1.Schemas
             return rotatedImg;
         }
 
-        public Mat ResizeImage(Mat image, double scaleFactor)
+        public Mat ResizeImage(Mat image, Double scaleFactor)
         {
             var newSize = new OpenCvSharp.Size(image.Width * scaleFactor, image.Height * scaleFactor);
             return image.Resize(newSize, 0, 0, InterpolationFlags.Area);
         }
-        public Mat RotateImage(Mat image, double angle)
+        public Mat RotateImage(Mat image, Double angle)
         {
             Point2f center = new Point2f(image.Cols / 2f, image.Rows / 2f);
             Mat rotMatrix = Cv2.GetRotationMatrix2D(center, angle, 1.0);

@@ -2,6 +2,7 @@
 using MvUtils;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using TE1.Schemas;
 
 namespace TE1.UI.Controls
@@ -38,7 +39,7 @@ namespace TE1.UI.Controls
                 this.e통신내역.BeginInvoke(new Action(() => 송신수신알림(통신, 명령, mesg)));
                 return;
             }
-    
+            Debug.WriteLine($"{통신} : {명령} => {mesg}");
             if(통신 == 큐알장치.통신구분.RX && 명령 == 큐알각인.제어명령.인쇄완료 && mesg.Contains("OK"))
             {
                 Global.장치통신.큐알각인 = false;

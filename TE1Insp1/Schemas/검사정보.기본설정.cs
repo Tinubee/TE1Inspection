@@ -246,7 +246,7 @@ namespace TE1.Schemas
         private Decimal PixelToMeter(검사정보 검사, Double value)
         {
             Double result = 0;
-            if (value == 0 || 검사.교정값 <= 0) result = value;
+            if (value == 0 || 검사.교정값 <= 0 || value == -99999) result = value;
             else if (검사.카메라여부) result = value * Decimal.ToDouble(검사.교정값) / 1000;
             else result = value;
             return (Decimal)Math.Round(result, Global.환경설정.결과자릿수);
@@ -263,7 +263,7 @@ namespace TE1.Schemas
             result *= 검사.결과부호;
 
             Boolean r = result >= 검사.최소값 && result <= 검사.최대값;
-            if (Global.환경설정.VIP모드 && (검사.검사명칭.StartsWith("T") || 검사.검사명칭.StartsWith("M")))
+            if (Global.환경설정.VIP모드 && (검사.검사명칭.StartsWith("M") || 검사.검사명칭.StartsWith("B")))
             {
                 if (r)
                 {
@@ -283,8 +283,8 @@ namespace TE1.Schemas
                         결과값 = 검사.최대값 - Convert.ToDecimal(offset);
                     //결과값 = result;
 
-                    Debug.WriteLine($"{검사.검사항목}VIP모드 실행 => {결과값}");
-                    측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
+                    Debug.WriteLine($"검사항목[{검사.검사항목}] VIP모드 실행 => {결과값}");
+                    측정값 = (Decimal)Math.Round(결과값, Global.환경설정.결과자릿수);
                     return true;
                 }
             }
@@ -353,6 +353,13 @@ namespace TE1.Schemas
 
             검사정보 정보X = 검사내역.Where(e => e.검사항목.ToString() == xStr).FirstOrDefault();
             검사정보 정보Y = 검사내역.Where(e => e.검사항목.ToString() == yStr).FirstOrDefault();
+
+            if (정보X.결과값 == 0 || 정보Y.결과값 == 0)
+            {
+                결과값 = 0;
+                측정값 = 0;
+                return false;
+            }
 
             Double 편차X = Convert.ToDouble(Math.Abs(정보X.기준값 - 정보X.결과값));
             Double 편차Y = Convert.ToDouble(Math.Abs(정보Y.기준값 - 정보Y.결과값));
@@ -445,7 +452,6 @@ namespace TE1.Schemas
                 String[] 라벨 = this.검사내역.Where(e => e.측정결과 != 결과구분.OK && Global.분류자료.GetItem(e.검사분류).라벨 != String.Empty).Select(e => Global.분류자료.GetItem(e.검사분류).라벨).ToArray();
                 this.불량정보 = String.Join(",", 오류);
                 this.라벨내용 = 라벨.Distinct().ToArray();
-                //Debug.WriteLine($"라벨내용 => {this.라벨내용}");
             }
             return this.측정결과;
         }

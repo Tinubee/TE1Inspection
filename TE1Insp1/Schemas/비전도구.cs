@@ -313,10 +313,8 @@ namespace TE1.Schemas
                 Input("Results", String.Empty);
                 this.ToolBlock.Run();
                 accepted = this.IsAccepted();
-                //검사?.SetResults(this.카메라, this.GetResults());
                 카메라구분 구분 = this.카메라 == 카메라구분.Cam01 ? 카메라구분.Cam02 : this.카메라;
                 검사?.SetResults(구분, Output<String>("Results"));
-                //검사?.SetResults(this.카메라, Output<String>("Results"));
                 this.표면검사(검사);
                 this.검사종료 = DateTime.Now;
                 //Debug.WriteLine($"{this.카메라.ToString()} => {(검사종료 - 검사시작).TotalMilliseconds.ToString("#,0")}", "검사시간");
@@ -336,16 +334,16 @@ namespace TE1.Schemas
             검사.검사완료여부 = 검사.검사완료.Count >= 2;
             if (검사.검사완료여부)
             {
-                Debug.WriteLine($"TE1 Vision 검사완료 => {검사.검사번호}");
+                Debug.WriteLine($"TE1 Vision 검사완료신호전송 => {검사.검사번호}");
                 Global.피씨통신.Publish(검사.검사번호, 검사.검사내역, 피씨명령.상부완료);
 
-                Debug.WriteLine($"----------------------------------------{검사.검사번호} 검사결과----------------------------------------");
+                Debug.WriteLine($"============================ {검사.검사번호} 검사결과 Start ============================");
                 foreach (검사정보 정보 in 검사.검사내역)
                 {
                     검사.SetResult(정보.검사항목, (Double)정보.측정값);
                     Debug.WriteLine($"{정보.검사항목} : {정보.측정값}");
                 }
-                Debug.WriteLine($"-------------------------------------------------------------------------------------------------------");
+                Debug.WriteLine($"============================ {검사.검사번호} 검사결과 End ============================");
             }
 
         }

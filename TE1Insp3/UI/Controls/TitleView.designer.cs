@@ -50,7 +50,7 @@ namespace TE1.UI.Controls
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(214, 28);
             this.label5.TabIndex = 70;
-            this.label5.Text = "TE1 MICA Attacher";
+            this.label5.Text = "TE1 Vision Inspection";
             // 
             // lb모드
             // 

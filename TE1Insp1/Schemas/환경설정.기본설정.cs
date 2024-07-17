@@ -249,6 +249,24 @@ namespace TE1.Schemas
             if (구분 == 결과구분.NG) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.Critical;
             return DevExpress.LookAndFeel.DXSkinColors.ForeColors.ControlText;
         }
+
+        public static Color BoltResultColor(결과구분 구분)
+        {
+            //if (구분 == 결과구분.WA) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.DisabledText;
+            if (구분 == 결과구분.ER) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.Question;
+            if (구분 == 결과구분.OK || 구분 == 결과구분.WA) return Color.Gold;
+            if (구분 == 결과구분.NG) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.Critical;
+            return DevExpress.LookAndFeel.DXSkinColors.ForeColors.ControlText;
+        }
+
+        public static Color ThicknessResultColor(결과구분 구분)
+        {
+            //if (구분 == 결과구분.WA) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.DisabledText;
+            if (구분 == 결과구분.ER) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.Question;
+            if (구분 == 결과구분.OK || 구분 == 결과구분.WA) return Color.Olive;
+            if (구분 == 결과구분.NG) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.Critical;
+            return DevExpress.LookAndFeel.DXSkinColors.ForeColors.ControlText;
+        }
         #region 드라이브 용량계산
         private DriveInfo ImageSaveDrive = null;
         private DriveInfo GetSaveImageDrive()

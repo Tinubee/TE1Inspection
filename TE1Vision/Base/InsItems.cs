@@ -111,6 +111,9 @@ namespace TE1
         public static InsItem F07 = new InsItem(0, InsType.F, -974.90, 0.00);
         public static InsItem F08 = new InsItem(0, InsType.F, -894.50, +150.00);
 
+        public static InsItem BT = new InsItem(3, InsType.B, -12.83, 83.00, 3.7);
+        public static InsItem BB = new InsItem(3, InsType.B, -977.17, -83.00, 3.7);
+
         public static InsItem M01X1 = new InsItem(3, InsType.S, -102.50, -181.90);
         public static InsItem M01Y2 = new InsItem(3, InsType.S, -152.20, -194.40);
         public static InsItem M01X3 = new InsItem(3, InsType.S, -201.80, -181.90);
@@ -171,6 +174,7 @@ namespace TE1
         public static InsItem M15Y2 = new InsItem(3, InsType.S, -324.10, -29.00);
         public static InsItem M15X3 = new InsItem(3, InsType.S, -397.50, -16.50);
         public static InsItem M15Y4 = new InsItem(3, InsType.S, -324.10, -4.00);
+
         public static InsItem M16X1 = new InsItem(3, InsType.S, -102.50, 16.50);
         public static InsItem M16Y2 = new InsItem(3, InsType.S, -152.20, 4.00);
         public static InsItem M16X3 = new InsItem(3, InsType.S, -201.80, 16.50);
@@ -231,6 +235,7 @@ namespace TE1
         public static InsItem M30Y2 = new InsItem(3, InsType.S, -324.10, 169.40);
         public static InsItem M30X3 = new InsItem(3, InsType.S, -397.50, 181.90);
         public static InsItem M30Y4 = new InsItem(3, InsType.S, -324.10, 194.40);
+
         public static InsItem M31X1 = new InsItem(3, InsType.S, -592.50, -181.90);
         public static InsItem M31Y2 = new InsItem(3, InsType.S, -665.90, -194.40);
         public static InsItem M31X3 = new InsItem(3, InsType.S, -739.30, -181.90);
@@ -291,6 +296,7 @@ namespace TE1
         public static InsItem M45Y2 = new InsItem(3, InsType.S, -837.90, -29.00);
         public static InsItem M45X3 = new InsItem(3, InsType.S, -887.50, -16.50);
         public static InsItem M45Y4 = new InsItem(3, InsType.S, -837.50, -4.00);
+
         public static InsItem M46X1 = new InsItem(3, InsType.S, -592.50, 16.50);
         public static InsItem M46Y2 = new InsItem(3, InsType.S, -665.90, 4.00);
         public static InsItem M46X3 = new InsItem(3, InsType.S, -739.30, 16.50);
@@ -371,6 +377,7 @@ namespace TE1
         public static InsItem GetItem(String name)
         {
             if (name.StartsWith("H") || name.StartsWith("R")) name = name.Substring(0, 3);
+            if (name.StartsWith("B")) name = name.Substring(0, 2);
             FieldInfo field = typeof(InsItems).GetField(name, BindingFlags.Static | BindingFlags.Public);
             if (field == null) return new InsItem();
             return field.GetValue(null) as InsItem;
@@ -398,6 +405,7 @@ namespace TE1
         [Description("Flatness")] F,
         [Description("Sheet")] S,
         [Description("Imprint")] I,
+        [Description("Bolt")] B,
     }
 
     public class InsItem

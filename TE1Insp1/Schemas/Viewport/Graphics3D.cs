@@ -47,6 +47,12 @@ namespace TE1.Schemas
                     case "F":
                         Color = ToColor(환경설정.FlatnessResultColor(결과));
                         break;
+                    case "B":
+                        Color = ToColor(환경설정.BoltResultColor(결과));
+                        break;
+                    case "P":
+                        Color = ToColor(환경설정.ThicknessResultColor(결과));
+                        break;
                 }
                 Label = CreateLabelText();
                 Draw();
@@ -208,7 +214,7 @@ namespace TE1.Schemas
             public override void Create(Visual3DCollection collectioin)
             {
                 base.Create(collectioin);
-                Rect = CreateRectangle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Width, Height, Colors.Yellow, Normal);
+                Rect = CreateRectangle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Width, Height, BackColor, Normal);
                 collectioin.Add(Rect);
             }
             public override void Draw()
@@ -227,7 +233,8 @@ namespace TE1.Schemas
             public override void Create(Visual3DCollection collectioin)
             {
                 base.Create(collectioin);
-                Circle = CreateCircle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Radius, Colors.SkyBlue);
+                Color 적용색상 = this.Type == 검사항목.PThickness ? Colors.Olive : Colors.Aqua;
+                Circle = CreateCircle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Radius, 적용색상);
                 collectioin.Add(Circle);
             }
             public override void Draw()

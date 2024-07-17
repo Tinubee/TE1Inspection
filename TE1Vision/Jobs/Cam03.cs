@@ -167,6 +167,7 @@ namespace TE1.Cam03
 
             foreach (var item in items)
             {
+                Debug.WriteLine($"{item.Key}");
                 if (item.Value.InsType == InsType.H)
                 {
                     CogFindCircleTool tool;
@@ -224,6 +225,21 @@ namespace TE1.Cam03
                     }
                     //SetPMAlign(tool, item.Value);
                 }
+                if (item.Value.InsType == InsType.B)
+                {
+                    CogFindCircleTool tool;
+                    if (ToolBlock.Tools.Contains(item.Key))
+                    {
+                        tool = GetTool(item.Key) as CogFindCircleTool;
+                    }
+                    else
+                    {
+                        tool = new CogFindCircleTool();
+                        tool.Name = item.Key;
+                        this.ToolBlock.Tools.Add(tool);
+                    }
+                    SetCircle(tool, item.Value);
+                }
             }
         }
         internal virtual void SetPMAlign(CogPMAlignTool tool, InsItem p)
@@ -238,19 +254,25 @@ namespace TE1.Cam03
             Double x = -p.Y / CalibX;
             Double y = -p.X / CalibY;
             Double r = p.R / CalibY;
-            tool.RunParams.ExpectedCircularArc.CenterX = x;
-            tool.RunParams.ExpectedCircularArc.CenterY = y;
-            tool.RunParams.ExpectedCircularArc.Radius = r;
-            tool.RunParams.CaliperSearchLength = 100;
-            tool.RunParams.CaliperProjectionLength = 10;
-            tool.RunParams.CaliperSearchDirection = CogFindCircleSearchDirectionConstants.Outward;
-            tool.RunParams.CaliperRunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
-            tool.RunParams.CaliperRunParams.ContrastThreshold = 8;
-            tool.RunParams.CaliperRunParams.FilterHalfSizeInPixels = 2;
+            if (tool.Name.StartsWith("B"))
+            {
+                //Bolt 속성 설정일단 제외. 검수 후 Hole과 비교 후 공통부분 제외하고 설정값 적용.
+            }
+            else
+            {
+                tool.RunParams.ExpectedCircularArc.CenterX = x;
+                tool.RunParams.ExpectedCircularArc.CenterY = y;
+                tool.RunParams.ExpectedCircularArc.Radius = r;
+                tool.RunParams.CaliperSearchLength = 100;
+                tool.RunParams.CaliperProjectionLength = 10;
+                tool.RunParams.CaliperSearchDirection = CogFindCircleSearchDirectionConstants.Outward;
+                tool.RunParams.CaliperRunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
+                tool.RunParams.CaliperRunParams.ContrastThreshold = 8;
+                tool.RunParams.CaliperRunParams.FilterHalfSizeInPixels = 2;
+            }
         }
         internal virtual void SetRectangle(CogToolBlock tool, InsItem p)
         {
-            Debug.WriteLine("setrectangle");
             if (tool == null) return;
             Base.Input(tool, "X", -p.Y / CalibX);
             Base.Input(tool, "Y", -p.X / CalibY);
@@ -307,6 +329,7 @@ namespace TE1.Cam03
             Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
             foreach (var item in items)
             {
+                Debug.WriteLine($"{item.Key}");
                 if (item.Value.InsType == InsType.H)
                 {
                     if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
@@ -316,21 +339,25 @@ namespace TE1.Cam03
                         results.Add(new Result(item.Key + "D", r.D));
                     }
                 }
-                else if (item.Value.InsType == InsType.R)
+                else if (item.Value.InsType == InsType.B)
                 {
-
+                    if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
+                    {
+                        results.Add(new Result(item.Key + "X", r.X));
+                        results.Add(new Result(item.Key + "Y", r.Y));
+                    }
                 }
                 else if (item.Value.InsType == InsType.X || item.Value.InsType == InsType.Y)
                 {
                     if (CalResult(GetTool(item.Key) as CogCaliperTool, item.Value, out InsItem r))
                     {
-                        //Debug.WriteLine($"{item.Key} : {r.D}");
+                        Debug.WriteLine($"{item.Key} : {r.D}");
                         results.Add(new Result(item.Key, r.D));
                     }
-
                 }
                 else if (item.Value.InsType == InsType.S)
                 {
+                    //Debug.WriteLine("dd");
                     if (CalResult(GetTool(item.Key) as CogCaliperTool, item.Value, out InsItem r))
                     {
                         //Debug.WriteLine($"{item.Key} : {r.D}");
@@ -351,7 +378,10 @@ namespace TE1.Cam03
                 CogCircle c = tool.Results.GetCircle();
                 result.X = -Math.Round(c.CenterY, 3);
                 result.Y = -Math.Round(c.CenterX, 3);
-                result.D = Math.Round(c.Radius * 2, 3);
+                if (tool.Name.StartsWith("B")) 
+                    result.D = 0;
+                else
+                    result.D = Math.Round(c.Radius * 2, 3);
             }
             return true;
         }
@@ -360,38 +390,26 @@ namespace TE1.Cam03
         {
             result = new InsItem() { InsType = ins.InsType };
             if (tool == null) return false;
-            if (tool.RunStatus.Result == CogToolResultConstants.Accept)
+            if (tool.RunStatus.Result == CogToolResultConstants.Accept && tool.Results.Count != 0)
             {
                 CogCaliperResult r = tool.Results[0];
 
                 if (ins.InsType == InsType.S)
                 {
                     Int32 type = Convert.ToInt32(tool.Name.Substring(tool.Name.Length - 1));
-                    //if (ins.InsType == InsType.X)
-                    //{
                     result.D = type % 2 == 1 ? r.PositionY : r.PositionX;//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
-                    Debug.WriteLine($"{tool.Name} : X : {r.PositionY} / ins.X : {ins.X} /  CalibX : {Math.Abs(ins.X) / CalibY}");
-                    //}
-                    //else if (ins.InsType == InsType.Y)
-                    //{
-                    //    result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
-                    //    Debug.WriteLine($"{tool.Name} : X : {r.PositionX} / ins.Y : {ins.Y} /  CalibX : {Math.Abs(ins.Y) / CalibX}");
-                    //}
                 }
                 else
                 {
                     if (ins.InsType == InsType.X)
-                    {
                         result.D = r.PositionY;//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
-                        Debug.WriteLine($"{tool.Name} : X : {r.PositionY} / ins.X : {ins.X} /  CalibX : {Math.Abs(ins.X) / CalibY}");
-                    }
                     else if (ins.InsType == InsType.Y)
-                    {
                         result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
-                        Debug.WriteLine($"{tool.Name} : X : {r.PositionX} / ins.Y : {ins.Y} /  CalibX : {Math.Abs(ins.Y) / CalibX}");
-                    }
                 }
-
+            }
+            else
+            {
+                result.D = 0;
             }
             return true;
         }
@@ -404,21 +422,9 @@ namespace TE1.Cam03
             {
                 CogCaliperResult r = tool.Results[0];
                 if (type == InsType.X)
-                {
-                    //if (lop == 1) result.X1 = r.PositionY;
-                    //else result.X3 = r.PositionY;
-                    //result.DList.Add(r.PositionY);//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
                     result.D = r.PositionY;
-                    Debug.WriteLine($"{tool.Name} : X : {r.PositionY} / ins.X : {ins.X} /  CalibX : {Math.Abs(ins.X) / CalibY}");
-                }
                 else if (type == InsType.Y)
-                {
-                    //if (lop == 2) result.Y2 = r.PositionX;
-                    //else result.Y4 = r.PositionX;
-                    //result.DList.Add(r.PositionX);
                     result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
-                    Debug.WriteLine($"{tool.Name} : X : {r.PositionX} / ins.Y : {ins.Y} /  CalibX : {Math.Abs(ins.Y) / CalibX}");
-                }
 
             }
             return true;

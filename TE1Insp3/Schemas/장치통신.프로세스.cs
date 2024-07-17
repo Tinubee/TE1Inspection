@@ -128,7 +128,8 @@ namespace TE1.Schemas
             if (index == 0) Global.경고로그(로그영역, 주소.ToString(), $"해당 위치에 검사할 제품의 Index가 없습니다.", false);
             Debug.WriteLine($"{Utils.FormatDate(DateTime.Now, "{0:HH:mm:ss.fff}")}  {주소} => {index}", "Trigger");
             //Debug.WriteLine($"1=>{정보읽기(정보주소.인덱스01)}, 2=>{정보읽기(정보주소.인덱스02)}, 3=>{정보읽기(정보주소.인덱스03)}, 4=>{정보읽기(정보주소.인덱스04)}, 5=>{정보읽기(정보주소.인덱스05)}, 6=>{정보읽기(정보주소.인덱스06)}", "PLC Index");
-            this.입출자료.SetDelay(주소, 0, 500);
+            if(주소 != 정보주소.큐알각인) this.입출자료.SetDelay(주소, 0, 500);
+            //this.입출자료.SetDelay(주소, 0, 500);
 
             return index;
         }
@@ -171,7 +172,7 @@ namespace TE1.Schemas
         private void 두께측정수행()
         {
             if (!검사번호확인(정보주소.두께측정, out 검사결과 검사, Replys.Yes)) return;
-            검사.SetResult(검사항목.Thickness, 제품두께 * 0.001);
+            검사.SetResult(검사항목.PThickness, 제품두께 * 0.001);
             Debug.WriteLine($"두께측정: {검사.검사번호} => {제품두께 * 0.001}");
         }
 

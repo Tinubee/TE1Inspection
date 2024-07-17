@@ -33,9 +33,10 @@ namespace TE1.UI.Controls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CamViewers));
-            DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
+            DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer dockingContainer2 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer();
             this.documentGroup1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup(this.components);
             this.document1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
+            this.document2 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document(this.components);
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager(this.components);
@@ -46,31 +47,32 @@ namespace TE1.UI.Controls
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.d좌측캠 = new DevExpress.XtraBars.Docking.DockPanel();
             this.controlContainer1 = new DevExpress.XtraBars.Docking.ControlContainer();
-            this.e우측캠 = new Cogutils.RecordDisplay();
+            this.e좌측캠 = new Cogutils.RecordDisplay();
             this.d하부캠 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel2_Container = new DevExpress.XtraBars.Docking.ControlContainer();
-            this.e좌측캠 = new Cogutils.RecordDisplay();
+            this.e하부캠 = new Cogutils.RecordDisplay();
             this.d우측캠 = new DevExpress.XtraBars.Docking.DockPanel();
             this.controlContainer2 = new DevExpress.XtraBars.Docking.ControlContainer();
-            this.e하부캠 = new Cogutils.RecordDisplay();
+            this.e우측캠 = new Cogutils.RecordDisplay();
             this.Bind검사정보 = new System.Windows.Forms.BindingSource(this.components);
             this.documentManager1 = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.tabbedView1 = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.document1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.document2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             this.d좌측캠.SuspendLayout();
             this.controlContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.e우측캠)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.e좌측캠)).BeginInit();
             this.d하부캠.SuspendLayout();
             this.dockPanel2_Container.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.e좌측캠)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.e하부캠)).BeginInit();
             this.d우측캠.SuspendLayout();
             this.controlContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.e하부캠)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.e우측캠)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind검사정보)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabbedView1)).BeginInit();
@@ -79,7 +81,8 @@ namespace TE1.UI.Controls
             // documentGroup1
             // 
             this.documentGroup1.Items.AddRange(new DevExpress.XtraBars.Docking2010.Views.Tabbed.Document[] {
-            this.document1});
+            this.document1,
+            this.document2});
             // 
             // document1
             // 
@@ -91,13 +94,23 @@ namespace TE1.UI.Controls
             this.document1.Properties.AllowFloat = DevExpress.Utils.DefaultBoolean.True;
             this.document1.Properties.AllowFloatOnDoubleClick = DevExpress.Utils.DefaultBoolean.True;
             // 
+            // document2
+            // 
+            this.document2.Caption = "Top";
+            this.document2.ControlName = "d하부캠";
+            this.document2.FloatLocation = new System.Drawing.Point(800, 0);
+            this.document2.FloatSize = new System.Drawing.Size(600, 900);
+            this.document2.Properties.AllowClose = DevExpress.Utils.DefaultBoolean.False;
+            this.document2.Properties.AllowFloat = DevExpress.Utils.DefaultBoolean.True;
+            this.document2.Properties.AllowFloatOnDoubleClick = DevExpress.Utils.DefaultBoolean.True;
+            // 
             // layoutControl1
             // 
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutControl1.Location = new System.Drawing.Point(1200, 0);
+            this.layoutControl1.Location = new System.Drawing.Point(1964, 0);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.Root;
-            this.layoutControl1.Size = new System.Drawing.Size(780, 1000);
+            this.layoutControl1.Size = new System.Drawing.Size(16, 1000);
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
             // 
@@ -107,7 +120,7 @@ namespace TE1.UI.Controls
             this.Root.GroupBordersVisible = false;
             this.Root.Name = "Root";
             this.Root.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
-            this.Root.Size = new System.Drawing.Size(780, 1000);
+            this.Root.Size = new System.Drawing.Size(16, 1000);
             this.Root.TextVisible = false;
             // 
             // dockManager1
@@ -180,10 +193,10 @@ namespace TE1.UI.Controls
             this.d좌측캠.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
             this.d좌측캠.FloatSize = new System.Drawing.Size(300, 800);
             this.d좌측캠.ID = new System.Guid("f5882d5d-e42e-471d-a4f7-a603eb936d37");
-            this.d좌측캠.Location = new System.Drawing.Point(600, 0);
+            this.d좌측캠.Location = new System.Drawing.Point(977, 0);
             this.d좌측캠.Name = "d좌측캠";
-            this.d좌측캠.OriginalSize = new System.Drawing.Size(600, 200);
-            this.d좌측캠.Size = new System.Drawing.Size(600, 1000);
+            this.d좌측캠.OriginalSize = new System.Drawing.Size(987, 200);
+            this.d좌측캠.Size = new System.Drawing.Size(987, 1000);
             this.d좌측캠.Text = "Left";
             // 
             // controlContainer1
@@ -191,48 +204,8 @@ namespace TE1.UI.Controls
             this.controlContainer1.Controls.Add(this.e좌측캠);
             this.controlContainer1.Location = new System.Drawing.Point(3, 30);
             this.controlContainer1.Name = "controlContainer1";
-            this.controlContainer1.Size = new System.Drawing.Size(593, 967);
+            this.controlContainer1.Size = new System.Drawing.Size(980, 967);
             this.controlContainer1.TabIndex = 0;
-            // 
-            // e우측캠
-            // 
-            this.e우측캠.ColorMapLowerClipColor = System.Drawing.Color.Black;
-            this.e우측캠.ColorMapLowerRoiLimit = 0D;
-            this.e우측캠.ColorMapPredefined = Cognex.VisionPro.Display.CogDisplayColorMapPredefinedConstants.None;
-            this.e우측캠.ColorMapUpperClipColor = System.Drawing.Color.Black;
-            this.e우측캠.ColorMapUpperRoiLimit = 1D;
-            this.e우측캠.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.e우측캠.DoubleTapZoomCycleLength = 2;
-            this.e우측캠.DoubleTapZoomSensitivity = 2.5D;
-            this.e우측캠.Location = new System.Drawing.Point(0, 0);
-            this.e우측캠.MouseWheelMode = Cognex.VisionPro.Display.CogDisplayMouseWheelModeConstants.Zoom1;
-            this.e우측캠.MouseWheelSensitivity = 1D;
-            this.e우측캠.Name = "e우측캠";
-            this.e우측캠.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("e우측캠.OcxState")));
-            this.e우측캠.Size = new System.Drawing.Size(593, 967);
-            this.e우측캠.TabIndex = 1;
-            // 
-            // d상부캠
-            // 
-            this.d하부캠.Controls.Add(this.dockPanel2_Container);
-            this.d하부캠.DockedAsTabbedDocument = true;
-            this.d하부캠.FloatLocation = new System.Drawing.Point(800, 0);
-            this.d하부캠.FloatSize = new System.Drawing.Size(600, 900);
-            this.d하부캠.FloatVertical = true;
-            this.d하부캠.ID = new System.Guid("bb89b76f-49ee-4a47-a8a1-b9e2af121512");
-            this.d하부캠.Name = "d상부캠";
-            this.d하부캠.OriginalSize = new System.Drawing.Size(200, 200);
-            this.d하부캠.SavedDock = DevExpress.XtraBars.Docking.DockingStyle.Top;
-            this.d하부캠.SavedIndex = 1;
-            this.d하부캠.Text = "Top";
-            // 
-            // dockPanel2_Container
-            // 
-            this.dockPanel2_Container.Controls.Add(this.e하부캠);
-            this.dockPanel2_Container.Location = new System.Drawing.Point(0, 0);
-            this.dockPanel2_Container.Name = "dockPanel2_Container";
-            this.dockPanel2_Container.Size = new System.Drawing.Size(774, 967);
-            this.dockPanel2_Container.TabIndex = 0;
             // 
             // e좌측캠
             // 
@@ -249,30 +222,32 @@ namespace TE1.UI.Controls
             this.e좌측캠.MouseWheelSensitivity = 1D;
             this.e좌측캠.Name = "e좌측캠";
             this.e좌측캠.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("e좌측캠.OcxState")));
-            this.e좌측캠.Size = new System.Drawing.Size(593, 967);
+            this.e좌측캠.Size = new System.Drawing.Size(980, 967);
             this.e좌측캠.TabIndex = 0;
             // 
-            // d우측캠
+            // d하부캠
             // 
-            this.d우측캠.Controls.Add(this.controlContainer2);
-            this.d우측캠.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
-            this.d우측캠.FloatSize = new System.Drawing.Size(300, 800);
-            this.d우측캠.ID = new System.Guid("ed5ff30a-6e16-43ef-bef7-27d1a49d40ea");
-            this.d우측캠.Location = new System.Drawing.Point(0, 0);
-            this.d우측캠.Name = "d우측캠";
-            this.d우측캠.OriginalSize = new System.Drawing.Size(600, 200);
-            this.d우측캠.Size = new System.Drawing.Size(600, 1000);
-            this.d우측캠.Text = "Right";
+            this.d하부캠.Controls.Add(this.dockPanel2_Container);
+            this.d하부캠.DockedAsTabbedDocument = true;
+            this.d하부캠.FloatLocation = new System.Drawing.Point(800, 0);
+            this.d하부캠.FloatSize = new System.Drawing.Size(600, 900);
+            this.d하부캠.FloatVertical = true;
+            this.d하부캠.ID = new System.Guid("bb89b76f-49ee-4a47-a8a1-b9e2af121512");
+            this.d하부캠.Name = "d하부캠";
+            this.d하부캠.OriginalSize = new System.Drawing.Size(200, 200);
+            this.d하부캠.SavedDock = DevExpress.XtraBars.Docking.DockingStyle.Top;
+            this.d하부캠.SavedIndex = 1;
+            this.d하부캠.Text = "Top";
             // 
-            // controlContainer2
+            // dockPanel2_Container
             // 
-            this.controlContainer2.Controls.Add(this.e우측캠);
-            this.controlContainer2.Location = new System.Drawing.Point(3, 30);
-            this.controlContainer2.Name = "controlContainer2";
-            this.controlContainer2.Size = new System.Drawing.Size(593, 967);
-            this.controlContainer2.TabIndex = 0;
+            this.dockPanel2_Container.Controls.Add(this.e하부캠);
+            this.dockPanel2_Container.Location = new System.Drawing.Point(0, 0);
+            this.dockPanel2_Container.Name = "dockPanel2_Container";
+            this.dockPanel2_Container.Size = new System.Drawing.Size(200, 200);
+            this.dockPanel2_Container.TabIndex = 0;
             // 
-            // e상부캠
+            // e하부캠
             // 
             this.e하부캠.ColorMapLowerClipColor = System.Drawing.Color.Black;
             this.e하부캠.ColorMapLowerRoiLimit = 0D;
@@ -285,10 +260,48 @@ namespace TE1.UI.Controls
             this.e하부캠.Location = new System.Drawing.Point(0, 0);
             this.e하부캠.MouseWheelMode = Cognex.VisionPro.Display.CogDisplayMouseWheelModeConstants.Zoom1;
             this.e하부캠.MouseWheelSensitivity = 1D;
-            this.e하부캠.Name = "e상부캠";
-            this.e하부캠.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("e상부캠.OcxState")));
-            this.e하부캠.Size = new System.Drawing.Size(774, 967);
+            this.e하부캠.Name = "e하부캠";
+            this.e하부캠.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("e하부캠.OcxState")));
+            this.e하부캠.Size = new System.Drawing.Size(200, 200);
             this.e하부캠.TabIndex = 2;
+            // 
+            // d우측캠
+            // 
+            this.d우측캠.Controls.Add(this.controlContainer2);
+            this.d우측캠.Dock = DevExpress.XtraBars.Docking.DockingStyle.Left;
+            this.d우측캠.FloatSize = new System.Drawing.Size(300, 800);
+            this.d우측캠.ID = new System.Guid("ed5ff30a-6e16-43ef-bef7-27d1a49d40ea");
+            this.d우측캠.Location = new System.Drawing.Point(0, 0);
+            this.d우측캠.Name = "d우측캠";
+            this.d우측캠.OriginalSize = new System.Drawing.Size(977, 200);
+            this.d우측캠.Size = new System.Drawing.Size(977, 1000);
+            this.d우측캠.Text = "Right";
+            // 
+            // controlContainer2
+            // 
+            this.controlContainer2.Controls.Add(this.e우측캠);
+            this.controlContainer2.Location = new System.Drawing.Point(3, 30);
+            this.controlContainer2.Name = "controlContainer2";
+            this.controlContainer2.Size = new System.Drawing.Size(970, 967);
+            this.controlContainer2.TabIndex = 0;
+            // 
+            // e우측캠
+            // 
+            this.e우측캠.ColorMapLowerClipColor = System.Drawing.Color.Black;
+            this.e우측캠.ColorMapLowerRoiLimit = 0D;
+            this.e우측캠.ColorMapPredefined = Cognex.VisionPro.Display.CogDisplayColorMapPredefinedConstants.None;
+            this.e우측캠.ColorMapUpperClipColor = System.Drawing.Color.Black;
+            this.e우측캠.ColorMapUpperRoiLimit = 1D;
+            this.e우측캠.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.e우측캠.DoubleTapZoomCycleLength = 2;
+            this.e우측캠.DoubleTapZoomSensitivity = 2.5D;
+            this.e우측캠.Location = new System.Drawing.Point(0, 0);
+            this.e우측캠.MouseWheelMode = Cognex.VisionPro.Display.CogDisplayMouseWheelModeConstants.Zoom1;
+            this.e우측캠.MouseWheelSensitivity = 1D;
+            this.e우측캠.Name = "e우측캠";
+            this.e우측캠.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("e우측캠.OcxState")));
+            this.e우측캠.Size = new System.Drawing.Size(970, 967);
+            this.e우측캠.TabIndex = 1;
             // 
             // Bind검사정보
             // 
@@ -308,11 +321,12 @@ namespace TE1.UI.Controls
             this.tabbedView1.DocumentGroups.AddRange(new DevExpress.XtraBars.Docking2010.Views.Tabbed.DocumentGroup[] {
             this.documentGroup1});
             this.tabbedView1.Documents.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseDocument[] {
-            this.document1});
-            dockingContainer1.Element = this.documentGroup1;
-            dockingContainer1.Length.UnitValue = 1.9706610012428574D;
+            this.document1,
+            this.document2});
+            dockingContainer2.Element = this.documentGroup1;
+            dockingContainer2.Length.UnitValue = 1.9706610012428574D;
             this.tabbedView1.RootContainer.Nodes.AddRange(new DevExpress.XtraBars.Docking2010.Views.Tabbed.DockingContainer[] {
-            dockingContainer1});
+            dockingContainer2});
             // 
             // CamViewers
             // 
@@ -329,19 +343,20 @@ namespace TE1.UI.Controls
             this.Size = new System.Drawing.Size(1980, 1000);
             ((System.ComponentModel.ISupportInitialize)(this.documentGroup1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.document1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.document2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             this.d좌측캠.ResumeLayout(false);
             this.controlContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.e우측캠)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.e좌측캠)).EndInit();
             this.d하부캠.ResumeLayout(false);
             this.dockPanel2_Container.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.e좌측캠)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.e하부캠)).EndInit();
             this.d우측캠.ResumeLayout(false);
             this.controlContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.e하부캠)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.e우측캠)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind검사정보)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabbedView1)).EndInit();
@@ -374,5 +389,6 @@ namespace TE1.UI.Controls
         private DevExpress.XtraBars.Docking.ControlContainer controlContainer2;
         private Cogutils.RecordDisplay e우측캠;
         private Cogutils.RecordDisplay e하부캠;
+        private DevExpress.XtraBars.Docking2010.Views.Tabbed.Document document2;
     }
 }

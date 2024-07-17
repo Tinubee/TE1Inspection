@@ -88,10 +88,10 @@ namespace TE1.UI.Controls
             // layoutControl1
             // 
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layoutControl1.Location = new System.Drawing.Point(1140, 0);
+            this.layoutControl1.Location = new System.Drawing.Point(970, 0);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.Root;
-            this.layoutControl1.Size = new System.Drawing.Size(840, 1000);
+            this.layoutControl1.Size = new System.Drawing.Size(1010, 1000);
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
             // 
@@ -101,7 +101,7 @@ namespace TE1.UI.Controls
             this.Root.GroupBordersVisible = false;
             this.Root.Name = "Root";
             this.Root.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
-            this.Root.Size = new System.Drawing.Size(840, 1000);
+            this.Root.Size = new System.Drawing.Size(1010, 1000);
             this.Root.TextVisible = false;
             // 
             // dockManager1
@@ -175,8 +175,8 @@ namespace TE1.UI.Controls
             this.d좌측캠.ID = new System.Guid("f5882d5d-e42e-471d-a4f7-a603eb936d37");
             this.d좌측캠.Location = new System.Drawing.Point(0, 0);
             this.d좌측캠.Name = "d좌측캠";
-            this.d좌측캠.OriginalSize = new System.Drawing.Size(1140, 200);
-            this.d좌측캠.Size = new System.Drawing.Size(1140, 1000);
+            this.d좌측캠.OriginalSize = new System.Drawing.Size(970, 200);
+            this.d좌측캠.Size = new System.Drawing.Size(970, 1000);
             this.d좌측캠.Text = "Left & Right";
             // 
             // controlContainer1
@@ -184,7 +184,7 @@ namespace TE1.UI.Controls
             this.controlContainer1.Controls.Add(this.e좌우측캠);
             this.controlContainer1.Location = new System.Drawing.Point(3, 30);
             this.controlContainer1.Name = "controlContainer1";
-            this.controlContainer1.Size = new System.Drawing.Size(1133, 967);
+            this.controlContainer1.Size = new System.Drawing.Size(963, 967);
             this.controlContainer1.TabIndex = 0;
             // 
             // e좌우측캠
@@ -202,7 +202,7 @@ namespace TE1.UI.Controls
             this.e좌우측캠.MouseWheelSensitivity = 1D;
             this.e좌우측캠.Name = "e좌우측캠";
             this.e좌우측캠.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("e좌우측캠.OcxState")));
-            this.e좌우측캠.Size = new System.Drawing.Size(1133, 967);
+            this.e좌우측캠.Size = new System.Drawing.Size(963, 967);
             this.e좌우측캠.TabIndex = 0;
             // 
             // d상부캠
@@ -224,7 +224,7 @@ namespace TE1.UI.Controls
             this.dockPanel2_Container.Controls.Add(this.e상부캠);
             this.dockPanel2_Container.Location = new System.Drawing.Point(0, 0);
             this.dockPanel2_Container.Name = "dockPanel2_Container";
-            this.dockPanel2_Container.Size = new System.Drawing.Size(834, 967);
+            this.dockPanel2_Container.Size = new System.Drawing.Size(1004, 967);
             this.dockPanel2_Container.TabIndex = 0;
             // 
             // e상부캠
@@ -242,7 +242,7 @@ namespace TE1.UI.Controls
             this.e상부캠.MouseWheelSensitivity = 1D;
             this.e상부캠.Name = "e상부캠";
             this.e상부캠.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("e상부캠.OcxState")));
-            this.e상부캠.Size = new System.Drawing.Size(834, 967);
+            this.e상부캠.Size = new System.Drawing.Size(1004, 967);
             this.e상부캠.TabIndex = 2;
             // 
             // Bind검사정보

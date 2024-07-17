@@ -25,7 +25,7 @@ namespace TE1.Schemas
             인쇄내용,
             [Description("WX,StopMarking")]
             인쇄중단,
-            [Description("WX,StartMarking")]
+            [Description("WX,StartMarking=1")]
             인쇄시작,
             [Description("RX,PrintCompTiming")]
             인쇄완료,
