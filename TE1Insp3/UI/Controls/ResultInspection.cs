@@ -67,7 +67,7 @@ namespace TE1.UI.Controls
             this.e측정결과.Appearance.ForeColor = 환경설정.ResultColor(결과.측정결과);
             this.e치수결과.Properties.Appearance.ForeColor = 환경설정.ResultColor(결과.치수결과);
             this.e외관결과.Properties.Appearance.ForeColor = 환경설정.ResultColor(결과.외관결과);
-            this.e큐알코드.Properties.Appearance.ForeColor = 환경설정.ResultColor(결과.큐알결과);
+            this.e큐알코드.Properties.Appearance.ForeColor = 환경설정.ResultColor(결과구분.OK);//환경설정.ResultColor(결과.큐알결과);
             검사정보 정보 = 결과.GetItem(검사항목.QrLegibility);
             if (정보 != null) this.e큐알등급.Properties.Appearance.ForeColor = 환경설정.ResultColor(정보.측정결과);
             else this.e큐알등급.Properties.Appearance.ForeColor = 환경설정.ResultColor(결과구분.WA);

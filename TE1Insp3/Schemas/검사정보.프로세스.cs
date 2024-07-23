@@ -31,16 +31,16 @@ namespace TE1.Schemas
         public const String 큐알정보구분자 = ";";
         public static String 큐알각인내용(DateTime 날짜, 모델구분 모델, Int32 검사코드)
         {
-            List<String> 인쇄항목 = new List<String>();
-            인쇄항목.Add(Utils.FormatDate(날짜, "{0:yyMMdd}"));
-            인쇄항목.Add(((Int32)모델).ToString("d2"));
-            인쇄항목.Add(검사코드.ToString("d4"));
-            인쇄항목.Add(Utils.GetDescription(모델));
+            //List<String> 인쇄항목 = new List<String>();
+            //인쇄항목.Add(Utils.FormatDate(날짜, "{0:yyMMdd}"));
+            //인쇄항목.Add(((Int32)모델).ToString("d2"));
+            //인쇄항목.Add(검사코드.ToString("d4"));
+            //인쇄항목.Add(Utils.GetDescription(모델));
             //인쇄항목.Add(Global.환경설정.회사코드);
             //인쇄항목.Add(Global.환경설정.라인번호);
             //인쇄항목.Add(Global.환경설정.TP_NTP);
             //인쇄항목.Add(Global.환경설정.RevisionNo);
-            String 내용 = String.Join(큐알정보구분자, 인쇄항목.ToArray());
+            String 내용 = $"21001162A0B1B7H{검사코드.ToString("d5")}P000#000";//String.Join(큐알정보구분자, 인쇄항목.ToArray()); => QR코드 임시 수정.
             Debug.WriteLine($"길이={내용.Length} => {내용}");
             return 내용;
             //if (내용.Length > 35) return 내용.Substring(0, 35);
@@ -71,7 +71,7 @@ namespace TE1.Schemas
                 .Select(key => grouped.ContainsKey(key) ? grouped[key] : " ")
                 .ToArray();
 
-            Debug.WriteLine($"{String.Join(",", result)}");
+            //Debug.WriteLine($"{String.Join(",", result)}");
 
             String 추가항목 = String.Join(LF.ToString(), result);
 

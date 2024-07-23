@@ -13,6 +13,13 @@ using System.Reflection;
 
 namespace TE1.Schemas
 {
+    public enum 비전파일구분
+    {
+        [Description("Dimension Left & Right")]
+        Cam02 = 2,
+        [Description("Dimension Top")]
+        Cam03 = 3,
+    }
     public enum 카메라구분
     {
         [ListBindable(false)]
@@ -186,7 +193,12 @@ namespace TE1.Schemas
                 foreach (검사정보 정보 in 자료)
                 {
                     if (!정보.검사여부) continue;
-                    this.검사내역.Add(검사정보.Create(정보, this.검사일시));
+                    if (정보.검사항목 == 검사항목.None)
+                    {
+                        this.검사내역.Add(검사정보.CreateName(정보, this.검사일시));
+                    }
+                    else
+                        this.검사내역.Add(검사정보.Create(정보, this.검사일시));
                 }
             }
             return this;
@@ -197,7 +209,16 @@ namespace TE1.Schemas
             foreach (검사정보 정보 in 자료)
             {
                 if ((Int32)정보.검사장치 != (Int32)카메라) continue;
-                검사정보 수동 = this.검사내역.Where(e => e.검사항목 == 정보.검사항목).FirstOrDefault();
+
+                검사정보 수동 = new 검사정보();
+
+                if (정보.검사항목 == 검사항목.None)
+                    수동 = this.검사내역.Where(e => e.검사명칭 == 정보.검사명칭).FirstOrDefault();
+                else
+                    수동 = this.검사내역.Where(e => e.검사항목 == 정보.검사항목).FirstOrDefault();
+
+                Debug.WriteLine($"{정보.검사명칭} : {정보.교정값}");
+
                 if (수동 == null) continue;
                 수동.최소값 = 정보.최소값;
                 수동.기준값 = 정보.기준값;
@@ -248,6 +269,7 @@ namespace TE1.Schemas
             Double result = 0;
             if (value == 0 || 검사.교정값 <= 0 || value == -99999) result = value;
             else if (검사.카메라여부) result = value * Decimal.ToDouble(검사.교정값) / 1000;
+            else if (검사.검사명칭.Contains("Burr")) result = value * Decimal.ToDouble(검사.교정값) / 1000;
             else result = value;
             return (Decimal)Math.Round(result, Global.환경설정.결과자릿수);
         }
@@ -370,6 +392,7 @@ namespace TE1.Schemas
             return true;
         }
 
+        public 검사정보 SetBurrResult(String name, Double value) => SetResult(검사내역.Where(e => e.검사명칭 == name).FirstOrDefault(), value);
         public 검사정보 SetResult(String name, Double value) => SetResult(검사내역.Where(e => e.검사항목.ToString() == name).FirstOrDefault(), value);
         public 검사정보 SetResult(검사항목 항목, Double value) => SetResult(검사내역.Where(e => e.검사항목 == 항목).FirstOrDefault(), value);
         public void SetResults(카메라구분 카메라, String json)
@@ -377,7 +400,16 @@ namespace TE1.Schemas
             try
             {
                 List<Result> results = JsonConvert.DeserializeObject<List<Result>>(json);
-                foreach (Result result in results) SetResult(result.K, result.V);
+                foreach (Result result in results)
+                {
+                    //if (result.K.Contains("Burr") && !result.K.Contains("Burr1") && !result.K.Contains("Burr2") && !result.K.Contains("Burr3") && !result.K.Contains("Burr4") && !result.K.Contains("Burr5") && !result.K.Contains("Burr6") && !result.K.Contains("Burr7") && !result.K.Contains("Burr8")) 
+                    //if (result.K.Contains("Burr"))
+                    //{
+                    //    //SetBurrResult(result.K, result.V);
+                    //}
+                    //else
+                    SetResult(result.K, result.V);
+                }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message, "Inspection"); }
             //Debug.WriteLine(json);
@@ -533,6 +565,8 @@ namespace TE1.Schemas
             }
         }
         public static 검사정보 Create(검사정보 정보, DateTime 일시) => new 검사정보() { 검사항목 = 정보.검사항목 }.Set(정보, 일시);
+
+        public static 검사정보 CreateName(검사정보 정보, DateTime 일시) => new 검사정보() { 검사명칭 = 정보.검사명칭, 교정값 = 정보.교정값 }.Set(정보, 일시);
         public void Init()
         {
             Attr = Utils.GetAttribute<ResultAttribute>(this.검사항목);
@@ -541,6 +575,7 @@ namespace TE1.Schemas
 
             this.X = InsItems.GetItem(this.검사명칭).X;
             this.Y = InsItems.GetItem(this.검사명칭).Y;
+
             if (this.검사명칭.Contains("M"))
             {
                 this.교정값 = 29;
@@ -552,22 +587,6 @@ namespace TE1.Schemas
                 else
                     this.보정값 = Convert.ToDecimal(InsItems.GetItem(this.검사명칭).Y);
             }
-            //String name = 검사항목.ToString();
-            //if (name.StartsWith("H") && 기준값 == 0)
-            //{
-            //    if (name.EndsWith("X"))
-            //    {
-            //        this.기준값 = Convert.ToDecimal(X);
-            //        this.최소값 = Convert.ToDecimal(X - 0.25);
-            //        this.최대값 = Convert.ToDecimal(X + 0.25);
-            //    }
-            //    else if (name.EndsWith("Y"))
-            //    {
-            //        this.기준값 = Convert.ToDecimal(Y);
-            //        this.최소값 = Convert.ToDecimal(Y - 0.25);
-            //        this.최대값 = Convert.ToDecimal(Y + 0.25);
-            //    }
-            //}
         }
 
         public 검사정보 Set(검사정보 정보, DateTime 일시)

@@ -160,6 +160,9 @@ namespace TE1.Schemas
         {
             if (!검사번호확인(정보주소.제품투입, out 검사결과 검사, Replys.Yes)) return;
             Global.피씨통신.제품투입전송(검사.검사번호);
+            //투입 시 상태정보 전송추가.
+            Global.피씨통신.제품상태전송(Global.상태정보);
+            this.동작상태알림?.Invoke();
         }
 
         private void 평탄측정수행()

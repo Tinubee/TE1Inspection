@@ -149,13 +149,10 @@ namespace TE1.Schemas
         [Result(검사그룹.치수, 장치구분.Cam02, "H28Y", Hosts.Measure)] H28Y = 1282,
         [Result(검사그룹.치수, 장치구분.Cam02, "H28D", Hosts.Measure)] H28D = 1283,
         [Result(검사그룹.치수, 장치구분.Cam02, "H28L", Hosts.Measure)] H28L = 1284,
-
         // B Datum
         [Result(검사그룹.치수, 장치구분.Cam02, "H37X", Hosts.Measure)] H37X = 1371,
         [Result(검사그룹.치수, 장치구분.Cam02, "H37Y", Hosts.Measure)] H37Y = 1372,
         [Result(검사그룹.치수, 장치구분.Cam02, "H37D", Hosts.Measure)] H37D = 1373,
-        //[Result(검사그룹.치수, 장치구분.Cam02, "H37L", Hosts.Measure)] H37L = 1374,
-        //[Result(검사그룹.치수, 장치구분.Cam02, "H37P", Hosts.Measure)] H37P = 1375, //위치도 사실 상 0
 
         // C Datum
         [Result(검사그룹.치수, 장치구분.Cam02, "H38X", Hosts.Measure)] H38X = 1381,
@@ -233,8 +230,11 @@ namespace TE1.Schemas
         // 3. Bolt
         [Result(검사그룹.치수, 장치구분.Cam03, "BTX", Hosts.Measure)] BTX = 2901,
         [Result(검사그룹.치수, 장치구분.Cam03, "BTY", Hosts.Measure)] BTY = 2902,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BTTab", Hosts.Measure)] BTTab = 2903,
+
         [Result(검사그룹.치수, 장치구분.Cam03, "BBX", Hosts.Measure)] BBX = 2911,
         [Result(검사그룹.치수, 장치구분.Cam03, "BBY", Hosts.Measure)] BBY = 2912,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BBTab", Hosts.Measure)] BBTab = 2913,
 
         // 4. Mica
         [Result(검사그룹.치수, 장치구분.Cam03, "M01X1", -1, Hosts.Measure)] M01X1 = 4011,
@@ -563,5 +563,286 @@ namespace TE1.Schemas
         // 9. Others
         [Result(검사그룹.표면, 장치구분.QrReader)] QrLegibility = 9010,
         [Result(검사그룹.표면, 장치구분.QrReader)] Imprinted = 9020,
+
+        //10. Hole Burr
+        // H01Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H01Burr01", Hosts.Measure)] H01Burr01 = 15001,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H01Burr02", Hosts.Measure)] H01Burr02 = 15002,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H01Burr03", Hosts.Measure)] H01Burr03 = 15003,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H01Burr04", Hosts.Measure)] H01Burr04 = 15004,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H01Burr05", Hosts.Measure)] H01Burr05 = 15005,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H01Burr06", Hosts.Measure)] H01Burr06 = 15006,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H01Burr07", Hosts.Measure)] H01Burr07 = 15007,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H01Burr08", Hosts.Measure)] H01Burr08 = 15008,
+
+        // H02Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H02Burr01", Hosts.Measure)] H02Burr01 = 15009,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H02Burr02", Hosts.Measure)] H02Burr02 = 15010,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H02Burr03", Hosts.Measure)] H02Burr03 = 15011,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H02Burr04", Hosts.Measure)] H02Burr04 = 15012,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H02Burr05", Hosts.Measure)] H02Burr05 = 15013,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H02Burr06", Hosts.Measure)] H02Burr06 = 15014,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H02Burr07", Hosts.Measure)] H02Burr07 = 15015,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H02Burr08", Hosts.Measure)] H02Burr08 = 15016,
+
+        // H03Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H03Burr01", Hosts.Measure)] H03Burr01 = 15017,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H03Burr02", Hosts.Measure)] H03Burr02 = 15018,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H03Burr03", Hosts.Measure)] H03Burr03 = 15019,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H03Burr04", Hosts.Measure)] H03Burr04 = 15020,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H03Burr05", Hosts.Measure)] H03Burr05 = 15021,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H03Burr06", Hosts.Measure)] H03Burr06 = 15022,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H03Burr07", Hosts.Measure)] H03Burr07 = 15023,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H03Burr08", Hosts.Measure)] H03Burr08 = 15024,
+
+        // H04Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H04Burr01", Hosts.Measure)] H04Burr01 = 15025,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H04Burr02", Hosts.Measure)] H04Burr02 = 15026,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H04Burr03", Hosts.Measure)] H04Burr03 = 15027,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H04Burr04", Hosts.Measure)] H04Burr04 = 15028,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H04Burr05", Hosts.Measure)] H04Burr05 = 15029,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H04Burr06", Hosts.Measure)] H04Burr06 = 15030,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H04Burr07", Hosts.Measure)] H04Burr07 = 15031,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H04Burr08", Hosts.Measure)] H04Burr08 = 15032,
+
+        // H05Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H05Burr01", Hosts.Measure)] H05Burr01 = 15033,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H05Burr02", Hosts.Measure)] H05Burr02 = 15034,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H05Burr03", Hosts.Measure)] H05Burr03 = 15035,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H05Burr04", Hosts.Measure)] H05Burr04 = 15036,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H05Burr05", Hosts.Measure)] H05Burr05 = 15037,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H05Burr06", Hosts.Measure)] H05Burr06 = 15038,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H05Burr07", Hosts.Measure)] H05Burr07 = 15039,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H05Burr08", Hosts.Measure)] H05Burr08 = 15040,
+
+        // H06Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H06Burr01", Hosts.Measure)] H06Burr01 = 15041,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H06Burr02", Hosts.Measure)] H06Burr02 = 15042,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H06Burr03", Hosts.Measure)] H06Burr03 = 15043,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H06Burr04", Hosts.Measure)] H06Burr04 = 15044,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H06Burr05", Hosts.Measure)] H06Burr05 = 15045,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H06Burr06", Hosts.Measure)] H06Burr06 = 15046,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H06Burr07", Hosts.Measure)] H06Burr07 = 15047,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H06Burr08", Hosts.Measure)] H06Burr08 = 15048,
+
+        // H07Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H07Burr01", Hosts.Measure)] H07Burr01 = 15049,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H07Burr02", Hosts.Measure)] H07Burr02 = 15050,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H07Burr03", Hosts.Measure)] H07Burr03 = 15051,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H07Burr04", Hosts.Measure)] H07Burr04 = 15052,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H07Burr05", Hosts.Measure)] H07Burr05 = 15053,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H07Burr06", Hosts.Measure)] H07Burr06 = 15054,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H07Burr07", Hosts.Measure)] H07Burr07 = 15055,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H07Burr08", Hosts.Measure)] H07Burr08 = 15056,
+
+        // H08Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H08Burr01", Hosts.Measure)] H08Burr01 = 15057,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H08Burr02", Hosts.Measure)] H08Burr02 = 15058,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H08Burr03", Hosts.Measure)] H08Burr03 = 15059,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H08Burr04", Hosts.Measure)] H08Burr04 = 15060,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H08Burr05", Hosts.Measure)] H08Burr05 = 15061,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H08Burr06", Hosts.Measure)] H08Burr06 = 15062,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H08Burr07", Hosts.Measure)] H08Burr07 = 15063,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H08Burr08", Hosts.Measure)] H08Burr08 = 15064,
+
+        // H09Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H09Burr01", Hosts.Measure)] H09Burr01 = 15065,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H09Burr02", Hosts.Measure)] H09Burr02 = 15066,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H09Burr03", Hosts.Measure)] H09Burr03 = 15067,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H09Burr04", Hosts.Measure)] H09Burr04 = 15068,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H09Burr05", Hosts.Measure)] H09Burr05 = 15069,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H09Burr06", Hosts.Measure)] H09Burr06 = 15070,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H09Burr07", Hosts.Measure)] H09Burr07 = 15071,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H09Burr08", Hosts.Measure)] H09Burr08 = 15072,
+
+        // H10Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H10Burr01", Hosts.Measure)] H10Burr01 = 15073,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H10Burr02", Hosts.Measure)] H10Burr02 = 15074,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H10Burr03", Hosts.Measure)] H10Burr03 = 15075,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H10Burr04", Hosts.Measure)] H10Burr04 = 15076,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H10Burr05", Hosts.Measure)] H10Burr05 = 15077,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H10Burr06", Hosts.Measure)] H10Burr06 = 15078,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H10Burr07", Hosts.Measure)] H10Burr07 = 15079,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H10Burr08", Hosts.Measure)] H10Burr08 = 15080,
+
+        // H11Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H11Burr01", Hosts.Measure)] H11Burr01 = 15081,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H11Burr02", Hosts.Measure)] H11Burr02 = 15082,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H11Burr03", Hosts.Measure)] H11Burr03 = 15083,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H11Burr04", Hosts.Measure)] H11Burr04 = 15084,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H11Burr05", Hosts.Measure)] H11Burr05 = 15085,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H11Burr06", Hosts.Measure)] H11Burr06 = 15086,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H11Burr07", Hosts.Measure)] H11Burr07 = 15087,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H11Burr08", Hosts.Measure)] H11Burr08 = 15088,
+
+        // H12Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H12Burr01", Hosts.Measure)] H12Burr01 = 15089,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H12Burr02", Hosts.Measure)] H12Burr02 = 15090,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H12Burr03", Hosts.Measure)] H12Burr03 = 15091,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H12Burr04", Hosts.Measure)] H12Burr04 = 15092,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H12Burr05", Hosts.Measure)] H12Burr05 = 15093,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H12Burr06", Hosts.Measure)] H12Burr06 = 15094,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H12Burr07", Hosts.Measure)] H12Burr07 = 15095,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H12Burr08", Hosts.Measure)] H12Burr08 = 15096,
+
+        // H13Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H13Burr01", Hosts.Measure)] H13Burr01 = 15097,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H13Burr02", Hosts.Measure)] H13Burr02 = 15098,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H13Burr03", Hosts.Measure)] H13Burr03 = 15099,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H13Burr04", Hosts.Measure)] H13Burr04 = 15100,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H13Burr05", Hosts.Measure)] H13Burr05 = 15101,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H13Burr06", Hosts.Measure)] H13Burr06 = 15102,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H13Burr07", Hosts.Measure)] H13Burr07 = 15103,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H13Burr08", Hosts.Measure)] H13Burr08 = 15104,
+
+        // H14Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H14Burr01", Hosts.Measure)] H14Burr01 = 15105,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H14Burr02", Hosts.Measure)] H14Burr02 = 15106,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H14Burr03", Hosts.Measure)] H14Burr03 = 15107,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H14Burr04", Hosts.Measure)] H14Burr04 = 15108,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H14Burr05", Hosts.Measure)] H14Burr05 = 15109,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H14Burr06", Hosts.Measure)] H14Burr06 = 15110,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H14Burr07", Hosts.Measure)] H14Burr07 = 15111,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H14Burr08", Hosts.Measure)] H14Burr08 = 15112,
+
+        // H15Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H15Burr01", Hosts.Measure)] H15Burr01 = 15113,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H15Burr02", Hosts.Measure)] H15Burr02 = 15114,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H15Burr03", Hosts.Measure)] H15Burr03 = 15115,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H15Burr04", Hosts.Measure)] H15Burr04 = 15116,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H15Burr05", Hosts.Measure)] H15Burr05 = 15117,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H15Burr06", Hosts.Measure)] H15Burr06 = 15118,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H15Burr07", Hosts.Measure)] H15Burr07 = 15119,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H15Burr08", Hosts.Measure)] H15Burr08 = 15120,
+
+        // H16Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H16Burr01", Hosts.Measure)] H16Burr01 = 15121,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H16Burr02", Hosts.Measure)] H16Burr02 = 15122,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H16Burr03", Hosts.Measure)] H16Burr03 = 15123,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H16Burr04", Hosts.Measure)] H16Burr04 = 15124,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H16Burr05", Hosts.Measure)] H16Burr05 = 15125,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H16Burr06", Hosts.Measure)] H16Burr06 = 15126,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H16Burr07", Hosts.Measure)] H16Burr07 = 15127,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H16Burr08", Hosts.Measure)] H16Burr08 = 15128,
+
+        // H17Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H17Burr01", Hosts.Measure)] H17Burr01 = 15129,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H17Burr02", Hosts.Measure)] H17Burr02 = 15130,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H17Burr03", Hosts.Measure)] H17Burr03 = 15131,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H17Burr04", Hosts.Measure)] H17Burr04 = 15132,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H17Burr05", Hosts.Measure)] H17Burr05 = 15133,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H17Burr06", Hosts.Measure)] H17Burr06 = 15134,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H17Burr07", Hosts.Measure)] H17Burr07 = 15135,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H17Burr08", Hosts.Measure)] H17Burr08 = 15136,
+
+        // H18Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H18Burr01", Hosts.Measure)] H18Burr01 = 15137,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H18Burr02", Hosts.Measure)] H18Burr02 = 15138,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H18Burr03", Hosts.Measure)] H18Burr03 = 15139,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H18Burr04", Hosts.Measure)] H18Burr04 = 15140,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H18Burr05", Hosts.Measure)] H18Burr05 = 15141,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H18Burr06", Hosts.Measure)] H18Burr06 = 15142,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H18Burr07", Hosts.Measure)] H18Burr07 = 15143,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H18Burr08", Hosts.Measure)] H18Burr08 = 15144,
+
+        // H19Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H19Burr01", Hosts.Measure)] H19Burr01 = 15145,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H19Burr02", Hosts.Measure)] H19Burr02 = 15146,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H19Burr03", Hosts.Measure)] H19Burr03 = 15147,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H19Burr04", Hosts.Measure)] H19Burr04 = 15148,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H19Burr05", Hosts.Measure)] H19Burr05 = 15149,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H19Burr06", Hosts.Measure)] H19Burr06 = 15150,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H19Burr07", Hosts.Measure)] H19Burr07 = 15151,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H19Burr08", Hosts.Measure)] H19Burr08 = 15152,
+
+        // H20Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H20Burr01", Hosts.Measure)] H20Burr01 = 15153,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H20Burr02", Hosts.Measure)] H20Burr02 = 15154,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H20Burr03", Hosts.Measure)] H20Burr03 = 15155,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H20Burr04", Hosts.Measure)] H20Burr04 = 15156,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H20Burr05", Hosts.Measure)] H20Burr05 = 15157,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H20Burr06", Hosts.Measure)] H20Burr06 = 15158,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H20Burr07", Hosts.Measure)] H20Burr07 = 15159,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H20Burr08", Hosts.Measure)] H20Burr08 = 15160,
+
+        // H21Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H21Burr01", Hosts.Measure)] H21Burr01 = 15161,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H21Burr02", Hosts.Measure)] H21Burr02 = 15162,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H21Burr03", Hosts.Measure)] H21Burr03 = 15163,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H21Burr04", Hosts.Measure)] H21Burr04 = 15164,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H21Burr05", Hosts.Measure)] H21Burr05 = 15165,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H21Burr06", Hosts.Measure)] H21Burr06 = 15166,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H21Burr07", Hosts.Measure)] H21Burr07 = 15167,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H21Burr08", Hosts.Measure)] H21Burr08 = 15168,
+
+        // H22Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H22Burr01", Hosts.Measure)] H22Burr01 = 15169,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H22Burr02", Hosts.Measure)] H22Burr02 = 15170,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H22Burr03", Hosts.Measure)] H22Burr03 = 15171,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H22Burr04", Hosts.Measure)] H22Burr04 = 15172,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H22Burr05", Hosts.Measure)] H22Burr05 = 15173,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H22Burr06", Hosts.Measure)] H22Burr06 = 15174,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H22Burr07", Hosts.Measure)] H22Burr07 = 15175,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H22Burr08", Hosts.Measure)] H22Burr08 = 15176,
+
+        // H23Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H23Burr01", Hosts.Measure)] H23Burr01 = 15177,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H23Burr02", Hosts.Measure)] H23Burr02 = 15178,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H23Burr03", Hosts.Measure)] H23Burr03 = 15179,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H23Burr04", Hosts.Measure)] H23Burr04 = 15180,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H23Burr05", Hosts.Measure)] H23Burr05 = 15181,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H23Burr06", Hosts.Measure)] H23Burr06 = 15182,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H23Burr07", Hosts.Measure)] H23Burr07 = 15183,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H23Burr08", Hosts.Measure)] H23Burr08 = 15184,
+
+        // H24Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H24Burr01", Hosts.Measure)] H24Burr01 = 15185,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H24Burr02", Hosts.Measure)] H24Burr02 = 15186,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H24Burr03", Hosts.Measure)] H24Burr03 = 15187,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H24Burr04", Hosts.Measure)] H24Burr04 = 15188,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H24Burr05", Hosts.Measure)] H24Burr05 = 15189,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H24Burr06", Hosts.Measure)] H24Burr06 = 15190,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H24Burr07", Hosts.Measure)] H24Burr07 = 15191,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H24Burr08", Hosts.Measure)] H24Burr08 = 15192,
+
+        // H25Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H25Burr01", Hosts.Measure)] H25Burr01 = 15193,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H25Burr02", Hosts.Measure)] H25Burr02 = 15194,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H25Burr03", Hosts.Measure)] H25Burr03 = 15195,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H25Burr04", Hosts.Measure)] H25Burr04 = 15196,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H25Burr05", Hosts.Measure)] H25Burr05 = 15197,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H25Burr06", Hosts.Measure)] H25Burr06 = 15198,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H25Burr07", Hosts.Measure)] H25Burr07 = 15199,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H25Burr08", Hosts.Measure)] H25Burr08 = 15200,
+
+        // H26Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H26Burr01", Hosts.Measure)] H26Burr01 = 15201,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H26Burr02", Hosts.Measure)] H26Burr02 = 15202,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H26Burr03", Hosts.Measure)] H26Burr03 = 15203,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H26Burr04", Hosts.Measure)] H26Burr04 = 15204,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H26Burr05", Hosts.Measure)] H26Burr05 = 15205,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H26Burr06", Hosts.Measure)] H26Burr06 = 15206,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H26Burr07", Hosts.Measure)] H26Burr07 = 15207,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H26Burr08", Hosts.Measure)] H26Burr08 = 15208,
+
+        // H27Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H27Burr01", Hosts.Measure)] H27Burr01 = 15209,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H27Burr02", Hosts.Measure)] H27Burr02 = 15210,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H27Burr03", Hosts.Measure)] H27Burr03 = 15211,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H27Burr04", Hosts.Measure)] H27Burr04 = 15212,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H27Burr05", Hosts.Measure)] H27Burr05 = 15213,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H27Burr06", Hosts.Measure)] H27Burr06 = 15214,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H27Burr07", Hosts.Measure)] H27Burr07 = 15215,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H27Burr08", Hosts.Measure)] H27Burr08 = 15216,
+
+        // H28Burr
+        [Result(검사그룹.치수, 장치구분.Cam02, "H28Burr01", Hosts.Measure)] H28Burr01 = 15217,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H28Burr02", Hosts.Measure)] H28Burr02 = 15218,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H28Burr03", Hosts.Measure)] H28Burr03 = 15219,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H28Burr04", Hosts.Measure)] H28Burr04 = 15220,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H28Burr05", Hosts.Measure)] H28Burr05 = 15221,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H28Burr06", Hosts.Measure)] H28Burr06 = 15222,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H28Burr07", Hosts.Measure)] H28Burr07 = 15223,
+        [Result(검사그룹.치수, 장치구분.Cam02, "H28Burr08", Hosts.Measure)] H28Burr08 = 15224,
     }
 }

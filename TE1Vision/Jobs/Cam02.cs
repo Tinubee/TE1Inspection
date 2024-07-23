@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Shapes;
 
 namespace TE1.Cam02
 {
@@ -101,6 +102,10 @@ namespace TE1.Cam02
             if (result != CogToolResultConstants.Accept) return;
             if (tool == LineB) SetOriginX();
             else if (tool == LineV) SetOriginY();
+            else if (tool.Name.Contains("H"))
+            {
+                Debug.WriteLine($"{tool.Name} Run");
+            }
         }
 
         public override void FinistedRun()
@@ -118,6 +123,7 @@ namespace TE1.Cam02
             Point2d p = Base.CalculatePoint(new Point2d(LineBC.Segment.StartX, LineBC.Segment.StartY), length, LineB.GetOutputLine().Rotation);
             LineV.X = p.X;
             LineV.Y = p.Y;
+            //LineV.Line.Rotation = p.
         }
 
         internal virtual void SetOriginY()
@@ -144,6 +150,16 @@ namespace TE1.Cam02
         internal Double CalibX => Input<Double>("CalibX");
         internal Double CalibY => Input<Double>("CalibY");
 
+        public override void AfterToolRun(ICogTool tool, CogToolResultConstants result)
+        {
+            base.AfterToolRun(tool, result);
+            if (result != CogToolResultConstants.Accept) return;
+            else if (tool.Name.Contains("H"))
+            {
+                //Debug.WriteLine($"{tool.Name} Run");
+            }
+        }
+
         public override void StartedRun()
         {
             base.StartedRun();
@@ -169,6 +185,7 @@ namespace TE1.Cam02
                 {
                     CogFindCircleTool tool;
                     CogBlobTool blobTool;
+                    CogFindCircleTool BurrTool;
 
                     if (ToolBlock.Tools.Contains(item.Key)) tool = GetTool(item.Key) as CogFindCircleTool;
                     else
@@ -182,14 +199,19 @@ namespace TE1.Cam02
                     if (item.Key != "H38")
                     {
                         String blobToolName = $"{item.Key}B";
-                        if (ToolBlock.Tools.Contains(blobToolName)) blobTool = GetTool(blobToolName) as CogBlobTool;
+                        String BurrToolName = $"{item.Key}Burr";
+
+                        blobTool = GetOrCreateTool(blobToolName);
+                        SetBlob(blobTool, item.Value);
+
+                        if (ToolBlock.Tools.Contains(BurrToolName)) BurrTool = GetTool(BurrToolName) as CogFindCircleTool;
                         else
                         {
-                            blobTool = new CogBlobTool();
-                            blobTool.Name = blobToolName;
-                            this.ToolBlock.Tools.Add(blobTool);
+                            BurrTool = new CogFindCircleTool();
+                            BurrTool.Name = BurrToolName;
+                            this.ToolBlock.Tools.Add(BurrTool);
                         }
-                        SetBlob(blobTool, item.Value);
+                        SetBurr(BurrTool, item.Value);
                     }
                 }
                 if (item.Value.InsType == InsType.R) SetRectangle(GetTool(item.Key) as CogToolBlock, item.Value);
@@ -207,17 +229,48 @@ namespace TE1.Cam02
                 }
             }
         }
-
+        private CogBlobTool GetOrCreateTool(string toolName)
+        {
+            CogBlobTool tool;
+            if (ToolBlock.Tools.Contains(toolName)) tool = GetTool(toolName) as CogBlobTool;
+            else
+            {
+                tool = new CogBlobTool();
+                tool.Name = toolName;
+                this.ToolBlock.Tools.Add(tool);
+            }
+            return tool;
+        }
         internal virtual void SetRectangle(CogToolBlock tool, InsItem p)
         {
             if (tool == null) return;
             Base.Input(tool, "X", -p.Y / CalibX);
             Base.Input(tool, "Y", -p.X / CalibY);
         }
+        internal virtual void SetBurr(CogFindCircleTool tool, InsItem p)
+        {
+            Double x = -p.Y / CalibX;
+            Double y = -p.X / CalibY;
+            Double r = p.R / CalibY;
 
+            tool.RunParams.ExpectedCircularArc.CenterX = x;
+            tool.RunParams.ExpectedCircularArc.CenterY = y;
+            tool.RunParams.ExpectedCircularArc.Radius = r;
+            tool.RunParams.ExpectedCircularArc.AngleStart = 0;
+            tool.RunParams.ExpectedCircularArc.AngleSpan = 360;
+
+            tool.RunParams.CaliperSearchLength = 150;
+            tool.RunParams.CaliperProjectionLength = 10;
+            tool.RunParams.CaliperSearchDirection = CogFindCircleSearchDirectionConstants.Outward;
+            tool.RunParams.CaliperRunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
+            tool.RunParams.CaliperRunParams.ContrastThreshold = 10;
+            tool.RunParams.CaliperRunParams.FilterHalfSizeInPixels = 5;
+
+            tool.RunParams.NumCalipers = 8;
+            tool.InputImage = (CogImage8Grey)this.InputImage;
+        }
         internal virtual void SetBlob(CogBlobTool tool, InsItem p)
         {
-            //Debug.WriteLine($"{tool.Name} SetBlob");
             Double x = -p.Y / CalibX;
             Double y = -p.X / CalibY;
             Double r = p.R / CalibY;
@@ -249,7 +302,7 @@ namespace TE1.Cam02
             tool.InputImage = this.InputImage;
         }
 
-        internal virtual void SetCircle(CogFindCircleTool tool, InsItem p)
+        internal virtual void SetCircle(CogFindCircleTool tool, InsItem p, String name = null)
         {
             Double x = -p.Y / CalibX;
             Double y = -p.X / CalibY;
@@ -267,6 +320,7 @@ namespace TE1.Cam02
             tool.RunParams.CaliperRunParams.FilterHalfSizeInPixels = 5;
 
             tool.RunParams.NumCalipers = 15;
+            //tool.InputImage = (CogImage8Grey)this.InputImage;
         }
 
         internal virtual void SetCaliper(CogCaliperTool tool, InsItem p)
@@ -301,15 +355,15 @@ namespace TE1.Cam02
                     {
                         if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
                         {
-                            results.Add(new Result(item.Key + "X", r.X));
-                            results.Add(new Result(item.Key + "Y", r.Y));
+                            results.Add(new Result(item.Key + "X", item.Value.X));
+                            results.Add(new Result(item.Key + "Y", item.Value.Y));
                             results.Add(new Result(item.Key + "D", r.D));
                             results.Add(new Result(item.Key + "L", r.L));
                         }
                         continue;
                     }
 
-                    if(item.Key + "B" != "H38B")
+                    if (item.Key + "B" != "H38B")
                     {
                         CogBlobTool tool = GetTool(item.Key + "B") as CogBlobTool;
                         Int32 count = tool.Results.GetBlobs().Count;
@@ -323,10 +377,43 @@ namespace TE1.Cam02
                         }
                         else
                         {
-                            if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
+                            CogFindCircleTool circleTool = GetTool(item.Key) as CogFindCircleTool;
+                            if (circleTool.Results.Count != 0)
                             {
-                                results.Add(new Result(item.Key + "X", r.X));
-                                results.Add(new Result(item.Key + "Y", r.Y));
+                                Debug.WriteLine($"{item.Key}");
+                                CogFindCircleTool burrTool = GetTool(item.Key + "Burr") as CogFindCircleTool;
+
+                                for (Int32 lop = 0; lop < burrTool.Results.Count; lop++)
+                                {
+                                    CogDistancePointPointTool distancetool = new CogDistancePointPointTool();
+                                    distancetool.InputImage = this.InputImage;
+                                    distancetool.StartX = circleTool.Results.GetCircle().CenterX;
+                                    distancetool.StartY = circleTool.Results.GetCircle().CenterY;
+                                    distancetool.EndX = burrTool.Results[lop].X;
+                                    distancetool.EndY = burrTool.Results[lop].Y;
+                                    distancetool.Run();
+
+                                    results.Add(new Result(item.Key + $"Burr0{lop + 1}", Math.Round(distancetool.Distance, 3)));
+
+                                    //if (lop == burrTool.Results.Count - 1) 
+                                    //{
+                                    //    results.Add(new Result(item.Key + $"Burr", 0));
+                                    //}
+                                }
+                            }
+                            if (CalResult(circleTool, item.Value, out InsItem r))
+                            {
+                                if (item.Key == "H37")
+                                {
+                                    results.Add(new Result(item.Key + "X", item.Value.X));
+                                    results.Add(new Result(item.Key + "Y", item.Value.Y));
+                                }
+                                else
+                                {
+                                    results.Add(new Result(item.Key + "X", r.X));
+                                    results.Add(new Result(item.Key + "Y", r.Y));
+                                }
+                       
                                 results.Add(new Result(item.Key + "D", r.D));
                                 results.Add(new Result(item.Key + "L", r.L));
                             }
@@ -401,6 +488,22 @@ namespace TE1.Cam02
             if (Idx >= Blobs.Count) Idx = Blobs.Count - 1;
             return Blobs[Idx];
         }
+
+        public CogCircle GetCircleRegion(CogFindCircleTool tool)
+        {
+            if (tool.Results.Count == 0) return null;
+
+            return tool.Results.GetCircle();
+        }
+
+        public void SetCircleRegion(CogBlobTool tool, CogCircle region)
+        {
+            tool.Region = region;
+            //if (tool.Results.Count == 0) return null;
+
+            //return tool.Results.GetCircle();
+        }
+
         internal virtual Boolean CalResult(CogCaliperTool tool, InsItem ins, out InsItem result)
         {
             result = new InsItem() { InsType = ins.InsType };

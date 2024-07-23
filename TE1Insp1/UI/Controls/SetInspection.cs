@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media.Media3D;
 using TE1.Schemas;
 
 namespace TE1.UI.Controls
@@ -47,19 +48,24 @@ namespace TE1.UI.Controls
             this.e모델선택.CustomDisplayText += 선택모델표현;
             this.b설정저장.Click += 설정저장;
             this.b도구설정.ButtonClick += 도구설정;
-            EnumToList 캠 = new EnumToList(Global.그랩제어.Keys.ToArray());
+            EnumToList 캠 = new EnumToList(Enum.GetValues(typeof(비전파일구분)));
+
             캠.SetLookUpEdit(this.b도구설정);
             this.b도구설정.EditValue = 캠.First().Value;
 
             Global.검사자료.수동검사알림 += 수동검사알림;
             this.ｅ교정.ButtonClick += 교정계산;
             this.b측정정보.Click += 측정정보;
+            this.b홀버전체보정.Click += B홀버전체보정_Click;
 
             Localization.SetColumnCaption(this.e모델선택, typeof(모델정보));
             Localization.SetColumnCaption(this.GridView1, typeof(검사정보));
             this.b설정저장.Text = 번역.설정저장;
             this.모델선택(this.e모델선택, EventArgs.Empty);
         }
+
+      
+
         public void Close() { }
 
         private 모델구분 선택모델 => (모델구분)this.e모델선택.EditValue;
@@ -128,10 +134,19 @@ namespace TE1.UI.Controls
             foreach (검사정보 설정 in 검사설정)
             {
                 if (설정.검사장치 != (장치구분)카메라) continue;
+
+                //검사정보 검사 = new 검사정보();
+                //if (설정.검사항목 == 검사항목.None)
+                //{
+                //    검사 = 결과.검사내역.Where(e => e.검사명칭 == 설정.검사명칭).FirstOrDefault();
+                //}
+                //else
                 검사정보 검사 = 결과.검사내역.Where(e => e.검사항목 == 설정.검사항목).FirstOrDefault();
+
                 if (검사 == null || 검사.측정결과 <= 결과구분.ER) continue;
                 설정.측정값 = 검사.측정값;
                 설정.결과값 = 검사.결과값;
+                //설정.교정값 = 검사.교정값;
             }
             this.GridView1.RefreshData();
         }
@@ -147,7 +162,18 @@ namespace TE1.UI.Controls
 
             this.GridView1.RefreshRow(this.GridView1.FocusedRowHandle);
         }
+        private void B홀버전체보정_Click(object sender, EventArgs e)
+        {
+            //전체 보정값계산로직 추가 
+            for (int lop = 0; lop < this.검사설정.Count; lop++)
+            {
+                검사정보 정보 = this.검사설정[lop] as 검사정보;
 
+                if (정보.검사명칭.Contains("Burr"))
+                    정보.교정계산(정보);
+            }
+            this.GridView1.RefreshData();
+        }
         private void 측정정보(object sender, EventArgs e)
         {
             Forms.CalibInfo f = new Forms.CalibInfo();

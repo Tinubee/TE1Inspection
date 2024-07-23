@@ -199,7 +199,8 @@ namespace TE1.Schemas
         {
             모델정보 정보 = this.GetItem(모델);
             if (정보 == null || 정보.검사설정 == null) return String.Empty;
-            검사정보 검사 = 정보.검사설정.GetItem(항목);
+            
+            검사정보 검사 = 항목 == 검사항목.None  ? 정보.검사설정.GetItem(항목.ToString()) : 정보.검사설정.GetItem(항목);
             if (검사 == null) return String.Empty;
             return 검사.검사명칭;
         }

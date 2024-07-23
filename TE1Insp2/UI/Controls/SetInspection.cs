@@ -66,11 +66,13 @@ namespace TE1.UI.Controls
 
         private void 모델선택(object sender, EventArgs e)
         {
-            try { 
+            try
+            {
                 this.GridControl1.DataSource = this.검사설정;
                 if (this.검사설정 != null && this.검사설정.Count > 0)
                 {
-                    Task.Run(() => { 
+                    Task.Run(() =>
+                    {
                         Task.Delay(500).Wait();
                         this.GridView1.MoveFirst();
                         //this.SetEditable(this.GridView1, this.GridView1.FocusedRowHandle);
@@ -78,8 +80,9 @@ namespace TE1.UI.Controls
                     });
                 }
             }
-            catch (Exception ex) {
-                Global.오류로그(검사설정.로그영역.GetString(), 번역.모델선택, $"{번역.모델선택}\r\n{ex.Message}" , true);
+            catch (Exception ex)
+            {
+                Global.오류로그(검사설정.로그영역.GetString(), 번역.모델선택, $"{번역.모델선택}\r\n{ex.Message}", true);
                 this.GridControl1.DataSource = null;
             }
         }
@@ -121,10 +124,19 @@ namespace TE1.UI.Controls
         private void 수동검사알림(카메라구분 카메라, 검사결과 결과)
         {
             if (this.InvokeRequired) { this.BeginInvoke(new Action(() => 수동검사알림(카메라, 결과))); return; }
-            foreach(검사정보 설정 in 검사설정)
+            foreach (검사정보 설정 in 검사설정)
             {
+                검사정보 검사 = new 검사정보();
+
                 if (설정.검사장치 != (장치구분)카메라) continue;
-                검사정보 검사 = 결과.검사내역.Where(e => e.검사항목 == 설정.검사항목).FirstOrDefault();
+
+                if (설정.검사항목 == 검사항목.None)
+                {
+                    검사 = 결과.검사내역.Where(e => e.검사명칭 == 설정.검사명칭).FirstOrDefault();
+                }
+                else
+                    검사 = 결과.검사내역.Where(e => e.검사항목 == 설정.검사항목).FirstOrDefault();
+                
                 if (검사 == null || 검사.측정결과 <= 결과구분.ER) continue;
                 설정.측정값 = 검사.측정값;
             }

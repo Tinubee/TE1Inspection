@@ -34,6 +34,12 @@ namespace TE1.Schemas
                 if (!Bindable(항목)) continue;
                 ResultAttribute a = Utils.GetAttribute<ResultAttribute>(항목);
                 this.Add(new 검사정보() { 검사항목 = 항목, 검사명칭 = 항목.ToString(), 검사그룹 = a.검사그룹, 검사장치 = a.장치구분 });
+                //if (항목.ToString().StartsWith("H") && 항목.ToString().Contains("Burr") && 항목.ToString().Contains("H38") == false)
+                //{
+                //    for (Int32 lop = 1; lop <= 8; lop++)
+                //        this.Add(new 검사정보() { 검사항목 = 검사항목.None, 검사명칭 = $"{항목}{lop}", 검사그룹 = a.검사그룹, 검사장치 = a.장치구분 });
+                //}
+
             }
 
             if (!File.Exists(저장파일))
@@ -59,7 +65,14 @@ namespace TE1.Schemas
         {
             if (자료 == null || 자료.Count < 1) return;
             this.ForEach(설정 => {
-                검사정보 정보 = 자료.Where(e => e.검사항목 == 설정.검사항목).FirstOrDefault();
+                검사정보 정보 = new 검사정보();
+                //if (설정.검사항목 == 검사항목.None)
+                //    정보 = 자료.Where(e => e.검사명칭 == 설정.검사명칭).FirstOrDefault();
+                //else
+                //{
+                //    정보 = 자료.Where(e => e.검사항목 == 설정.검사항목).FirstOrDefault();
+                //}
+                정보 = 자료.Where(e => e.검사항목 == 설정.검사항목).FirstOrDefault();
                 if (정보 != null) 설정.Set(정보, DateTime.Now);
             });
         }
@@ -85,5 +98,7 @@ namespace TE1.Schemas
         }
 
         public 검사정보 GetItem(검사항목 항목) => this.Where(e => e.검사항목 == 항목).FirstOrDefault();
+
+        public 검사정보 GetItem(String 항목) => this.Where(e => e.검사명칭 == 항목).FirstOrDefault();
     }
 }

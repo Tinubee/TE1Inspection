@@ -53,6 +53,8 @@ namespace TE1.Schemas
 
         public void Save(검사결과 검사)
         {
+            
+
             this.테이블.Add(검사);
             this.Save();
         }

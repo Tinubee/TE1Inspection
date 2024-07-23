@@ -52,12 +52,18 @@ namespace TE1.Schemas
 
         private Boolean 검사설정수신(통신자료 자료)
         {
+            Debug.WriteLine("검사설정 수신 완료.");
             모델정보 모델 = Global.모델자료.GetItem((모델구분)자료.번호);
             if (모델 == null) return false;
             List<검사정보> 설정자료 = 자료.Get<List<검사정보>>();
-            foreach(검사정보 정보 in 설정자료)
+            foreach (검사정보 정보 in 설정자료)
             {
-                검사정보 설정 = 모델.검사설정.GetItem(정보.검사항목);
+                검사정보 설정 = new 검사정보();
+                if (정보.검사항목 == 검사항목.None)
+                    설정 = 모델.검사설정.GetItem(정보.검사명칭);
+                else
+                    설정 = 모델.검사설정.GetItem(정보.검사항목);
+
                 설정.Set(정보, DateTime.Now);
             }
             모델.검사설정.Save();
@@ -71,7 +77,6 @@ namespace TE1.Schemas
         }
         private Boolean 치수완료수신(통신자료 자료)
         {
-            //Global.장치통신.치수측정완료();
             Debug.WriteLine($"치수완료수신 => {자료.번호}");
             검사결과 검사 = Global.검사자료.검사항목찾기(자료.번호);
             if (검사 == null) return false;
@@ -96,7 +101,7 @@ namespace TE1.Schemas
             if (검사 == null) return false;
 
             List<검사정보> 센서 = 자료.Get<List<검사정보>>();
-            foreach(검사정보 정보 in 센서)
+            foreach (검사정보 정보 in 센서)
                 검사.SetResult(정보.검사항목, (Double)정보.측정값);
             return true;
         }
@@ -108,7 +113,7 @@ namespace TE1.Schemas
         public void 상부치수전송(Int32 검사번호) => Publish(검사번호, 피씨명령.상부치수, Hosts.Measure);
         public void 하부표면전송(Int32 검사번호) => Publish(검사번호, 피씨명령.하부표면, Hosts.Surface);
         public void 상부표면전송(Int32 검사번호) => Publish(검사번호, 피씨명령.상부표면, Hosts.Surface);
-        public void 제품상태전송(상태정보 정보) => Publish(정보 , 피씨명령.상태정보);
+        public void 제품상태전송(상태정보 정보) => Publish(정보, 피씨명령.상태정보);
         public void VIP모드상태전송(Boolean 모드) => Publish(모드, 피씨명령.VIP모드);
         #endregion
     }

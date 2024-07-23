@@ -30,7 +30,6 @@ namespace TE1.UI.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetInspection));
             DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
@@ -41,10 +40,13 @@ namespace TE1.UI.Controls
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetInspection));
             this.GridControl1 = new MvUtils.CustomGrid();
             this.검사설정Bind = new System.Windows.Forms.BindingSource(this.components);
             this.GridView1 = new MvUtils.CustomView();
             this.col검사분류 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.e분류 = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+            this.Bind검사분류 = new System.Windows.Forms.BindingSource(this.components);
             this.col검사명칭 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col검사일시 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col검사항목 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -70,8 +72,6 @@ namespace TE1.UI.Controls
             this.col카메라여부 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col결과부호 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col오류문구 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.e분류 = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
-            this.Bind검사분류 = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
@@ -86,12 +86,13 @@ namespace TE1.UI.Controls
             this.b분류설정 = new DevExpress.XtraEditors.PopupContainerEdit();
             this.popupContainerControl1 = new DevExpress.XtraEditors.PopupContainerControl();
             this.e분류자료 = new TE1.UI.Controls.Categorys();
+            this.b홀버전체보정 = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ｅ교정)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.e분류)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind검사분류)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ｅ교정)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
@@ -187,6 +188,24 @@ namespace TE1.UI.Controls
             this.col검사분류.Name = "col검사분류";
             this.col검사분류.Visible = true;
             this.col검사분류.VisibleIndex = 0;
+            // 
+            // e분류
+            // 
+            this.e분류.AutoHeight = false;
+            this.e분류.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.e분류.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("명칭", "Category")});
+            this.e분류.DataSource = this.Bind검사분류;
+            this.e분류.DisplayMember = "명칭";
+            this.e분류.Name = "e분류";
+            this.e분류.NullText = "[Category]";
+            this.e분류.ShowHeader = false;
+            this.e분류.ValueMember = "코드";
+            // 
+            // Bind검사분류
+            // 
+            this.Bind검사분류.DataSource = typeof(TE1.Schemas.분류자료);
             // 
             // col검사명칭
             // 
@@ -407,24 +426,6 @@ namespace TE1.UI.Controls
             this.col오류문구.Name = "col오류문구";
             this.col오류문구.OptionsColumn.ReadOnly = true;
             // 
-            // e분류
-            // 
-            this.e분류.AutoHeight = false;
-            this.e분류.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.e분류.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
-            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("명칭", "Category")});
-            this.e분류.DataSource = this.Bind검사분류;
-            this.e분류.DisplayMember = "명칭";
-            this.e분류.Name = "e분류";
-            this.e분류.NullText = "[Category]";
-            this.e분류.ShowHeader = false;
-            this.e분류.ValueMember = "코드";
-            // 
-            // Bind검사분류
-            // 
-            this.Bind검사분류.DataSource = typeof(TE1.Schemas.분류자료);
-            // 
             // barManager1
             // 
             this.barManager1.DockControls.Add(this.barDockControlTop);
@@ -467,6 +468,7 @@ namespace TE1.UI.Controls
             // 
             // panelControl1
             // 
+            this.panelControl1.Controls.Add(this.b홀버전체보정);
             this.panelControl1.Controls.Add(this.b측정정보);
             this.panelControl1.Controls.Add(this.b도구설정);
             this.panelControl1.Controls.Add(this.e모델선택);
@@ -589,6 +591,19 @@ namespace TE1.UI.Controls
             this.e분류자료.Size = new System.Drawing.Size(500, 400);
             this.e분류자료.TabIndex = 0;
             // 
+            // b홀버전체보정
+            // 
+            this.b홀버전체보정.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.b홀버전체보정.Appearance.Options.UseFont = true;
+            this.b홀버전체보정.Dock = System.Windows.Forms.DockStyle.Right;
+            this.b홀버전체보정.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("simpleButton1.ImageOptions.SvgImage")));
+            this.b홀버전체보정.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
+            this.b홀버전체보정.Location = new System.Drawing.Point(779, 5);
+            this.b홀버전체보정.Name = "b홀버전체보정";
+            this.b홀버전체보정.Size = new System.Drawing.Size(140, 42);
+            this.b홀버전체보정.TabIndex = 22;
+            this.b홀버전체보정.Text = "HoleBurrCal";
+            // 
             // SetInspection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -605,9 +620,9 @@ namespace TE1.UI.Controls
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ｅ교정)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.e분류)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind검사분류)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ｅ교정)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
@@ -669,5 +684,6 @@ namespace TE1.UI.Controls
         private DevExpress.XtraGrid.Columns.GridColumn colY;
         private DevExpress.XtraGrid.Columns.GridColumn colD;
         private DevExpress.XtraGrid.Columns.GridColumn col오류문구;
+        private DevExpress.XtraEditors.SimpleButton b홀버전체보정;
     }
 }

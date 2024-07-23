@@ -39,8 +39,8 @@ namespace TE1
         public static InsItem H26 = new InsItem(2, InsType.H, -666.50, +221.81, 9.0);
         public static InsItem H27 = new InsItem(2, InsType.H, -746.50, +221.81, 9.0);
         public static InsItem H28 = new InsItem(2, InsType.H, -930.30, +221.81, 9.0);
-        public static InsItem H37 = new InsItem(2, InsType.H, -982.25, -63.00, 7.5);
-        public static InsItem H38 = new InsItem(2, InsType.H, -8.75, -63.00, 7.5);
+        public static InsItem H37 = new InsItem(2, InsType.H, -982.25, -63.00, 7.5); //Datum
+        public static InsItem H38 = new InsItem(2, InsType.H, -8.75, -63.00, 7.5); //Datum
         public static InsItem R01 = new InsItem(2, InsType.R, -7.75, +63.00, 9.5);
         public static InsItem T101 = new InsItem(2, InsType.Y, -933.30, -202.58);
         public static InsItem T103 = new InsItem(2, InsType.Y, -849.73, -202.58);
