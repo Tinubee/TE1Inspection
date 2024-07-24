@@ -309,14 +309,14 @@ namespace TE1.Cam03
             tool.Region.CenterY = y;
             tool.Region.SideXLength = 160;
             tool.Region.SideYLength = 50;
-            if (p.InsType == InsType.X)
-            {
-                tool.Region.Rotation = Math.PI / 2;
-            }
-            else
-            {
-                tool.Region.Rotation = -Math.PI;
-            }
+            //if (p.InsType == InsType.X)
+            //{
+            //    tool.Region.Rotation = Math.PI / 2;
+            //}
+            //else
+            //{
+            //    tool.Region.Rotation = -Math.PI;
+            //}
 
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
             //tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DarkToLight;

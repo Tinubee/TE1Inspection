@@ -69,17 +69,27 @@ namespace TE1
 
                 if (!환경설정.Init()) return false;
                 로그자료.Init();
+                Debug.WriteLine("로그자료 Init완료.");
                 유저자료.Init();
+                Debug.WriteLine("유저자료 Init완료.");
                 피씨통신.Init();
+                Debug.WriteLine("피씨통신 Init완료.");
                 모델자료.Init();
+                Debug.WriteLine("모델자료 Init완료.");
                 분류자료.Init();
+                Debug.WriteLine("분류자료 Init완료.");
                 검사자료.Init();
+                Debug.WriteLine("검사자료 Init완료.");
                 if (!그랩제어.Init()) new Exception("Camera initialization failed.");
                 if (!피씨통신.Open()) new Exception("Unable to connect to server.");
                 비전검사.Init(); // 그랩장치가 먼저 Init 되어야 함
+                Debug.WriteLine("비전검사 Init완료.");
                 사진자료.Init();
+                Debug.WriteLine("사진자료 Init완료.");
                 조명제어.Init();
+                Debug.WriteLine("조명제어 Init완료.");
                 캘리브.Init();
+                Debug.WriteLine("캘리브 Init완료.");
 
                 Global.정보로그(로그영역, "Initialize", "Initialize the system.", false);
                 Initialized?.Invoke(null, true);

@@ -193,12 +193,7 @@ namespace TE1.Schemas
                 foreach (검사정보 정보 in 자료)
                 {
                     if (!정보.검사여부) continue;
-                    if (정보.검사항목 == 검사항목.None)
-                    {
-                        this.검사내역.Add(검사정보.CreateName(정보, this.검사일시));
-                    }
-                    else
-                        this.검사내역.Add(검사정보.Create(정보, this.검사일시));
+                    this.검사내역.Add(검사정보.Create(정보, this.검사일시));
                 }
             }
             return this;
@@ -280,7 +275,7 @@ namespace TE1.Schemas
         }
         public Boolean SetResultValue(검사정보 검사, Double value, out Decimal 결과값, out Decimal 측정값, Boolean 마진포함 = false)
         {
-           
+
             Decimal result = PixelToMeter(검사, value);
             result += 검사.보정값;
             result *= 검사.결과부호;
@@ -316,7 +311,7 @@ namespace TE1.Schemas
                 결과값 = result;
                 측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
             }
-           
+
             //결과값 = result;
             //측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
             if (r) return true;

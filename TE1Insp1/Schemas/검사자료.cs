@@ -26,8 +26,15 @@ namespace TE1.Schemas
 
         public void Init()
         {
-            this.수동검사초기화();
-            Global.환경설정.모델변경알림 += 모델변경알림;
+            try
+            {
+                this.수동검사초기화();
+                Global.환경설정.모델변경알림 += 모델변경알림;
+            }
+            catch (Exception ex)
+            {
+                Global.오류로그("검사자료", "검사자료", $"{ex.Message}", true);
+            }
         }
 
         public Boolean Close() => true;
