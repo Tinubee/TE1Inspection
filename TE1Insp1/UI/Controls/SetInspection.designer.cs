@@ -30,6 +30,7 @@ namespace TE1.UI.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetInspection));
             DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
@@ -40,7 +41,6 @@ namespace TE1.UI.Controls
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetInspection));
             this.GridControl1 = new MvUtils.CustomGrid();
             this.검사설정Bind = new System.Windows.Forms.BindingSource(this.components);
             this.GridView1 = new MvUtils.CustomView();
@@ -78,6 +78,7 @@ namespace TE1.UI.Controls
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.b홀버전체보정 = new DevExpress.XtraEditors.SimpleButton();
             this.b측정정보 = new DevExpress.XtraEditors.SimpleButton();
             this.b도구설정 = new DevExpress.XtraEditors.LookUpEdit();
             this.e모델선택 = new DevExpress.XtraEditors.LookUpEdit();
@@ -86,7 +87,7 @@ namespace TE1.UI.Controls
             this.b분류설정 = new DevExpress.XtraEditors.PopupContainerEdit();
             this.popupContainerControl1 = new DevExpress.XtraEditors.PopupContainerControl();
             this.e분류자료 = new TE1.UI.Controls.Categorys();
-            this.b홀버전체보정 = new DevExpress.XtraEditors.SimpleButton();
+            this.b홀XY옵셋전체입력 = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).BeginInit();
@@ -114,7 +115,7 @@ namespace TE1.UI.Controls
             this.GridControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.ｅ교정,
             this.e분류});
-            this.GridControl1.Size = new System.Drawing.Size(1244, 729);
+            this.GridControl1.Size = new System.Drawing.Size(1442, 729);
             this.GridControl1.TabIndex = 0;
             this.GridControl1.UseDirectXPaint = DevExpress.Utils.DefaultBoolean.True;
             this.GridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -440,7 +441,7 @@ namespace TE1.UI.Controls
             this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
-            this.barDockControlTop.Size = new System.Drawing.Size(1244, 0);
+            this.barDockControlTop.Size = new System.Drawing.Size(1442, 0);
             // 
             // barDockControlBottom
             // 
@@ -448,7 +449,7 @@ namespace TE1.UI.Controls
             this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.barDockControlBottom.Location = new System.Drawing.Point(0, 781);
             this.barDockControlBottom.Manager = this.barManager1;
-            this.barDockControlBottom.Size = new System.Drawing.Size(1244, 0);
+            this.barDockControlBottom.Size = new System.Drawing.Size(1442, 0);
             // 
             // barDockControlLeft
             // 
@@ -462,12 +463,13 @@ namespace TE1.UI.Controls
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(1244, 0);
+            this.barDockControlRight.Location = new System.Drawing.Point(1442, 0);
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Size = new System.Drawing.Size(0, 781);
             // 
             // panelControl1
             // 
+            this.panelControl1.Controls.Add(this.b홀XY옵셋전체입력);
             this.panelControl1.Controls.Add(this.b홀버전체보정);
             this.panelControl1.Controls.Add(this.b측정정보);
             this.panelControl1.Controls.Add(this.b도구설정);
@@ -478,8 +480,21 @@ namespace TE1.UI.Controls
             this.panelControl1.Location = new System.Drawing.Point(0, 0);
             this.panelControl1.Name = "panelControl1";
             this.panelControl1.Padding = new System.Windows.Forms.Padding(3);
-            this.panelControl1.Size = new System.Drawing.Size(1244, 52);
+            this.panelControl1.Size = new System.Drawing.Size(1442, 52);
             this.panelControl1.TabIndex = 5;
+            // 
+            // b홀버전체보정
+            // 
+            this.b홀버전체보정.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.b홀버전체보정.Appearance.Options.UseFont = true;
+            this.b홀버전체보정.Dock = System.Windows.Forms.DockStyle.Right;
+            this.b홀버전체보정.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("b홀버전체보정.ImageOptions.SvgImage")));
+            this.b홀버전체보정.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
+            this.b홀버전체보정.Location = new System.Drawing.Point(977, 5);
+            this.b홀버전체보정.Name = "b홀버전체보정";
+            this.b홀버전체보정.Size = new System.Drawing.Size(140, 42);
+            this.b홀버전체보정.TabIndex = 22;
+            this.b홀버전체보정.Text = "HoleBurrCal";
             // 
             // b측정정보
             // 
@@ -488,7 +503,7 @@ namespace TE1.UI.Controls
             this.b측정정보.Dock = System.Windows.Forms.DockStyle.Right;
             this.b측정정보.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("b측정정보.ImageOptions.SvgImage")));
             this.b측정정보.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
-            this.b측정정보.Location = new System.Drawing.Point(919, 5);
+            this.b측정정보.Location = new System.Drawing.Point(1117, 5);
             this.b측정정보.Name = "b측정정보";
             this.b측정정보.Size = new System.Drawing.Size(140, 42);
             this.b측정정보.TabIndex = 20;
@@ -548,7 +563,7 @@ namespace TE1.UI.Controls
             this.b설정저장.Appearance.Options.UseFont = true;
             this.b설정저장.Dock = System.Windows.Forms.DockStyle.Right;
             this.b설정저장.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("b설정저장.ImageOptions.SvgImage")));
-            this.b설정저장.Location = new System.Drawing.Point(1059, 5);
+            this.b설정저장.Location = new System.Drawing.Point(1257, 5);
             this.b설정저장.Name = "b설정저장";
             this.b설정저장.Size = new System.Drawing.Size(180, 42);
             this.b설정저장.TabIndex = 0;
@@ -591,18 +606,17 @@ namespace TE1.UI.Controls
             this.e분류자료.Size = new System.Drawing.Size(500, 400);
             this.e분류자료.TabIndex = 0;
             // 
-            // b홀버전체보정
+            // b홀XY옵셋전체입력
             // 
-            this.b홀버전체보정.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.b홀버전체보정.Appearance.Options.UseFont = true;
-            this.b홀버전체보정.Dock = System.Windows.Forms.DockStyle.Right;
-            this.b홀버전체보정.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("simpleButton1.ImageOptions.SvgImage")));
-            this.b홀버전체보정.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
-            this.b홀버전체보정.Location = new System.Drawing.Point(779, 5);
-            this.b홀버전체보정.Name = "b홀버전체보정";
-            this.b홀버전체보정.Size = new System.Drawing.Size(140, 42);
-            this.b홀버전체보정.TabIndex = 22;
-            this.b홀버전체보정.Text = "HoleBurrCal";
+            this.b홀XY옵셋전체입력.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.b홀XY옵셋전체입력.Appearance.Options.UseFont = true;
+            this.b홀XY옵셋전체입력.Dock = System.Windows.Forms.DockStyle.Right;
+            this.b홀XY옵셋전체입력.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
+            this.b홀XY옵셋전체입력.Location = new System.Drawing.Point(837, 5);
+            this.b홀XY옵셋전체입력.Name = "b홀XY옵셋전체입력";
+            this.b홀XY옵셋전체입력.Size = new System.Drawing.Size(140, 42);
+            this.b홀XY옵셋전체입력.TabIndex = 23;
+            this.b홀XY옵셋전체입력.Text = "HoleXY";
             // 
             // SetInspection
             // 
@@ -616,7 +630,7 @@ namespace TE1.UI.Controls
             this.Controls.Add(this.barDockControlBottom);
             this.Controls.Add(this.barDockControlTop);
             this.Name = "SetInspection";
-            this.Size = new System.Drawing.Size(1244, 781);
+            this.Size = new System.Drawing.Size(1442, 781);
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).EndInit();
@@ -685,5 +699,6 @@ namespace TE1.UI.Controls
         private DevExpress.XtraGrid.Columns.GridColumn colD;
         private DevExpress.XtraGrid.Columns.GridColumn col오류문구;
         private DevExpress.XtraEditors.SimpleButton b홀버전체보정;
+        private DevExpress.XtraEditors.SimpleButton b홀XY옵셋전체입력;
     }
 }

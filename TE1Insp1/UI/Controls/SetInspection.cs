@@ -57,6 +57,7 @@ namespace TE1.UI.Controls
             this.ｅ교정.ButtonClick += 교정계산;
             this.b측정정보.Click += 측정정보;
             this.b홀버전체보정.Click += B홀버전체보정_Click;
+            this.b홀XY옵셋전체입력.Click += B홀XY옵셋전체입력_Click;
 
             Localization.SetColumnCaption(this.e모델선택, typeof(모델정보));
             Localization.SetColumnCaption(this.GridView1, typeof(검사정보));
@@ -64,7 +65,6 @@ namespace TE1.UI.Controls
             this.모델선택(this.e모델선택, EventArgs.Empty);
         }
 
-      
 
         public void Close() { }
 
@@ -174,6 +174,34 @@ namespace TE1.UI.Controls
             }
             this.GridView1.RefreshData();
         }
+
+        private void B홀XY옵셋전체입력_Click(object sender, EventArgs e)
+        {
+            for (int lop = 0; lop < this.검사설정.Count; lop++)
+            {
+                검사정보 정보 = this.검사설정[lop] as 검사정보;
+
+                if (정보.검사명칭.StartsWith("H"))
+                {
+                    if (정보.검사명칭.Contains("X"))
+                    {
+                        정보.보정값 = Convert.ToDecimal(-정보.X);
+                        정보.최소값 = Convert.ToDecimal(-0.25);
+                        정보.기준값 = 0;
+                        정보.최대값 = Convert.ToDecimal(0.25);
+                    }
+                    else if (정보.검사명칭.Contains("Y"))
+                    {
+                        정보.보정값 = Convert.ToDecimal(-정보.Y);
+                        정보.최소값 = Convert.ToDecimal(-0.25);
+                        정보.기준값 = 0;
+                        정보.최대값 = Convert.ToDecimal(0.25);
+                    }
+                }
+            }
+            this.GridView1.RefreshData();
+        }
+
         private void 측정정보(object sender, EventArgs e)
         {
             Forms.CalibInfo f = new Forms.CalibInfo();

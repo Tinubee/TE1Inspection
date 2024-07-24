@@ -280,6 +280,7 @@ namespace TE1.Schemas
         }
         public Boolean SetResultValue(검사정보 검사, Double value, out Decimal 결과값, out Decimal 측정값, Boolean 마진포함 = false)
         {
+           
             Decimal result = PixelToMeter(검사, value);
             result += 검사.보정값;
             result *= 검사.결과부호;
@@ -315,6 +316,7 @@ namespace TE1.Schemas
                 결과값 = result;
                 측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
             }
+           
             //결과값 = result;
             //측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
             if (r) return true;
@@ -354,6 +356,9 @@ namespace TE1.Schemas
                 검사.측정값 = Math.Round(측정값L, 3);
                 검사.결과값 = Math.Round(결과값L, 3);
                 검사.측정결과 = okL ? 결과구분.OK : 결과구분.NG;
+
+                Debug.WriteLine($"{검사.검사항목} : {검사.측정값} / {검사.최소값} / {검사.최대값} / {okL}");
+
                 return 검사;
             }
 
@@ -376,20 +381,22 @@ namespace TE1.Schemas
             검사정보 정보X = 검사내역.Where(e => e.검사항목.ToString() == xStr).FirstOrDefault();
             검사정보 정보Y = 검사내역.Where(e => e.검사항목.ToString() == yStr).FirstOrDefault();
 
-            if (정보X.결과값 == 0 || 정보Y.결과값 == 0)
-            {
-                결과값 = 0;
-                측정값 = 0;
-                return false;
-            }
+            //if (정보X.결과값 == 0 || 정보Y.결과값 == 0)
+            //{
+            //    결과값 = 0;
+            //    측정값 = 0;
+            //    return false;
+            //}
 
-            Double 편차X = Convert.ToDouble(Math.Abs(정보X.기준값 - 정보X.결과값));
-            Double 편차Y = Convert.ToDouble(Math.Abs(정보Y.기준값 - 정보Y.결과값));
+            Double 편차X = Convert.ToDouble(Math.Abs(정보X.결과값));
+            Double 편차Y = Convert.ToDouble(Math.Abs(정보Y.결과값));
 
             결과값 = Convert.ToDecimal(Math.Sqrt(편차X * 편차X + 편차Y * 편차Y)) * 2;
             측정값 = 결과값;
 
-            return true;
+            Boolean r = 결과값 >= 검사.최소값 && 결과값 <= 검사.최대값;
+
+            return r;
         }
 
         public 검사정보 SetBurrResult(String name, Double value) => SetResult(검사내역.Where(e => e.검사명칭 == name).FirstOrDefault(), value);
@@ -402,18 +409,10 @@ namespace TE1.Schemas
                 List<Result> results = JsonConvert.DeserializeObject<List<Result>>(json);
                 foreach (Result result in results)
                 {
-                    //if (result.K.Contains("Burr") && !result.K.Contains("Burr1") && !result.K.Contains("Burr2") && !result.K.Contains("Burr3") && !result.K.Contains("Burr4") && !result.K.Contains("Burr5") && !result.K.Contains("Burr6") && !result.K.Contains("Burr7") && !result.K.Contains("Burr8")) 
-                    //if (result.K.Contains("Burr"))
-                    //{
-                    //    //SetBurrResult(result.K, result.V);
-                    //}
-                    //else
                     SetResult(result.K, result.V);
                 }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message, "Inspection"); }
-            //Debug.WriteLine(json);
-
         }
         //public void SetResults(카메라구분 카메라, Dictionary<String, Object> results)
         //{

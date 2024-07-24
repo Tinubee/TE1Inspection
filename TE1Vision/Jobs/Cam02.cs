@@ -104,7 +104,7 @@ namespace TE1.Cam02
             else if (tool == LineV) SetOriginY();
             else if (tool.Name.Contains("H"))
             {
-                Debug.WriteLine($"{tool.Name} Run");
+                //Debug.WriteLine($"{tool.Name} Run");
             }
         }
 
