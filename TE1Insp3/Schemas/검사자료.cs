@@ -99,6 +99,7 @@ namespace TE1.Schemas
             return this.테이블.Delete(정보) > 0;
         }
 
+        public void 검사일시추출실행(int numberOfResults, int numberOfProducts) => this.테이블.검사일시추출(numberOfResults, numberOfProducts);
         #region 검사로직
         // PLC에서 검사번호 요청 시 새 검사 자료를 생성하여 스플에 넣음
         public 검사결과 검사시작(Int32 검사코드)
