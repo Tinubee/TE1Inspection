@@ -31,6 +31,8 @@ namespace TE1.UI.Controls
             this.b자료조회.Click += 자료조회;
             this.b엑셀파일.Click += 엑셀파일;
 
+            this.b데이터추출.Click += B데이터추출_Click;
+
             //foreach(검사그룹 그룹 in typeof(검사그룹).GetEnumValues())
             //{
             //    if (그룹 == 검사그룹.None) continue;
@@ -60,6 +62,11 @@ namespace TE1.UI.Controls
             this.GridView1.Init();
             this.GridView1.CustomDrawFooterCell += GridView1_CustomDrawFooterCell;
             this.GridView1.DoubleClick += 검사결과보기;
+        }
+
+        private void B데이터추출_Click(object sender, EventArgs e)
+        {
+            Global.검사자료.검사일시추출실행((int)this.e반복횟수.Value, (int)this.e제품갯수.Value);
         }
 
         private GridBand GetBand(String Caption) => this.GridView1.Bands.Where(g => g.Caption == Caption).FirstOrDefault();
