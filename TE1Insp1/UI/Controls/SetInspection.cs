@@ -8,6 +8,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Media.Media3D;
 using TE1.Schemas;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Text;
+using System.Windows.Forms;
+using DevExpress.Data.Helpers;
+using DevExpress.XtraEditors.Filtering.Templates;
+using Newtonsoft.Json;
 
 namespace TE1.UI.Controls
 {
@@ -58,6 +69,7 @@ namespace TE1.UI.Controls
             this.b측정정보.Click += 측정정보;
             this.b홀버전체보정.Click += B홀버전체보정_Click;
             this.b홀XY옵셋전체입력.Click += B홀XY옵셋전체입력_Click;
+            b엑셀데이터불러오기.Click += B엑셀데이터불러오기_Click;
 
             Localization.SetColumnCaption(this.e모델선택, typeof(모델정보));
             Localization.SetColumnCaption(this.GridView1, typeof(검사정보));
@@ -65,7 +77,33 @@ namespace TE1.UI.Controls
             this.모델선택(this.e모델선택, EventArgs.Empty);
         }
 
+        private void B엑셀데이터불러오기_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                엑셀데이터불러오기(ofd.FileName);
+            }
+        }
+        private void 엑셀데이터불러오기(string 경로)
+        {
+            Dictionary<String, Decimal> data = new Dictionary<string, decimal>();
+            data = JsonConvert.DeserializeObject<Dictionary<String, Decimal>>(File.ReadAllText(경로), Utils.JsonSetting());
 
+            for (int lop = 0; lop < this.검사설정.Count; lop++)
+            {
+                검사정보 정보 = this.검사설정[lop] as 검사정보;
+
+                Decimal value = data.FirstOrDefault(x => x.Key == 정보.검사명칭).Value;
+                Debug.WriteLine($"{정보.검사명칭} : {정보.측정값} {정보.결과값} {value}");
+
+                정보.실측값 = value;
+
+                if (value != 0 && 정보.측정값 != 0 && 정보.X != 0) {
+                    정보.교정계산(정보);
+                }
+            }
+        }
         public void Close() { }
 
         private 모델구분 선택모델 => (모델구분)this.e모델선택.EditValue;

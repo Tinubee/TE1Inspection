@@ -88,19 +88,19 @@ namespace TE1
         public static InsItem T603 = new InsItem(2, InsType.X, -942.10, -143.50);
         public static InsItem T604 = new InsItem(2, InsType.X, -942.10, -193.46);
 
-        public static InsItem T701 = new InsItem(3, InsType.X, 0.00, -120.84);
+        public static InsItem T701 = new InsItem(2, InsType.X, 0.00, -120.84);
         public static InsItem T702 = new InsItem(2, InsType.X, 0.00, -82.07);
         public static InsItem T703 = new InsItem(2, InsType.X, -2.50, -54.47);
         public static InsItem T705 = new InsItem(2, InsType.X, -2.50, +19.08);
         public static InsItem T706 = new InsItem(2, InsType.X, 0.00, +66.39);
         public static InsItem T707 = new InsItem(2, InsType.X, 0.00, +113.02);
 
-        public static InsItem T801 = new InsItem(3, InsType.X, -990.00, -121.58);
+        public static InsItem T801 = new InsItem(2, InsType.X, -990.00, -121.58);
         public static InsItem T803 = new InsItem(2, InsType.X, -990.00, -55.44);
         public static InsItem T804 = new InsItem(2, InsType.X, -987.50, -18.13);
         public static InsItem T806 = new InsItem(2, InsType.X, -987.50, +18.03);
         public static InsItem T807 = new InsItem(2, InsType.X, -990.00, +82.86);
-        public static InsItem T808 = new InsItem(3, InsType.X, -990.00, +121.40);
+        public static InsItem T808 = new InsItem(2, InsType.X, -990.00, +121.40);
 
         public static InsItem F01 = new InsItem(0, InsType.F, -95.50, -150.00);
         public static InsItem F02 = new InsItem(0, InsType.F, -22.50, +0.01);

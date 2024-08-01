@@ -78,8 +78,8 @@ namespace TE1.Schemas
         #region 사진저장
         public void SaveImage(그랩장치 장치, 검사결과 결과) => SaveImage(장치.구분, 장치.MatImage(), 결과.검사일시, 결과.검사번호);
 
-        public void SaveImage(그랩장치 장치, 검사결과 결과, Mat 합성이미지) => SaveImage(장치.구분, 합성이미지, 결과.검사일시, 결과.검사번호);
-        public void SaveImage(카메라구분 카메라, Mat image, DateTime 시간, Int32 번호)
+        public void SaveImage(그랩장치 장치, 검사결과 결과, Mat 합성이미지) => SaveImage(장치.구분, 합성이미지, 결과.검사일시, 결과.검사번호, true);
+        public void SaveImage(카메라구분 카메라, Mat image, DateTime 시간, Int32 번호, Boolean Merged = false)
         {
             if (!this.ContainsKey(카메라)) return;
             사진저장 정보 = this[카메라];
@@ -88,7 +88,7 @@ namespace TE1.Schemas
             new Thread(() => {
                 String file = String.Empty;
                 if (!정보.사본저장) return;
-                file = CopyImageFile(시간, 번호, 카메라, 정보.사본유형);
+                file = CopyImageFile(시간, 번호, 카메라, 정보.사본유형, Merged);
                 Double scale = Math.Max(0.1, Math.Min((Double)정보.사진비율 / 100, 1.0));
                 //Debug.WriteLine($"Scale: {정보.사진비율} => {scale}", 카메라.ToString());
                 if (scale == 1) this.SaveImage(정보, image, file);
@@ -99,6 +99,7 @@ namespace TE1.Schemas
                 }
             }).Start();
         }
+       
         public void SaveImage(사진저장 정보, Mat mat, String file)
         {
             if (정보 == null || mat == null || String.IsNullOrEmpty(file)) return;
@@ -111,20 +112,20 @@ namespace TE1.Schemas
             if (!result) Global.오류로그(로그영역.GetString(), 정보.카메라.ToString(), error, false);
         }
 
-        public String CopyImagePath(DateTime 시간, 카메라구분 카메라)
+        public String CopyImagePath(DateTime 시간, 카메라구분 카메라, Boolean Merged = false)
         {
-            String path = Path.Combine(Global.환경설정.사진저장, Utils.FormatDate(시간, "{0:yyyy-MM-dd}"), 카메라.ToString());
+            String path = Merged ? Path.Combine(Global.환경설정.사진저장, Utils.FormatDate(시간, "{0:yyyy-MM-dd}"), "MergedImage") : Path.Combine(Global.환경설정.사진저장, Utils.FormatDate(시간, "{0:yyyy-MM-dd}"), 카메라.ToString());
             Common.DirectoryExists(path, true);
             return path;
         }
-        public String CopyImageFile(DateTime 시간, Int32 번호, 카메라구분 카메라)
+        public String CopyImageFile(DateTime 시간, Int32 번호, 카메라구분 카메라, Boolean Merged = false)
         {
             if (!this.ContainsKey(카메라)) return String.Empty;
-            return CopyImageFile(시간, 번호, 카메라, this[카메라].사본유형);
+            return CopyImageFile(시간, 번호, 카메라, this[카메라].사본유형, Merged);
         }
-        public String CopyImageFile(DateTime 시간, Int32 번호, 카메라구분 카메라, 사진형식 형식)
+        public String CopyImageFile(DateTime 시간, Int32 번호, 카메라구분 카메라, 사진형식 형식, Boolean Merged = false)
         {
-            String path = CopyImagePath(시간, 카메라);
+            String path = CopyImagePath(시간, 카메라 , Merged);
             String file = SaveImageFileName(시간, 번호, 형식);
             if (String.IsNullOrEmpty(path) || String.IsNullOrEmpty(file)) return String.Empty;
             return Path.Combine(path, file);

@@ -228,6 +228,26 @@ namespace TE1.Cam03
                 if (item.Value.InsType == InsType.B)
                 {
                     CogFindCircleTool tool;
+                    CogPMAlignTool alignTool;
+
+                    //if (ToolBlock.Tools.Contains(item.Key))
+                    //{
+                    //    alignTool = GetTool(item.Key) as CogPMAlignTool;
+                    //    String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", alignTool.Name);
+
+                    //    if (!Base.LoadTrainImage(alignTool, $"{trainImagePath}.bmp"))
+                    //        Debug.WriteLine($"{trainImagePath}.bmp Train Image Load Fail");
+
+                    //    /* tool.Pattern.TrainImage = */
+                    //}
+                    //else
+                    //{
+                    //    alignTool = new CogPMAlignTool();
+                    //    alignTool.Name = item.Key;
+                    //    this.ToolBlock.Tools.Add(alignTool);
+                    //}
+                    //찾은 패턴 Point로 CircleTool Setting.
+
                     if (ToolBlock.Tools.Contains(item.Key))
                     {
                         tool = GetTool(item.Key) as CogFindCircleTool;
@@ -238,6 +258,7 @@ namespace TE1.Cam03
                         tool.Name = item.Key;
                         this.ToolBlock.Tools.Add(tool);
                     }
+
                     SetCircle(tool, item.Value);
                 }
             }
@@ -373,7 +394,7 @@ namespace TE1.Cam03
         {
             result = new InsItem() { InsType = ins.InsType };
             if (tool == null) return false;
-            if (tool.RunStatus.Result == CogToolResultConstants.Accept)
+            if (tool.RunStatus.Result == CogToolResultConstants.Accept && tool.Results.Count != 0)
             {
                 CogCircle c = tool.Results.GetCircle();
                 result.X = -Math.Round(c.CenterY, 3);

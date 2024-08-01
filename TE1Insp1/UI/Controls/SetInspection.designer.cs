@@ -31,16 +31,16 @@ namespace TE1.UI.Controls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetInspection));
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions3 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject9 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject10 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject11 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject12 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
             this.GridControl1 = new MvUtils.CustomGrid();
             this.검사설정Bind = new System.Windows.Forms.BindingSource(this.components);
             this.GridView1 = new MvUtils.CustomView();
@@ -78,6 +78,7 @@ namespace TE1.UI.Controls
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.b홀XY옵셋전체입력 = new DevExpress.XtraEditors.SimpleButton();
             this.b홀버전체보정 = new DevExpress.XtraEditors.SimpleButton();
             this.b측정정보 = new DevExpress.XtraEditors.SimpleButton();
             this.b도구설정 = new DevExpress.XtraEditors.LookUpEdit();
@@ -87,7 +88,7 @@ namespace TE1.UI.Controls
             this.b분류설정 = new DevExpress.XtraEditors.PopupContainerEdit();
             this.popupContainerControl1 = new DevExpress.XtraEditors.PopupContainerControl();
             this.e분류자료 = new TE1.UI.Controls.Categorys();
-            this.b홀XY옵셋전체입력 = new DevExpress.XtraEditors.SimpleButton();
+            this.b엑셀데이터불러오기 = new DevExpress.XtraEditors.SimpleButton();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).BeginInit();
@@ -469,6 +470,7 @@ namespace TE1.UI.Controls
             // 
             // panelControl1
             // 
+            this.panelControl1.Controls.Add(this.b엑셀데이터불러오기);
             this.panelControl1.Controls.Add(this.b홀XY옵셋전체입력);
             this.panelControl1.Controls.Add(this.b홀버전체보정);
             this.panelControl1.Controls.Add(this.b측정정보);
@@ -482,6 +484,18 @@ namespace TE1.UI.Controls
             this.panelControl1.Padding = new System.Windows.Forms.Padding(3);
             this.panelControl1.Size = new System.Drawing.Size(1442, 52);
             this.panelControl1.TabIndex = 5;
+            // 
+            // b홀XY옵셋전체입력
+            // 
+            this.b홀XY옵셋전체입력.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.b홀XY옵셋전체입력.Appearance.Options.UseFont = true;
+            this.b홀XY옵셋전체입력.Dock = System.Windows.Forms.DockStyle.Right;
+            this.b홀XY옵셋전체입력.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
+            this.b홀XY옵셋전체입력.Location = new System.Drawing.Point(837, 5);
+            this.b홀XY옵셋전체입력.Name = "b홀XY옵셋전체입력";
+            this.b홀XY옵셋전체입력.Size = new System.Drawing.Size(140, 42);
+            this.b홀XY옵셋전체입력.TabIndex = 23;
+            this.b홀XY옵셋전체입력.Text = "HoleXY";
             // 
             // b홀버전체보정
             // 
@@ -519,10 +533,10 @@ namespace TE1.UI.Controls
             this.b도구설정.Properties.Appearance.Font = new System.Drawing.Font("맑은 고딕", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.b도구설정.Properties.Appearance.Options.UseFont = true;
             this.b도구설정.Properties.AutoHeight = false;
-            editorButtonImageOptions1.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions1.SvgImage")));
+            editorButtonImageOptions3.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions3.SvgImage")));
             this.b도구설정.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "도구설정", "도구설정", null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions3, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject9, serializableAppearanceObject10, serializableAppearanceObject11, serializableAppearanceObject12, "도구설정", "도구설정", null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.b도구설정.Properties.NullText = "[카메라 선택]";
             this.b도구설정.Size = new System.Drawing.Size(300, 42);
             this.b도구설정.TabIndex = 10;
@@ -578,12 +592,12 @@ namespace TE1.UI.Controls
             this.b분류설정.Name = "b분류설정";
             this.b분류설정.Properties.Appearance.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.b분류설정.Properties.Appearance.Options.UseFont = true;
-            editorButtonImageOptions2.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions2.SvgImage")));
-            editorButtonImageOptions2.SvgImageSize = new System.Drawing.Size(40, 40);
-            serializableAppearanceObject5.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            serializableAppearanceObject5.Options.UseFont = true;
+            editorButtonImageOptions1.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions1.SvgImage")));
+            editorButtonImageOptions1.SvgImageSize = new System.Drawing.Size(40, 40);
+            serializableAppearanceObject1.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            serializableAppearanceObject1.Options.UseFont = true;
             this.b분류설정.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "Categorys", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "Categorys", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "Categorys", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "Categorys", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.b분류설정.Properties.NullText = "Categorys";
             this.b분류설정.Properties.PopupControl = this.popupContainerControl1;
             this.b분류설정.Size = new System.Drawing.Size(175, 42);
@@ -606,17 +620,17 @@ namespace TE1.UI.Controls
             this.e분류자료.Size = new System.Drawing.Size(500, 400);
             this.e분류자료.TabIndex = 0;
             // 
-            // b홀XY옵셋전체입력
+            // b엑셀데이터불러오기
             // 
-            this.b홀XY옵셋전체입력.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.b홀XY옵셋전체입력.Appearance.Options.UseFont = true;
-            this.b홀XY옵셋전체입력.Dock = System.Windows.Forms.DockStyle.Right;
-            this.b홀XY옵셋전체입력.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
-            this.b홀XY옵셋전체입력.Location = new System.Drawing.Point(837, 5);
-            this.b홀XY옵셋전체입력.Name = "b홀XY옵셋전체입력";
-            this.b홀XY옵셋전체입력.Size = new System.Drawing.Size(140, 42);
-            this.b홀XY옵셋전체입력.TabIndex = 23;
-            this.b홀XY옵셋전체입력.Text = "HoleXY";
+            this.b엑셀데이터불러오기.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.b엑셀데이터불러오기.Appearance.Options.UseFont = true;
+            this.b엑셀데이터불러오기.Dock = System.Windows.Forms.DockStyle.Right;
+            this.b엑셀데이터불러오기.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
+            this.b엑셀데이터불러오기.Location = new System.Drawing.Point(697, 5);
+            this.b엑셀데이터불러오기.Name = "b엑셀데이터불러오기";
+            this.b엑셀데이터불러오기.Size = new System.Drawing.Size(140, 42);
+            this.b엑셀데이터불러오기.TabIndex = 24;
+            this.b엑셀데이터불러오기.Text = "excel";
             // 
             // SetInspection
             // 
@@ -700,5 +714,6 @@ namespace TE1.UI.Controls
         private DevExpress.XtraGrid.Columns.GridColumn col오류문구;
         private DevExpress.XtraEditors.SimpleButton b홀버전체보정;
         private DevExpress.XtraEditors.SimpleButton b홀XY옵셋전체입력;
+        private DevExpress.XtraEditors.SimpleButton b엑셀데이터불러오기;
     }
 }

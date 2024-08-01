@@ -68,6 +68,8 @@ namespace TE1.Schemas
         [JsonIgnore]
         public Boolean VIP모드 { get; set; } = false;
         [JsonIgnore]
+        public Boolean Cam0102개별이미지저장 { get; set; } = false;
+        [JsonIgnore]
         public String Format => "#,0." + String.Empty.PadLeft(this.결과자릿수, '0');
         [JsonIgnore]
         public String 결과표현 => "{0:" + Format + "}";

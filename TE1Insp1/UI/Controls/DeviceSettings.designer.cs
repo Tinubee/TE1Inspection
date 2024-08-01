@@ -42,6 +42,8 @@ namespace TE1.UI.Controls
             this.Root = new DevExpress.XtraLayout.LayoutControlGroup();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             this.Bind환경설정 = new System.Windows.Forms.BindingSource(this.components);
+            this.layoutControlItem1 = new DevExpress.XtraLayout.LayoutControlItem();
+            this.b개별저장 = new DevExpress.XtraEditors.ToggleSwitch();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1.Panel1)).BeginInit();
             this.splitContainerControl1.Panel1.SuspendLayout();
@@ -55,6 +57,8 @@ namespace TE1.UI.Controls
             ((System.ComponentModel.ISupportInitialize)(this.Root)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind환경설정)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.b개별저장.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainerControl1
@@ -125,6 +129,7 @@ namespace TE1.UI.Controls
             // layoutControl1
             // 
             this.layoutControl1.Controls.Add(this.b캠트리거);
+            this.layoutControl1.Controls.Add(this.b개별저장);
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutControl1.Location = new System.Drawing.Point(2, 27);
             this.layoutControl1.Name = "layoutControl1";
@@ -140,7 +145,7 @@ namespace TE1.UI.Controls
             this.b캠트리거.ImageOptions.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("b캠트리거.ImageOptions.SvgImage")));
             this.b캠트리거.Location = new System.Drawing.Point(9, 9);
             this.b캠트리거.Name = "b캠트리거";
-            this.b캠트리거.Size = new System.Drawing.Size(596, 36);
+            this.b캠트리거.Size = new System.Drawing.Size(376, 36);
             this.b캠트리거.StyleController = this.layoutControl1;
             this.b캠트리거.TabIndex = 4;
             this.b캠트리거.Text = "Camera Trigger Board Position Reset";
@@ -152,7 +157,8 @@ namespace TE1.UI.Controls
             this.Root.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
             this.Root.GroupBordersVisible = false;
             this.Root.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[] {
-            this.layoutControlItem3});
+            this.layoutControlItem3,
+            this.layoutControlItem1});
             this.Root.Name = "Root";
             this.Root.Padding = new DevExpress.XtraLayout.Utils.Padding(5, 5, 5, 5);
             this.Root.Size = new System.Drawing.Size(614, 56);
@@ -164,13 +170,34 @@ namespace TE1.UI.Controls
             this.layoutControlItem3.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem3.Name = "layoutControlItem3";
             this.layoutControlItem3.Padding = new DevExpress.XtraLayout.Utils.Padding(4, 4, 4, 4);
-            this.layoutControlItem3.Size = new System.Drawing.Size(604, 46);
+            this.layoutControlItem3.Size = new System.Drawing.Size(384, 46);
             this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem3.TextVisible = false;
             // 
             // Bind환경설정
             // 
             this.Bind환경설정.DataSource = typeof(TE1.Schemas.환경설정);
+            // 
+            // layoutControlItem1
+            // 
+            this.layoutControlItem1.Control = this.b개별저장;
+            this.layoutControlItem1.Location = new System.Drawing.Point(384, 0);
+            this.layoutControlItem1.Name = "layoutControlItem1";
+            this.layoutControlItem1.Size = new System.Drawing.Size(220, 46);
+            this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
+            this.layoutControlItem1.TextVisible = false;
+            // 
+            // b개별저장
+            // 
+            this.b개별저장.EditValue = null;
+            this.b개별저장.Location = new System.Drawing.Point(391, 7);
+            this.b개별저장.Name = "b개별저장";
+            this.b개별저장.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.Default;
+            this.b개별저장.Properties.OffText = "Off";
+            this.b개별저장.Properties.OnText = "On";
+            this.b개별저장.Size = new System.Drawing.Size(216, 22);
+            this.b개별저장.StyleController = this.layoutControl1;
+            this.b개별저장.TabIndex = 5;
             // 
             // DeviceSettings
             // 
@@ -192,6 +219,8 @@ namespace TE1.UI.Controls
             ((System.ComponentModel.ISupportInitialize)(this.Root)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind환경설정)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.b개별저장.Properties)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -209,5 +238,7 @@ namespace TE1.UI.Controls
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem3;
         private System.Windows.Forms.BindingSource Bind환경설정;
         private ImageSave e사진저장;
+        private DevExpress.XtraEditors.ToggleSwitch b개별저장;
+        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem1;
     }
 }

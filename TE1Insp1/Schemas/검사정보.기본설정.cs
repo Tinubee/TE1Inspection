@@ -343,7 +343,7 @@ namespace TE1.Schemas
             if (검사 == null) return null;
             if (Double.IsNaN(value)) { 검사.측정결과 = 결과구분.ER; return 검사; }
 
-            if (검사.검사명칭.Contains("H") && 검사.검사명칭.Contains("L"))
+            if (검사.검사명칭.Contains("H") && 검사.검사명칭.Contains("P"))
             {
                 //위치도계산
                 Boolean okL = 위치도계산(검사, value, out Decimal 결과값L, out Decimal 측정값L);

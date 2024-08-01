@@ -113,6 +113,7 @@ namespace TE1.Cam02
             base.FinistedRun();
             Double y = Math.Round(LengthBC / LineBC.Segment.Length * 1000, 9);
             Debug.WriteLine($"{LengthBC} / {Math.Round(LineBC.Segment.Length, 2)} = {y}", "DatumBC");
+            Debug.WriteLine($"CalibX => {CalibX} , CalibY => {CalibY}", "Calibration Value");
             Output("CalibX", CalibX);
             Output("CalibY", CalibY);
         }
@@ -285,7 +286,7 @@ namespace TE1.Cam02
 
             tool.Region = rect;
             tool.RunParams.SegmentationParams.Mode = CogBlobSegmentationModeConstants.HardFixedThreshold;
-            tool.RunParams.SegmentationParams.HardFixedThreshold = 50;
+            tool.RunParams.SegmentationParams.HardFixedThreshold = 40;
             tool.RunParams.SegmentationParams.Polarity = CogBlobSegmentationPolarityConstants.LightBlobs;
             tool.RunParams.ConnectivityMinPixels = 10000;
 
@@ -358,7 +359,7 @@ namespace TE1.Cam02
                             results.Add(new Result(item.Key + "X", item.Value.X));
                             results.Add(new Result(item.Key + "Y", item.Value.Y));
                             results.Add(new Result(item.Key + "D", r.D));
-                            results.Add(new Result(item.Key + "L", r.L));
+                            results.Add(new Result(item.Key + "P", r.L));
                         }
                         continue;
                     }
@@ -373,7 +374,7 @@ namespace TE1.Cam02
                             results.Add(new Result(item.Key + "X", 0));
                             results.Add(new Result(item.Key + "Y", 0));
                             results.Add(new Result(item.Key + "D", 0));
-                            results.Add(new Result(item.Key + "L", 0));
+                            results.Add(new Result(item.Key + "P", 0));
                         }
                         else
                         {
@@ -415,7 +416,7 @@ namespace TE1.Cam02
                                 }
                        
                                 results.Add(new Result(item.Key + "D", r.D));
-                                results.Add(new Result(item.Key + "L", r.L));
+                                results.Add(new Result(item.Key + "P", r.L));
                             }
                         }
                     }

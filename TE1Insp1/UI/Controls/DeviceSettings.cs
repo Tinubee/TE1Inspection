@@ -19,11 +19,14 @@ namespace TE1.UI.Controls
         {
             this.Bind환경설정.DataSource = Global.환경설정;
             this.b캠트리거.Click += 캠트리거리셋;
+            this.b개별저장.Toggled += 개별저장;
             this.e카메라.Init();
             this.e기본설정.Init();
             this.e사진저장.Init();
             this.e유저관리.Init();
         }
+
+        private void 개별저장(object sender, EventArgs e) => Global.환경설정.Cam0102개별이미지저장 = b개별저장.IsOn;
 
         public void Close()
         {

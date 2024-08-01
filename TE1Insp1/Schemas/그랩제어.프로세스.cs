@@ -97,6 +97,8 @@ namespace TE1.Schemas
             {
                 if (장치.구분 == 카메라구분.Cam01) 좌측이미지 = 장치.MatImage();
                 if (장치.구분 == 카메라구분.Cam02) 우측이미지 = 장치.MatImage();
+
+               
             }
 
             if (Global.장치상태.자동수동)
@@ -109,9 +111,12 @@ namespace TE1.Schemas
                 {
                     if (!검사.그랩완료.Contains(장치.구분)) 검사.그랩완료.Add(장치.구분);
 
+                    if (Global.환경설정.Cam0102개별이미지저장)
+                        Global.사진자료.SaveImage(장치, 검사);
+
                     if (검사.그랩완료.Count == 2)
                     {
-                        Global.그랩제어.GetItem(카메라구분.Cam02).MergeImages(좌측이미지, 우측이미지, 7400, 609);
+                        Global.그랩제어.GetItem(카메라구분.Cam02).MergeImages(좌측이미지, 우측이미지, 7320, 530);
                         Global.비전검사.Run(장치, 검사, true);
                     }
                 }
@@ -123,9 +128,13 @@ namespace TE1.Schemas
                 if (장치.구분 == 카메라구분.Cam01 || 장치.구분 == 카메라구분.Cam02)
                 {
                     if (!Global.검사자료.수동검사.그랩완료.Contains(장치.구분)) Global.검사자료.수동검사.그랩완료.Add(장치.구분);
+
+                    if (Global.환경설정.Cam0102개별이미지저장)
+                        Global.사진자료.SaveImage(장치, Global.검사자료.수동검사);
+
                     if (Global.검사자료.수동검사.그랩완료.Count == 2)
                     {
-                        Global.그랩제어.GetItem(카메라구분.Cam02).MergeImages(좌측이미지, 우측이미지, 7400, 609);
+                        Global.그랩제어.GetItem(카메라구분.Cam02).MergeImages(좌측이미지, 우측이미지, 7320, 530);
                         Global.비전검사.Run(장치, Global.검사자료.수동검사, true);
                     }
                 }
