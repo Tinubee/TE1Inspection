@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace TE1.Schemas
@@ -26,15 +27,17 @@ namespace TE1.Schemas
 
         public void Init()
         {
-            try
-            {
-                this.수동검사초기화();
-                Global.환경설정.모델변경알림 += 모델변경알림;
-            }
-            catch (Exception ex)
-            {
-                Global.오류로그("검사자료", "검사자료", $"{ex.Message}", true);
-            }
+            this.수동검사초기화();
+            Global.환경설정.모델변경알림 += 모델변경알림;
+            //try
+            //{
+            //    this.수동검사초기화();
+            //    Global.환경설정.모델변경알림 += 모델변경알림;
+            //}
+            //catch (Exception ex)
+            //{
+            //    Global.오류로그("검사자료", "검사자료", $"{ex.Message}", true);
+            //}
         }
 
         public Boolean Close() => true;
@@ -78,7 +81,12 @@ namespace TE1.Schemas
             //Global.오류로그(로그영역.GetString(), "Index", $"[{검사코드}] There is no index.", true);
             return null;
         }
-
+        public 검사결과 현재검사찾기()
+        {
+            if (!Global.장치상태.자동수동) return this.수동검사;
+            if (this.검사스플.Count < 1) return this.수동검사;
+            return this.검사스플.Last().Value;
+        }
         public void 검사결과계산(검사결과 검사)
         {
             if (검사 == null) return;

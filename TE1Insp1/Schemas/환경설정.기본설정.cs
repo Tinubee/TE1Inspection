@@ -256,7 +256,7 @@ namespace TE1.Schemas
         {
             //if (구분 == 결과구분.WA) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.DisabledText;
             if (구분 == 결과구분.ER) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.Question;
-            if (구분 == 결과구분.OK || 구분 == 결과구분.WA) return Color.Gold;
+            if (구분 == 결과구분.OK || 구분 == 결과구분.WA) return Color.Purple;
             if (구분 == 결과구분.NG) return DevExpress.LookAndFeel.DXSkinColors.ForeColors.Critical;
             return DevExpress.LookAndFeel.DXSkinColors.ForeColors.ControlText;
         }

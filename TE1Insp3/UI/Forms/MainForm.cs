@@ -10,6 +10,7 @@ namespace TE1
 {
     public partial class MainForm : DevExpress.XtraBars.TabForm
     {
+        public event Global.BaseEvent 검사항목변경알림테스트;
         private LocalizationMain 번역 = new LocalizationMain();
         private UI.Forms.WaitForm WaitForm;
         public MainForm()
@@ -26,7 +27,7 @@ namespace TE1
             //this.TabFormControl.SelectedPageChanged += SelectedPageChanged;
             //this.t환경설정.SelectedPageChanged += SelectedTabPageChanged;
         }
-
+        public void 검사항목표시변경() => this.검사항목변경알림테스트.Invoke();
         private void ShowWaitForm()
         {
             WaitForm = new UI.Forms.WaitForm() { ShowOnTopMode = ShowFormOnTopMode.AboveAll };

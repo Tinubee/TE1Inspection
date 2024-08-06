@@ -116,7 +116,7 @@ namespace TE1.Schemas
 
                     if (검사.그랩완료.Count == 2)
                     {
-                        Global.그랩제어.GetItem(카메라구분.Cam02).MergeImages(좌측이미지, 우측이미지, 7320, 530);
+                        Global.그랩제어.GetItem(카메라구분.Cam02).MergeImages(좌측이미지, 우측이미지, 7468, 678);
                         Global.비전검사.Run(장치, 검사, true);
                     }
                 }
@@ -134,7 +134,7 @@ namespace TE1.Schemas
 
                     if (Global.검사자료.수동검사.그랩완료.Count == 2)
                     {
-                        Global.그랩제어.GetItem(카메라구분.Cam02).MergeImages(좌측이미지, 우측이미지, 7320, 530);
+                        Global.그랩제어.GetItem(카메라구분.Cam02).MergeImages(좌측이미지, 우측이미지, 7468, 678);
                         Global.비전검사.Run(장치, Global.검사자료.수동검사, true);
                     }
                 }

@@ -10,6 +10,7 @@ namespace TE1
 {
     public partial class MainForm : DevExpress.XtraBars.TabForm
     {
+        public event Global.BaseEvent 검사항목변경알림테스트;
         private LocalizationMain 번역 = new LocalizationMain();
         private UI.Forms.WaitForm WaitForm;
         public MainForm()
@@ -25,41 +26,32 @@ namespace TE1
             this.FormClosing += MainFormClosing;
             this.KeyPreview = true;
             this.KeyDown += MainForm_KeyDown;
+            this.e프로젝트.ItemDoubleClick += E프로젝트_ItemDoubleClick;
 
             //this.TabFormControl.SelectedPageChanged += SelectedPageChanged;
             //this.t환경설정.SelectedPageChanged += SelectedTabPageChanged;
         }
+
+        private void E프로젝트_ItemDoubleClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            //Debug.WriteLine("test Success");
+            //this.검사항목변경알림테스트.Invoke();
+        }
+
+        public void 검사항목표시변경() => this.검사항목변경알림테스트.Invoke();
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             //Test용
             if (e.KeyCode == Keys.T)
             {
-                Debug.WriteLine("test Success");
-                for (int i = 0; i < 100; i++)
-                {
-                    //DateTime startTime = DateTime.Now;
-                    Global.조명제어.TurnOn();
-                    //Task.Delay(20).Wait();
-                    Global.조명제어.TurnOff();
-                    //Task.Delay(20).Wait();
-                    //DateTime EndTime = DateTime.Now;
-
-                    //Debug.WriteLine($"{EndTime - startTime}");
-                }
-                
-                
+                //Debug.WriteLine("test Success");
+                //this.검사항목변경알림테스트.Invoke();
             }
-
-
-
-
-
-
             if (e.KeyCode == Keys.Y)
             {
-                Debug.WriteLine("뷰어 초기화");
-                this.e결과뷰어.ReloadModel();
+                //Debug.WriteLine("뷰어 초기화");
+                //this.e결과뷰어.ReloadModel();
             }
         }
 

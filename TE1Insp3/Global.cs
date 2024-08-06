@@ -114,7 +114,6 @@ namespace TE1
                 환경설정.Close();
                 모델자료.Close();
                 로그자료.Close();
-                
                 Properties.Settings.Default.Save();
                 Debug.WriteLine("시스템 종료");
                 r = true;

@@ -59,7 +59,14 @@ namespace TE1.UI.Controls
             this.Model3D.EndInit();
             this.Invalidate();
         }
-
+        public void 검사항목표시변경()
+        {
+            if (this.InvokeRequired) { this.BeginInvoke(new Action(() => { 검사항목표시변경(); })); return; }
+            this.Model3D.BeginInit();
+            this.Model3D.검사항목표시변경();
+            this.Model3D.EndInit();
+            this.Invalidate();
+        }
         public void RefreshViewport()
         {
             if (this.InvokeRequired) { this.BeginInvoke(new Action(RefreshViewport)); }

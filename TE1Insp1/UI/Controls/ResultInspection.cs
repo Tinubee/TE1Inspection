@@ -6,6 +6,7 @@ using TE1.Schemas;
 using System;
 using System.Windows.Media.Media3D;
 using System.Windows;
+using System.Diagnostics;
 
 namespace TE1.UI.Controls
 {
@@ -31,14 +32,19 @@ namespace TE1.UI.Controls
 
             this.e결과뷰어.Init(Model3D);
             this.e결과목록.Init();
+            Global.MainForm.검사항목변경알림테스트 += 검사항목변경알림;
 
             if (this.RunType == ViewTypes.Auto)
             {
                 Global.검사자료.검사완료알림 += 검사완료알림;
-                //검사완료알림(??);
+                검사완료알림(Global.검사자료.현재검사찾기());
             }
+            this.e결과목록.FilterActive();
+            this.검사항목변경알림();
             this.e큐알코드.ButtonClick += (object sender, ButtonPressedEventArgs e) => Clipboard.SetText(this.e큐알코드.Text);
         }
+
+        private void 검사항목변경알림() => this.e결과뷰어.검사항목표시변경();
 
         public void ReloadModel()
         {

@@ -238,8 +238,8 @@ namespace TE1.Schemas
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            Double leftAngle = 0.228958; //0.279972;
-            Double rightAngle = 0.175257; // 0.216211;
+            Double leftAngle = 0.224395; //0.279972;
+            Double rightAngle = 0.177276; // 0.216211;
 
             Mat leftProcessed = ProcessImage(좌측이미지, leftAngle);
             Mat rightProcessed = ProcessImage(우측이미지, rightAngle);

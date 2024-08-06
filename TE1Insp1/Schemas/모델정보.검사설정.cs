@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -34,11 +35,6 @@ namespace TE1.Schemas
                 ResultAttribute a = Utils.GetAttribute<ResultAttribute>(항목);
                 if (a == null || DeviceInfoAttribute.GetHost(a.장치구분) != 환경설정.HostType) continue;
                 this.Add(new 검사정보() { 검사항목 = 항목, 검사명칭 = 항목.ToString(), 검사그룹 = a.검사그룹, 검사장치 = a.장치구분 });
-                //if (항목.ToString().StartsWith("H") && 항목.ToString().Contains("Burr") && 항목.ToString().Contains("H38") == false)
-                //{
-                //    for (Int32 lop = 1; lop <= 8; lop++)
-                //        this.Add(new 검사정보() { 검사항목 = 검사항목.None, 검사명칭 = $"{항목}{lop}", 검사그룹 = a.검사그룹, 검사장치 = a.장치구분 });
-                //}
             }
 
             if (!File.Exists(저장파일))

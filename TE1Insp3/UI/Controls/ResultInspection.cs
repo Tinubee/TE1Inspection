@@ -42,9 +42,15 @@ namespace TE1.UI.Controls
                 Global.검사자료.검사완료알림 += 검사완료알림;
                 검사완료알림(Global.검사자료.현재검사찾기());
             }
+
+            Global.MainForm.검사항목변경알림테스트 += 검사항목변경알림;
+
             this.e큐알코드.ButtonClick += (object sender, ButtonPressedEventArgs e) => Clipboard.SetText(this.e큐알코드.Text);
         }
-
+        private void 검사항목변경알림()
+        {
+            this.e결과뷰어.검사항목표시변경();
+        }
         private void 검사항목선택변경(List<검사항목> 항목들)
         {
             //Debug.WriteLine($"{정보.검사명칭}");

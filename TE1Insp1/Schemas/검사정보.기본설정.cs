@@ -212,8 +212,6 @@ namespace TE1.Schemas
                 else
                     수동 = this.검사내역.Where(e => e.검사항목 == 정보.검사항목).FirstOrDefault();
 
-                Debug.WriteLine($"{정보.검사명칭} : {정보.교정값}");
-
                 if (수동 == null) continue;
                 수동.최소값 = 정보.최소값;
                 수동.기준값 = 정보.기준값;
@@ -300,7 +298,6 @@ namespace TE1.Schemas
                     else
                         결과값 = 검사.최대값 - Convert.ToDecimal(offset);
                     //결과값 = result;
-
                     Debug.WriteLine($"검사항목[{검사.검사항목}] VIP모드 실행 => {결과값}");
                     측정값 = (Decimal)Math.Round(결과값, Global.환경설정.결과자릿수);
                     return true;
@@ -312,8 +309,6 @@ namespace TE1.Schemas
                 측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
             }
 
-            //결과값 = result;
-            //측정값 = (Decimal)Math.Round(value, Global.환경설정.결과자릿수);
             if (r) return true;
             if (검사.마진값 <= 0 || 마진포함) return false;
 
@@ -343,7 +338,7 @@ namespace TE1.Schemas
             if (검사 == null) return null;
             if (Double.IsNaN(value)) { 검사.측정결과 = 결과구분.ER; return 검사; }
 
-            if (검사.검사명칭.Contains("H") && 검사.검사명칭.Contains("P"))
+            if ((검사.검사명칭.StartsWith("H") || 검사.검사명칭.StartsWith("B")) && 검사.검사명칭.Contains("P"))
             {
                 //위치도계산
                 Boolean okL = 위치도계산(검사, value, out Decimal 결과값L, out Decimal 측정값L);
@@ -351,9 +346,7 @@ namespace TE1.Schemas
                 검사.측정값 = Math.Round(측정값L, 3);
                 검사.결과값 = Math.Round(결과값L, 3);
                 검사.측정결과 = okL ? 결과구분.OK : 결과구분.NG;
-
-                Debug.WriteLine($"{검사.검사항목} : {검사.측정값} / {검사.최소값} / {검사.최대값} / {okL}");
-
+                //Debug.WriteLine($"{검사.검사항목} : {검사.측정값} / {검사.최소값} / {검사.최대값} / {okL}");
                 return 검사;
             }
 
@@ -370,18 +363,11 @@ namespace TE1.Schemas
             결과값 = 0;
             측정값 = 0;
 
-            String xStr = 검사.검사명칭.Substring(0, 3) + "X";
-            String yStr = 검사.검사명칭.Substring(0, 3) + "Y";
+            String xStr = 검사.검사명칭.StartsWith("B") ? 검사.검사명칭.Substring(0, 2) + "X" : 검사.검사명칭.Substring(0, 3) + "X";
+            String yStr = 검사.검사명칭.StartsWith("B") ? 검사.검사명칭.Substring(0, 2) + "Y" : 검사.검사명칭.Substring(0, 3) + "Y";
 
             검사정보 정보X = 검사내역.Where(e => e.검사항목.ToString() == xStr).FirstOrDefault();
             검사정보 정보Y = 검사내역.Where(e => e.검사항목.ToString() == yStr).FirstOrDefault();
-
-            //if (정보X.결과값 == 0 || 정보Y.결과값 == 0)
-            //{
-            //    결과값 = 0;
-            //    측정값 = 0;
-            //    return false;
-            //}
 
             Double 편차X = Convert.ToDouble(Math.Abs(정보X.결과값));
             Double 편차Y = Convert.ToDouble(Math.Abs(정보Y.결과값));
@@ -525,7 +511,8 @@ namespace TE1.Schemas
         public 결과구분 측정결과 { get; set; } = 결과구분.WA;
         [NotMapped, JsonProperty("iduse"), ProtoMember(18), Translation("Used", "검사"), BatchEdit(true)]
         public Boolean 검사여부 { get; set; } = true;
-
+        [NotMapped, JsonProperty("isShow")]
+        public Boolean isShow { get; set; } = true;
         [NotMapped, JsonIgnore]
         public Double 검사시간 = 0;
         [NotMapped, JsonIgnore]
@@ -570,7 +557,7 @@ namespace TE1.Schemas
             this.X = InsItems.GetItem(this.검사명칭).X;
             this.Y = InsItems.GetItem(this.검사명칭).Y;
 
-            if (this.검사명칭.Contains("M"))
+            if (this.검사명칭.StartsWith("M"))
             {
                 this.교정값 = 29;
                 Int32 type = Convert.ToInt32(this.검사명칭.Substring(this.검사명칭.Length - 1));

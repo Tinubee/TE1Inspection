@@ -14,6 +14,7 @@ namespace TE1.UI.Controls
         public delegate void 검사항목변경대리자(List<검사항목> 항목들);
         public event 검사항목변경대리자 검사항목선택변경;
         public 검사정보 선택정보 = null;
+      
 
         public ResultGrid() => InitializeComponent();
 
@@ -40,21 +41,25 @@ namespace TE1.UI.Controls
 
         private void FilterChanged(object sender, EventArgs e)
         {
-            List<검사정보> filteredItems = new List<검사정보>();
             GridView view = sender as GridView;
+            List<검사항목> 필터리스트 = new List<검사항목>();
+
             for (int i = 0; i < view.RowCount; i++)
             {
                 int rowHandle = view.GetVisibleRowHandle(i);
+                검사정보 cellValue = view.GetRow(rowHandle) as 검사정보;
+
+                //검사정보 정보 = Global.모델자료.선택모델.검사설정.GetItem(cellValue.검사항목);
                 if (view.IsDataRow(rowHandle))
-                {
-                    검사정보 cellValue = view.GetRow(rowHandle) as 검사정보;
-                    filteredItems.Add(cellValue);
-                }
+                    필터리스트.Add(cellValue.검사항목);
             }
 
-            //foreach (검사정보 item in filteredItems)
-            //    Debug.WriteLine($"{item.검사명칭}");
-         
+            foreach (검사정보 정보 in Global.모델자료.선택모델.검사설정)
+            {
+                if (필터리스트.Contains(정보.검사항목)) 정보.isShow = true;
+                else 정보.isShow = false;
+            }
+            Global.MainForm.검사항목표시변경();
         }
 
         private void GridView1_RowClick(object sender, RowClickEventArgs e)

@@ -1,4 +1,5 @@
-﻿using HelixToolkit.Wpf;
+﻿using DevExpress.Utils.Extensions;
+using HelixToolkit.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,7 +33,7 @@ namespace TE1.Schemas
         public virtual Vector3D CameraLookDirection { get; set; } = default(Vector3D);
         public virtual Vector3D CameraUpDirection { get; set; } = default(Vector3D);
 
-        public Boolean Init(Hosts pc ,out String error)
+        public Boolean Init(Hosts pc, out String error)
         {
             //this.Children.Clear();
             error = String.Empty;
@@ -121,7 +122,13 @@ namespace TE1.Schemas
 
         internal virtual Visual3D Add(Visual3D item) { Children.Add(item); return item; }
         internal virtual Boolean Remove(Visual3D item) => Children.Remove(item);
-        //internal virtual Boolean Remove(Base3D item) => Children.Remove(item);
+        //Filter
+        internal virtual void Remove(Base3D item) => item.Clear(Children);
+        internal virtual void Add(Base3D item)
+        {
+            item.Create(Children);
+        }
+      
         internal virtual Boolean Remove(GeometryModel3D item) => ModelGroup.Children.Remove(item);
 
         internal virtual void AddArrowLine(Point3D s, Point3D e, Color color)
@@ -167,7 +174,7 @@ namespace TE1.Schemas
                 Padding = new System.Windows.Thickness(4, 2, 4, 2),
                 Foreground = new SolidColorBrush(color),
                 Background = new SolidColorBrush(Colors.Transparent),
-                HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
+                HorizontalAlignment = text == "R" || text == "L" ? System.Windows.HorizontalAlignment.Center : System.Windows.HorizontalAlignment.Left,
                 VerticalAlignment = System.Windows.VerticalAlignment.Center,
             };
 

@@ -317,12 +317,10 @@ namespace TE1.Schemas
                 검사?.SetResults(구분, Output<String>("Results"));
                 this.표면검사(검사);
                 this.검사종료 = DateTime.Now;
-                //Debug.WriteLine($"{this.카메라.ToString()} => {(검사종료 - 검사시작).TotalMilliseconds.ToString("#,0")}", "검사시간");
+                Debug.WriteLine($"{this.카메라.ToString()} => {(검사종료 - 검사시작).TotalMilliseconds.ToString("#,0")} msec", "검사시간");
                 DisplayResult(검사, 구분);
-                //DisplayResult(검사, this.카메라);
                 Global.캘리브?.AddNew(this.ToolBlock, this.카메라, 검사.검사번호);
                 검사완료체크(검사);
-                //this.검사완료알림?.Invoke(검사);
             }
             catch (Exception ex) { Global.오류로그(로그영역, "Run", $"[{this.카메라.ToString()}] {ex.Message}", true); }
             return accepted;
@@ -339,13 +337,10 @@ namespace TE1.Schemas
                 Debug.WriteLine($"TE1 Vision 검사완료신호전송 => {검사.검사번호}");
                 Global.피씨통신.Publish(검사.검사번호, 검사.검사내역, 피씨명령.상부완료);
 
-                Debug.WriteLine($"============================ {검사.검사번호} 검사결과 Start ============================");
                 foreach (검사정보 정보 in 검사.검사내역)
                 {
                     검사.SetResult(정보.검사항목, (Double)정보.측정값);
-                    Debug.WriteLine($"{정보.검사항목} : {정보.측정값}");
                 }
-                Debug.WriteLine($"============================ {검사.검사번호} 검사결과 End ============================");
             }
 
         }

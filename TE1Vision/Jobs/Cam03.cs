@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using Cognex.VisionPro.PMAlign;
 using System.IO;
+using Cognex.VisionPro.Blob;
 
 namespace TE1.Cam03
 {
@@ -143,6 +144,26 @@ namespace TE1.Cam03
         public override Cameras Camera => Cameras.Cam03;
         internal Double CalibX => Input<Double>("CalibX");
         internal Double CalibY => Input<Double>("CalibY");
+        internal CogPMAlignTool BTTrain => GetTool("BTTrain") as CogPMAlignTool;
+        internal CogPMAlignTool BBTrain => GetTool("BBTrain") as CogPMAlignTool;
+
+        internal CogFindCircleTool BT => GetTool("BT") as CogFindCircleTool;
+        internal CogFindCircleTool BB => GetTool("BB") as CogFindCircleTool;
+        public override void AfterToolRun(ICogTool tool, CogToolResultConstants result)
+        {
+            base.AfterToolRun(tool, result);
+            if (result != CogToolResultConstants.Accept) return;
+            if (tool == BTTrain)
+            {
+                BT.RunParams.ExpectedCircularArc.CenterX = BTTrain.Results.Count > 0 ? BTTrain.Results[0].GetPose().TranslationX : 0;
+                BT.RunParams.ExpectedCircularArc.CenterY = BTTrain.Results.Count > 0 ? BTTrain.Results[0].GetPose().TranslationY : 0;
+            }
+            else if (tool == BBTrain)
+            {
+                BB.RunParams.ExpectedCircularArc.CenterX = BBTrain.Results.Count > 0 ? BBTrain.Results[0].GetPose().TranslationX : 0;
+                BB.RunParams.ExpectedCircularArc.CenterY = BBTrain.Results.Count > 0 ? BBTrain.Results[0].GetPose().TranslationY : 0;
+            }
+        }
 
         public override void StartedRun()
         {
@@ -167,7 +188,6 @@ namespace TE1.Cam03
 
             foreach (var item in items)
             {
-                Debug.WriteLine($"{item.Key}");
                 if (item.Value.InsType == InsType.H)
                 {
                     CogFindCircleTool tool;
@@ -210,12 +230,23 @@ namespace TE1.Cam03
                     if (ToolBlock.Tools.Contains(item.Key))
                     {
                         tool = GetTool(item.Key) as CogPMAlignTool;
-                        String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", tool.Name);
 
-                        if (!Base.LoadTrainImage(tool, $"{trainImagePath}.bmp"))
-                            Debug.WriteLine($"{trainImagePath}.bmp Train Image Load Fail");
+                        if (tool.Name.Contains("TL") || tool.Name.Contains("BL"))
+                        {
+                            if (!tool.Pattern.Trained)
+                            {
+                                String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", tool.Name);
+                                tool.Pattern.PCPLoadFromFile($"{trainImagePath}.vpp");
+                                tool.Pattern.Train();
+                            }
+                        }
+                        else
+                        {
+                            String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", tool.Name);
 
-                        /* tool.Pattern.TrainImage = */
+                            if (!Base.LoadTrainImage(tool, $"{trainImagePath}.bmp"))
+                                Debug.WriteLine($"{trainImagePath}.bmp Train Image Load Fail");
+                        }
                     }
                     else
                     {
@@ -223,31 +254,32 @@ namespace TE1.Cam03
                         tool.Name = item.Key;
                         this.ToolBlock.Tools.Add(tool);
                     }
-                    //SetPMAlign(tool, item.Value);
                 }
                 if (item.Value.InsType == InsType.B)
                 {
                     CogFindCircleTool tool;
                     CogPMAlignTool alignTool;
 
-                    //if (ToolBlock.Tools.Contains(item.Key))
-                    //{
-                    //    alignTool = GetTool(item.Key) as CogPMAlignTool;
-                    //    String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", alignTool.Name);
+                    if (ToolBlock.Tools.Contains(item.Key))
+                    {
+                        alignTool = GetTool(item.Key + "Train") as CogPMAlignTool;
 
-                    //    if (!Base.LoadTrainImage(alignTool, $"{trainImagePath}.bmp"))
-                    //        Debug.WriteLine($"{trainImagePath}.bmp Train Image Load Fail");
-
-                    //    /* tool.Pattern.TrainImage = */
-                    //}
-                    //else
-                    //{
-                    //    alignTool = new CogPMAlignTool();
-                    //    alignTool.Name = item.Key;
-                    //    this.ToolBlock.Tools.Add(alignTool);
-                    //}
+                        if (!alignTool.Pattern.Trained)
+                        {
+                            String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", alignTool.Name);
+                            alignTool.Pattern.PCPLoadFromFile($"{trainImagePath}.vpp");
+                            alignTool.Pattern.Train();
+                        }
+                    }
+                    else
+                    {
+                        alignTool = new CogPMAlignTool();
+                        alignTool.Name = item.Key;
+                        this.ToolBlock.Tools.Add(alignTool);
+                    }
                     //찾은 패턴 Point로 CircleTool Setting.
-
+                    //if (alignTool.Results.Count > 0)
+                    //{
                     if (ToolBlock.Tools.Contains(item.Key))
                     {
                         tool = GetTool(item.Key) as CogFindCircleTool;
@@ -259,7 +291,8 @@ namespace TE1.Cam03
                         this.ToolBlock.Tools.Add(tool);
                     }
 
-                    SetCircle(tool, item.Value);
+                    SetCircle(tool, item.Value, alignTool);
+                    //}
                 }
             }
         }
@@ -270,14 +303,15 @@ namespace TE1.Cam03
             Double r = p.R / CalibY;
 
         }
-        internal virtual void SetCircle(CogFindCircleTool tool, InsItem p)
+        internal virtual void SetCircle(CogFindCircleTool tool, InsItem p, CogPMAlignTool alignTool = null)
         {
             Double x = -p.Y / CalibX;
             Double y = -p.X / CalibY;
             Double r = p.R / CalibY;
             if (tool.Name.StartsWith("B"))
             {
-                //Bolt 속성 설정일단 제외. 검수 후 Hole과 비교 후 공통부분 제외하고 설정값 적용.
+                //tool.RunParams.ExpectedCircularArc.CenterX = alignTool.Results[0].GetPose().TranslationX;
+                //tool.RunParams.ExpectedCircularArc.CenterY = alignTool.Results[0].GetPose().TranslationY;
             }
             else
             {
@@ -301,7 +335,6 @@ namespace TE1.Cam03
 
         internal virtual void SetMicaCaliper(CogCaliperTool tool, InsItem p)
         {
-            //Debug.WriteLine("들어옴");
             Int32 lop = Convert.ToInt32(tool.Name.Substring(tool.Name.Length - 1));
             Double x = -p.Y / CalibX;
             Double y = -p.X / CalibY;
@@ -330,18 +363,7 @@ namespace TE1.Cam03
             tool.Region.CenterY = y;
             tool.Region.SideXLength = 160;
             tool.Region.SideYLength = 50;
-            //if (p.InsType == InsType.X)
-            //{
-            //    tool.Region.Rotation = Math.PI / 2;
-            //}
-            //else
-            //{
-            //    tool.Region.Rotation = -Math.PI;
-            //}
-
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
-            //tool.RunParams.Edge0Polarity = CogCaliperPolarityConstants.DarkToLight;
-            //tool.RunParams.ContrastThreshold = 10;
         }
 
         internal virtual void CalResults()
@@ -350,7 +372,6 @@ namespace TE1.Cam03
             Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
             foreach (var item in items)
             {
-                Debug.WriteLine($"{item.Key}");
                 if (item.Value.InsType == InsType.H)
                 {
                     if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
@@ -362,32 +383,71 @@ namespace TE1.Cam03
                 }
                 else if (item.Value.InsType == InsType.B)
                 {
-                    if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
+                    CogPMAlignTool tool = GetTool(item.Key + "Train") as CogPMAlignTool;
+                    Int32 count = tool.Results.Count;
+
+                    if (count == 0)
                     {
-                        results.Add(new Result(item.Key + "X", r.X));
-                        results.Add(new Result(item.Key + "Y", r.Y));
+                        results.Add(new Result(item.Key + "X", 0));
+                        results.Add(new Result(item.Key + "Y", 0));
+                        results.Add(new Result(item.Key + "D", 0));
+                        results.Add(new Result(item.Key + "P", 0));
+
+                        SetNgRegion(tool);
+                    }
+                    else
+                    {
+                        if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
+                        {
+                            results.Add(new Result(item.Key + "X", r.X));
+                            results.Add(new Result(item.Key + "Y", r.Y));
+                            results.Add(new Result(item.Key + "P", 0));
+                        }
                     }
                 }
                 else if (item.Value.InsType == InsType.X || item.Value.InsType == InsType.Y)
                 {
                     if (CalResult(GetTool(item.Key) as CogCaliperTool, item.Value, out InsItem r))
-                    {
-                        Debug.WriteLine($"{item.Key} : {r.D}");
                         results.Add(new Result(item.Key, r.D));
-                    }
                 }
                 else if (item.Value.InsType == InsType.S)
                 {
-                    //Debug.WriteLine("dd");
                     if (CalResult(GetTool(item.Key) as CogCaliperTool, item.Value, out InsItem r))
-                    {
-                        //Debug.WriteLine($"{item.Key} : {r.D}");
                         results.Add(new Result(item.Key, r.D));
+                }
+                else if (item.Value.InsType == InsType.I)
+                {
+                   
+                    CogPMAlignTool tool = GetTool(item.Key) as CogPMAlignTool;
+                    Int32 count = tool.Results.Count;
+
+                    if (count == 0)
+                    {
+                        Debug.WriteLine($"{item.Key}");
+                        results.Add(new Result(item.Key, 0));
+                        SetNgRegion(tool);
+                    }
+                    else
+                    {
+                        if (CalResult(GetTool(item.Key) as CogPMAlignTool, item.Value, out InsItem r))
+                            results.Add(new Result(item.Key, r.D));
                     }
                 }
             }
-            //Debug.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
+
             Output("Results", JsonConvert.SerializeObject(results));
+        }
+
+        private void SetNgRegion(CogPMAlignTool tool)
+        {
+            ICogRecord record = tool.CreateLastRunRecord();
+            ICogRecord searchRegionRecord = record.SubRecords["InputImage"].SubRecords["SearchRegion"];
+            if (searchRegionRecord.Content is ICogGraphicInteractive searchRegion)
+            {
+                CogRectangleAffine rectangle = searchRegion as CogRectangleAffine;
+                if (rectangle != null)
+                    rectangle.Color = CogColorConstants.Red;
+            }
         }
 
         internal virtual Boolean CalResult(CogFindCircleTool tool, InsItem ins, out InsItem result)
@@ -399,14 +459,23 @@ namespace TE1.Cam03
                 CogCircle c = tool.Results.GetCircle();
                 result.X = -Math.Round(c.CenterY, 3);
                 result.Y = -Math.Round(c.CenterX, 3);
-                if (tool.Name.StartsWith("B")) 
+                if (tool.Name.StartsWith("B"))
                     result.D = 0;
                 else
                     result.D = Math.Round(c.Radius * 2, 3);
             }
             return true;
         }
-
+        internal virtual Boolean CalResult(CogPMAlignTool tool, InsItem ins, out InsItem result)
+        {
+            result = new InsItem() { InsType = ins.InsType };
+            if (tool == null) return false;
+            if (tool.RunStatus.Result == CogToolResultConstants.Accept && tool.Results.Count != 0)
+            {
+                result.D = tool.Results[0].Score;
+            }
+            return true;
+        }
         internal virtual Boolean CalResult(CogCaliperTool tool, InsItem ins, out InsItem result)
         {
             result = new InsItem() { InsType = ins.InsType };
@@ -418,14 +487,14 @@ namespace TE1.Cam03
                 if (ins.InsType == InsType.S)
                 {
                     Int32 type = Convert.ToInt32(tool.Name.Substring(tool.Name.Length - 1));
-                    result.D = type % 2 == 1 ? r.PositionY : r.PositionX;//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
+                    result.D = type % 2 == 1 ? r.PositionY : r.PositionX;
                 }
                 else
                 {
                     if (ins.InsType == InsType.X)
-                        result.D = r.PositionY;//Math.Abs(Math.Round(r.PositionY - Math.Abs(ins.X) / CalibY, 3));
+                        result.D = r.PositionY;
                     else if (ins.InsType == InsType.Y)
-                        result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
+                        result.D = r.PositionX;
                 }
             }
             else
@@ -445,12 +514,11 @@ namespace TE1.Cam03
                 if (type == InsType.X)
                     result.D = r.PositionY;
                 else if (type == InsType.Y)
-                    result.D = r.PositionX;//Math.Abs(Math.Round(r.PositionX - Math.Abs(ins.Y) / CalibX, 3));
+                    result.D = r.PositionX;
 
             }
             return true;
         }
-
 
         internal virtual Boolean CalResult(CogToolBlock tool, InsItem ins, out InsItem result)
         {
@@ -466,91 +534,4 @@ namespace TE1.Cam03
             return true;
         }
     }
-
-    //public class ImprintTools : BaseTool
-    //{
-    //    public ImprintTools(CogToolBlock tool) : base(tool) { }
-    //    public override Cameras Camera => Cameras.Cam03;
-    //    internal Double CalibX => Input<Double>("CalibX");
-    //    internal Double CalibY => Input<Double>("CalibY");
-
-    //    public override void StartedRun()
-    //    {
-    //        base.StartedRun();
-    //        InitTools();
-    //    }
-
-    //    public override void FinistedRun()
-    //    {
-    //        base.FinistedRun();
-    //        CalResults();
-    //    }
-
-    //    private Double CenterX => InputImage.Width / 2 - Input<Double>("CenterX");
-    //    internal virtual void InitTools()
-    //    {
-    //        CogCreateLineTool centerV = GetTool("CenterV") as CogCreateLineTool;
-    //        if (centerV != null) centerV.Line.X = CenterX;
-
-    //        //InsItems.LoadMica();  //위치 Setting을 위한 임시 생성.
-    //        Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
-
-    //        foreach (var item in items)
-    //        {
-    //            if (item.Value.InsType == InsType.I)
-    //            {
-    //                //CogPMAlignTool tool;
-    //                //if (ToolBlock.Tools.Contains(item.Key))
-    //                //{
-    //                //    tool = GetTool(item.Key) as CogPMAlignTool;
-    //                //    //if(tool.RunParams.)
-    //                //}
-    //                //else
-    //                //{
-    //                //    tool = new CogPMAlignTool();
-    //                //    tool.Name = item.Key;
-    //                //    this.ToolBlock.Tools.Add(tool);
-    //                //}
-    //                //SetPMAlign(tool, item.Value);
-    //            }
-    //        }
-    //    }
-    //    internal virtual void SetPMAlign(CogPMAlignTool tool, InsItem p)
-    //    {
-    //        //Double x = -p.Y / CalibX;
-    //        //Double y = -p.X / CalibY;
-    //        //Double r = p.R / CalibY;
-
-    //    }
-
-    //    internal virtual void CalResults()
-    //    {
-    //        List<Result> results = new List<Result>();
-    //        Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
-    //        foreach (var item in items)
-    //        {
-    //            if (item.Value.InsType == InsType.I)
-    //            {
-
-    //            }
-    //        }
-    //        //Debug.WriteLine(JsonConvert.SerializeObject(results, Formatting.Indented));
-    //        Output("Results", JsonConvert.SerializeObject(results));
-    //    }
-
-    //    internal virtual Boolean CalResult(CogPMAlignTool tool, InsItem ins, out InsItem result)
-    //    {
-    //        result = new InsItem() { InsType = ins.InsType };
-    //        if (tool == null) return false;
-    //        if (tool.RunStatus.Result == CogToolResultConstants.Accept)
-    //        {
-    //            //Double score = tool.Pattern.
-    //            //CogCircle c = tool.Results.GetCircle();
-    //            //result.X = -Math.Round(c.CenterY, 3);
-    //            //result.Y = -Math.Round(c.CenterX, 3);
-    //            //result.D = Math.Round(c.Radius * 2, 3);
-    //        }
-    //        return true;
-    //    }
-    //}
 }

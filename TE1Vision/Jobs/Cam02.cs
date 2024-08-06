@@ -113,7 +113,7 @@ namespace TE1.Cam02
             base.FinistedRun();
             Double y = Math.Round(LengthBC / LineBC.Segment.Length * 1000, 9);
             Debug.WriteLine($"{LengthBC} / {Math.Round(LineBC.Segment.Length, 2)} = {y}", "DatumBC");
-            Debug.WriteLine($"CalibX => {CalibX} , CalibY => {CalibY}", "Calibration Value");
+            //Debug.WriteLine($"CalibX => {CalibX} , CalibY => {CalibY}", "Calibration Value");
             Output("CalibX", CalibX);
             Output("CalibY", CalibY);
         }
@@ -136,6 +136,7 @@ namespace TE1.Cam02
             Transform.TranslationX = p.X;
             Transform.TranslationY = p.Y;
             Transform.Rotation = LineBC.Segment.Rotation + Math.PI / 2;
+            Transform.Skew = 0;
             Output("CenterX", p.X);
             Output("CenterY", p.Y);
             Output("Rotation", Transform.Rotation);
@@ -342,6 +343,7 @@ namespace TE1.Cam02
             }
 
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
+            tool.InputImage = this.InputImage;
         }
 
         internal virtual void CalResults()
@@ -381,9 +383,7 @@ namespace TE1.Cam02
                             CogFindCircleTool circleTool = GetTool(item.Key) as CogFindCircleTool;
                             if (circleTool.Results.Count != 0)
                             {
-                                Debug.WriteLine($"{item.Key}");
                                 CogFindCircleTool burrTool = GetTool(item.Key + "Burr") as CogFindCircleTool;
-
                                 for (Int32 lop = 0; lop < burrTool.Results.Count; lop++)
                                 {
                                     CogDistancePointPointTool distancetool = new CogDistancePointPointTool();
@@ -395,11 +395,6 @@ namespace TE1.Cam02
                                     distancetool.Run();
 
                                     results.Add(new Result(item.Key + $"Burr0{lop + 1}", Math.Round(distancetool.Distance, 3)));
-
-                                    //if (lop == burrTool.Results.Count - 1) 
-                                    //{
-                                    //    results.Add(new Result(item.Key + $"Burr", 0));
-                                    //}
                                 }
                             }
                             if (CalResult(circleTool, item.Value, out InsItem r))
@@ -500,9 +495,6 @@ namespace TE1.Cam02
         public void SetCircleRegion(CogBlobTool tool, CogCircle region)
         {
             tool.Region = region;
-            //if (tool.Results.Count == 0) return null;
-
-            //return tool.Results.GetCircle();
         }
 
         internal virtual Boolean CalResult(CogCaliperTool tool, InsItem ins, out InsItem result)

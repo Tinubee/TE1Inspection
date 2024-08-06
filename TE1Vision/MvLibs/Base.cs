@@ -326,6 +326,7 @@ namespace MvLibs
             if (!File.Exists(file)) return false;
             tool.Pattern.TrainImage = new CogImage8Grey(new Bitmap(file));
             tool.Pattern.TrainRegion = new CogRectangle() { X = 0, Y = 0, Width = tool.Pattern.TrainImage.Width, Height = tool.Pattern.TrainImage.Height };
+            
             tool.Pattern.Train();
             return tool.Pattern.Trained;
         }

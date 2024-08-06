@@ -42,65 +42,59 @@ namespace TE1
         public static InsItem H37 = new InsItem(2, InsType.H, -982.25, -63.00, 7.5); //Datum
         public static InsItem H38 = new InsItem(2, InsType.H, -8.75, -63.00, 7.5); //Datum
         public static InsItem R01 = new InsItem(2, InsType.R, -7.75, +63.00, 9.5);
-        public static InsItem T101 = new InsItem(2, InsType.Y, -933.30, -202.58);
-        public static InsItem T103 = new InsItem(2, InsType.Y, -849.73, -202.58);
-        public static InsItem T105 = new InsItem(2, InsType.Y, -749.78, -202.58);
-        public static InsItem T107 = new InsItem(2, InsType.Y, -650.24, -202.58);
-        public static InsItem T109 = new InsItem(2, InsType.Y, -550.01, -202.58);
-        public static InsItem T111 = new InsItem(2, InsType.Y, -469.57, -202.58);
-        public static InsItem T113 = new InsItem(2, InsType.Y, -350.02, -202.58);
-        public static InsItem T115 = new InsItem(2, InsType.Y, -249.93, -202.58);
-        public static InsItem T117 = new InsItem(2, InsType.Y, -149.98, -202.58);
-        public static InsItem T119 = new InsItem(2, InsType.Y, -56.65, -202.58);
-
-        public static InsItem T201 = new InsItem(2, InsType.Y, -57.71, +230.58);
-        public static InsItem T203 = new InsItem(2, InsType.Y, -114.09, +230.58);
-        public static InsItem T205 = new InsItem(2, InsType.Y, -224.35, +230.58);
-        public static InsItem T207 = new InsItem(2, InsType.Y, -343.50, +230.58);
-        public static InsItem T209 = new InsItem(2, InsType.Y, -430.06, +230.58);
-        public static InsItem T210 = new InsItem(2, InsType.X, -446.50, +219.54);
-        public static InsItem T211 = new InsItem(2, InsType.Y, -466.38, +205.58);
-        public static InsItem T212 = new InsItem(2, InsType.Y, -533.90, +205.58);
-        public static InsItem T213 = new InsItem(2, InsType.X, -553.50, +218.26);
-        public static InsItem T214 = new InsItem(2, InsType.Y, -560.18, +230.58);
-        public static InsItem T216 = new InsItem(2, InsType.Y, -625.03, +230.58);
-        public static InsItem T218 = new InsItem(2, InsType.Y, -736.17, +230.58);
-        public static InsItem T220 = new InsItem(2, InsType.Y, -838.91, +230.58);
-        public static InsItem T222 = new InsItem(2, InsType.Y, -929.97, +230.58);
-
-        public static InsItem T301 = new InsItem(3, InsType.X, -47.90, +193.32);
-        public static InsItem T302 = new InsItem(2, InsType.X, -47.90, +151.44);
-        public static InsItem T303 = new InsItem(2, InsType.Y, -34.00, +130.18);
-        public static InsItem T304 = new InsItem(2, InsType.Y, -10.74, +130.18);
-
-        public static InsItem T401 = new InsItem(2, InsType.Y, -10.36, -130.18);
-        public static InsItem T402 = new InsItem(2, InsType.Y, -36.28, -130.18);
-        public static InsItem T403 = new InsItem(2, InsType.X, -47.90, -143.79);
-        public static InsItem T404 = new InsItem(2, InsType.X, -47.90, -189.84);
-
-        public static InsItem T501 = new InsItem(2, InsType.X, -942.10, +221.95);
-        public static InsItem T503 = new InsItem(2, InsType.X, -942.10, +144.86);
-        public static InsItem T504 = new InsItem(2, InsType.Y, -952.99, +130.18);
-        public static InsItem T505 = new InsItem(2, InsType.Y, -978.25, +130.18);
-
-        public static InsItem T601 = new InsItem(2, InsType.Y, -978.51, -130.18);
-        public static InsItem T602 = new InsItem(2, InsType.Y, -954.56, -130.18);
-        public static InsItem T603 = new InsItem(2, InsType.X, -942.10, -143.50);
-        public static InsItem T604 = new InsItem(2, InsType.X, -942.10, -193.46);
-
-        public static InsItem T701 = new InsItem(2, InsType.X, 0.00, -120.84);
-        public static InsItem T702 = new InsItem(2, InsType.X, 0.00, -82.07);
-        public static InsItem T703 = new InsItem(2, InsType.X, -2.50, -54.47);
-        public static InsItem T705 = new InsItem(2, InsType.X, -2.50, +19.08);
-        public static InsItem T706 = new InsItem(2, InsType.X, 0.00, +66.39);
-        public static InsItem T707 = new InsItem(2, InsType.X, 0.00, +113.02);
-
-        public static InsItem T801 = new InsItem(2, InsType.X, -990.00, -121.58);
-        public static InsItem T803 = new InsItem(2, InsType.X, -990.00, -55.44);
-        public static InsItem T804 = new InsItem(2, InsType.X, -987.50, -18.13);
-        public static InsItem T806 = new InsItem(2, InsType.X, -987.50, +18.03);
-        public static InsItem T807 = new InsItem(2, InsType.X, -990.00, +82.86);
-        public static InsItem T808 = new InsItem(2, InsType.X, -990.00, +121.40);
+       
+        public static InsItem T001 = new InsItem(2, InsType.Y, -56.65, -202.58);
+        public static InsItem T002 = new InsItem(2, InsType.Y, -149.98, -202.58);
+        public static InsItem T003 = new InsItem(2, InsType.Y, -249.93, -202.58);
+        public static InsItem T004 = new InsItem(2, InsType.Y, -350.02, -202.58);
+        public static InsItem T005 = new InsItem(2, InsType.Y, -469.57, -202.58);
+        public static InsItem T006 = new InsItem(2, InsType.Y, -550.01, -202.58);
+        public static InsItem T007 = new InsItem(2, InsType.Y, -650.24, -202.58);
+        public static InsItem T008 = new InsItem(2, InsType.Y, -749.78, -202.58);
+        public static InsItem T009 = new InsItem(2, InsType.Y, -849.73, -202.58);
+        public static InsItem T010 = new InsItem(2, InsType.Y, -933.30, -202.58);
+        public static InsItem T011 = new InsItem(2, InsType.X, -942.10, -193.46);
+        public static InsItem T012 = new InsItem(2, InsType.X, -942.10, -143.50);
+        public static InsItem T013 = new InsItem(2, InsType.Y, -954.56, -130.18);
+        public static InsItem T014 = new InsItem(2, InsType.Y, -978.51, -130.18);
+        public static InsItem T015 = new InsItem(2, InsType.X, -990.00, -121.58);
+        public static InsItem T016 = new InsItem(2, InsType.X, -990.00, -55.44);
+        public static InsItem T017 = new InsItem(2, InsType.X, -987.50, -18.13);
+        public static InsItem T018 = new InsItem(2, InsType.X, -987.50, +18.03);
+        public static InsItem T019 = new InsItem(2, InsType.X, -990.00, +82.86);
+        public static InsItem T020 = new InsItem(2, InsType.X, -990.00, +121.40);
+        public static InsItem T021 = new InsItem(2, InsType.Y, -978.25, +130.18);
+        public static InsItem T022 = new InsItem(2, InsType.Y, -952.99, +130.18);
+        public static InsItem T023 = new InsItem(2, InsType.X, -942.10, +144.86);
+        public static InsItem T024 = new InsItem(2, InsType.X, -942.10, +221.95);
+        public static InsItem T025 = new InsItem(2, InsType.Y, -929.97, +230.58);
+        public static InsItem T026 = new InsItem(2, InsType.Y, -838.91, +230.58);
+        public static InsItem T027 = new InsItem(2, InsType.Y, -736.17, +230.58);
+        public static InsItem T028 = new InsItem(2, InsType.Y, -625.03, +230.58);
+        public static InsItem T029 = new InsItem(2, InsType.Y, -560.18, +230.58);
+        public static InsItem T030 = new InsItem(2, InsType.X, -553.50, +218.26);
+        public static InsItem T031 = new InsItem(2, InsType.Y, -533.90, +205.58);
+        public static InsItem T032 = new InsItem(2, InsType.Y, -466.38, +205.58);
+        public static InsItem T033 = new InsItem(2, InsType.X, -446.50, +219.54);
+        public static InsItem T034 = new InsItem(2, InsType.Y, -430.06, +230.58);
+        public static InsItem T035 = new InsItem(2, InsType.Y, -343.50, +230.58);
+        public static InsItem T036 = new InsItem(2, InsType.Y, -224.35, +230.58);
+        public static InsItem T037 = new InsItem(2, InsType.Y, -114.09, +230.58);
+        public static InsItem T038 = new InsItem(2, InsType.Y, -57.71, +230.58);
+        public static InsItem T039 = new InsItem(3, InsType.X, -47.90, +193.32);
+        public static InsItem T040 = new InsItem(2, InsType.X, -47.90, +151.44);
+        public static InsItem T041 = new InsItem(2, InsType.Y, -34.00, +130.18);
+        public static InsItem T042 = new InsItem(2, InsType.Y, -10.74, +130.18);
+        public static InsItem T043 = new InsItem(2, InsType.X, 0.00, +113.02);
+        public static InsItem T044 = new InsItem(2, InsType.X, 0.00, +66.39);
+        public static InsItem T045 = new InsItem(2, InsType.X, -2.50, +19.08);
+        public static InsItem T046 = new InsItem(2, InsType.X, -2.50, -54.47);
+        public static InsItem T047 = new InsItem(2, InsType.X, 0.00, -82.07);
+        public static InsItem T048 = new InsItem(2, InsType.X, 0.00, -120.84);
+        public static InsItem T049 = new InsItem(2, InsType.Y, -10.36, -130.18);
+        public static InsItem T050 = new InsItem(2, InsType.Y, -36.28, -130.18);
+        public static InsItem T051 = new InsItem(2, InsType.X, -47.90, -143.79);
+        public static InsItem T052 = new InsItem(2, InsType.X, -47.90, -189.84);
 
         public static InsItem F01 = new InsItem(0, InsType.F, -95.50, -150.00);
         public static InsItem F02 = new InsItem(0, InsType.F, -22.50, +0.01);
@@ -367,12 +361,12 @@ namespace TE1
         public static InsItem ImMiddle3 = new InsItem(3, InsType.I, 0, 0);
         public static InsItem ImSheetM1TR = new InsItem(3, InsType.I, 0, 0);
         public static InsItem ImSheetM1BR = new InsItem(3, InsType.I, 0, 0);
-        //public static InsItem ImSheetM1TL = new InsItem(3, InsType.I, 0, 0);
-        //public static InsItem ImSheetM1BL = new InsItem(3, InsType.I, 0, 0);
+        public static InsItem ImSheetM1TL = new InsItem(3, InsType.I, 0, 0);
+        public static InsItem ImSheetM1BL = new InsItem(3, InsType.I, 0, 0);
         public static InsItem ImSheetM2TR = new InsItem(3, InsType.I, 0, 0);
         public static InsItem ImSheetM2BR = new InsItem(3, InsType.I, 0, 0);
-        //public static InsItem ImSheetM2TL = new InsItem(3, InsType.I, 0, 0);
-        //public static InsItem ImSheetM2BL = new InsItem(3, InsType.I, 0, 0);
+        public static InsItem ImSheetM2TL = new InsItem(3, InsType.I, 0, 0);
+        public static InsItem ImSheetM2BL = new InsItem(3, InsType.I, 0, 0);
 
         public static InsItem GetItem(String name)
         {

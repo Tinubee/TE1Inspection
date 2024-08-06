@@ -21,7 +21,6 @@ namespace TE1.Schemas
             if (자료.명령 == 피씨명령.상부치수) return 상부치수수신(자료);
             if (자료.명령 == 피씨명령.검사결과)
             {
-                Debug.WriteLine("검사결과명령");
                 return true;
             }
             if (자료.명령 == 피씨명령.VIP모드) return VIP모드정보수신(자료);
@@ -88,11 +87,6 @@ namespace TE1.Schemas
             }).Start();
             //Publish(상부치수번호, 피씨명령.상부치수);
             return true;
-        }
-
-        public void 검사결과전송()
-        {
-            Debug.WriteLine("검사결과 전송");
         }
     }
 }

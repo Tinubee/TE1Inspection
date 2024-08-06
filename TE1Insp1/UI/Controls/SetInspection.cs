@@ -95,11 +95,12 @@ namespace TE1.UI.Controls
                 검사정보 정보 = this.검사설정[lop] as 검사정보;
 
                 Decimal value = data.FirstOrDefault(x => x.Key == 정보.검사명칭).Value;
-                Debug.WriteLine($"{정보.검사명칭} : {정보.측정값} {정보.결과값} {value}");
+                //Debug.WriteLine($"{정보.검사명칭} : {정보.측정값} {정보.결과값} {value}");
 
                 정보.실측값 = value;
 
-                if (value != 0 && 정보.측정값 != 0 && 정보.X != 0) {
+                if (value != 0 && 정보.측정값 != 0 && 정보.X != 0)
+                {
                     정보.교정계산(정보);
                 }
             }
@@ -218,7 +219,6 @@ namespace TE1.UI.Controls
             for (int lop = 0; lop < this.검사설정.Count; lop++)
             {
                 검사정보 정보 = this.검사설정[lop] as 검사정보;
-
                 if (정보.검사명칭.StartsWith("H"))
                 {
                     if (정보.검사명칭.Contains("X"))
@@ -234,6 +234,17 @@ namespace TE1.UI.Controls
                         정보.최소값 = Convert.ToDecimal(-0.25);
                         정보.기준값 = 0;
                         정보.최대값 = Convert.ToDecimal(0.25);
+                    }
+                }
+                else if (정보.검사명칭.StartsWith("T"))
+                {
+                    if (정보.Attr.검사정보.InsType == InsType.X)
+                    {
+                        정보.보정값 = (Decimal)정보.Attr.검사정보.X;
+                    }
+                    else if (정보.Attr.검사정보.InsType == InsType.Y)
+                    {
+                        정보.보정값 = (Decimal)정보.Attr.검사정보.Y;
                     }
                 }
             }

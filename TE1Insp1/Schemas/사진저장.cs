@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace TE1.Schemas
 {
-    public enum 사진형식 { Jpg } // , Bmp, Png
+    public enum 사진형식 { Jpg, Bmp } // , Bmp, Png
     public class 사진저장
     {
         [JsonProperty("Camera"), Translation("Camera", "카메라")]
@@ -88,7 +88,8 @@ namespace TE1.Schemas
             new Thread(() => {
                 String file = String.Empty;
                 if (!정보.사본저장) return;
-                file = CopyImageFile(시간, 번호, 카메라, 정보.사본유형, Merged);
+                file = CopyImageFile(시간, 번호, 카메라, 사진형식.Bmp, Merged);
+                //file = CopyImageFile(시간, 번호, 카메라, 정보.사본유형, Merged);
                 Double scale = Math.Max(0.1, Math.Min((Double)정보.사진비율 / 100, 1.0));
                 //Debug.WriteLine($"Scale: {정보.사진비율} => {scale}", 카메라.ToString());
                 if (scale == 1) this.SaveImage(정보, image, file);
@@ -107,7 +108,7 @@ namespace TE1.Schemas
             String error = String.Empty;
             if (정보.사본유형 == 사진형식.Jpg) result = Common.ImageSaveJpeg(mat, file, out error, 100); //정보.사진품질
             //else if (정보.사본유형 == 사진형식.Png) result = Common.ImageSavePng(mat, file, out error);
-            //else if (정보.사본유형 == 사진형식.Bmp) result = Common.ImageSaveBmp(mat, file, out error);
+            else if (정보.사본유형 == 사진형식.Bmp) result = Common.ImageSaveBmp(mat, file, out error);
             else return;
             if (!result) Global.오류로그(로그영역.GetString(), 정보.카메라.ToString(), error, false);
         }
