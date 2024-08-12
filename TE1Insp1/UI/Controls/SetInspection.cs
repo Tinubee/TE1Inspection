@@ -208,8 +208,23 @@ namespace TE1.UI.Controls
             {
                 검사정보 정보 = this.검사설정[lop] as 검사정보;
 
-                if (정보.검사명칭.Contains("Burr"))
+                //if (정보.검사명칭.Contains("Burr"))
+                //    정보.교정계산(정보);
+
+                if (정보.검사명칭.StartsWith("H") && (정보.검사명칭.Contains("X") || 정보.검사명칭.Contains("Y")))
                     정보.교정계산(정보);
+
+                if (정보.검사명칭.StartsWith("H") && 정보.검사명칭.Contains("D"))
+                    정보.교정계산(정보);
+
+                if (정보.검사명칭.StartsWith("T"))
+                {
+                    if (정보.검사항목 != 검사항목.T039)
+                    {
+                        정보.교정계산(정보);
+                    }
+                }
+                   
             }
             this.GridView1.RefreshData();
         }

@@ -273,8 +273,24 @@ namespace TE1.Schemas
         }
         public Boolean SetResultValue(검사정보 검사, Double value, out Decimal 결과값, out Decimal 측정값, Boolean 마진포함 = false)
         {
-
             Decimal result = PixelToMeter(검사, value);
+
+            if (검사.검사명칭.StartsWith("H"))
+            {
+                if (검사.검사명칭.Contains("X"))
+                    result = Math.Abs(result) - (Decimal)982.25;
+                if (검사.검사명칭.Contains("Y"))
+                    result = result - (Decimal)63;
+            }
+            else if (검사.검사명칭.StartsWith("T"))
+            {
+                if (검사.instype == InsType.Y)
+                {
+                    result = result + (Decimal)63;
+                }
+                else if (검사.instype == InsType.X) result = result + (Decimal)982.25;
+            }
+
             result += 검사.보정값;
             result *= 검사.결과부호;
 
@@ -461,7 +477,7 @@ namespace TE1.Schemas
                 this.치수결과 = 최종결과(치수결과);
                 this.외관결과 = 최종결과(외관결과);
                 String[] 오류 = this.검사내역.Where(e => e.측정결과 != 결과구분.OK).Select(e => e.오류문구).ToArray();
-                String[] 라벨 = this.검사내역.Where(e => e.측정결과 != 결과구분.OK && Global.분류자료.GetItem(e.검사분류).라벨 != String.Empty).Select(e => Global.분류자료.GetItem(e.검사분류).라벨).ToArray();
+                String[] 라벨 = this.검사내역.Where(e => e.측정결과 != 결과구분.OK && Global.분류자료.GetItem(e.검사분류) != null && Global.분류자료.GetItem(e.검사분류).라벨 != String.Empty).Select(e => Global.분류자료.GetItem(e.검사분류).라벨).ToArray();
                 this.불량정보 = String.Join(",", 오류);
                 this.라벨내용 = 라벨.Distinct().ToArray();
             }
@@ -533,6 +549,8 @@ namespace TE1.Schemas
         public Double D => Attr != null ? Attr.검사정보.D : 0;
         [NotMapped, JsonIgnore]
         public Double H => Attr != null ? Attr.검사정보.H : 0;
+        [NotMapped, JsonIgnore]
+        public InsType instype => Attr != null ? Attr.검사정보.InsType : InsType.X;
         [NotMapped, JsonIgnore]
         public String 오류내용 = String.Empty;
         [NotMapped, JsonIgnore]
@@ -607,21 +625,33 @@ namespace TE1.Schemas
                 }
                 else
                 {
-                    Debug.WriteLine($"item.X : {item.X} / item.Y : {item.Y}");
-                    Decimal 적용값 = item.InsType == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
-
-                    Debug.WriteLine($"적용값 : {적용값} / 측정값 : {this.측정값}");
-
-                    //if(item.InsType == InsType.X && item.X == 0)
-                    //    this.교정값 = Convert.ToDecimal(Math.Round(적용값 / this.측정값 * 1000, 9));
-                    //else
-                    this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
-
-                    this.보정값 = item.InsType == InsType.X ? Convert.ToDecimal(item.X) : Convert.ToDecimal(item.Y);
+                    if (item.InsType == InsType.Y)
+                    {
+                        Decimal 적용값 = this.Y < 0 ? (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 - (Decimal)63) : (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 + (Decimal)63);
+                        this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                        this.보정값 = Convert.ToDecimal(item.Y);
+                    }
+                    if (item.InsType == InsType.X)
+                    {
+                        Decimal 적용값 = (Decimal)982.25 - (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
+                        this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                        this.보정값 = Convert.ToDecimal(item.X);
+                    }
                 }
             }
             else
-                this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(this.실측값 / this.측정값 * 1000, 9)));
+            {
+                if (item.InsType == InsType.H && (정보.검사명칭.Contains("X") || 정보.검사명칭.Contains("Y")))
+                {
+                    if (정보.검사명칭.Contains("X")) this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(-((Decimal)982.25 - Math.Abs(this.실측값)) / this.측정값 * 1000, 9)));
+                    else if (정보.검사명칭.Contains("Y")) this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round((this.실측값 + (Decimal)63) / this.측정값 * 1000, 9)));
+                }
+                else
+                {
+                    this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(this.실측값 / this.측정값 * 1000, 9)));
+                }
+            }
+
 
             return true;
         }

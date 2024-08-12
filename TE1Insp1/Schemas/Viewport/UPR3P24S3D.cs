@@ -173,16 +173,17 @@ namespace TE1.Schemas
                 검사정보 정보 = 결과.GetItem(항목.Type);
                 if (정보 == null)
                 {
+                    //Debug.WriteLine($"{항목.Name}");
                     항목.Draw(항목, Decimal.MinValue, 결과구분.PS);
                     continue;
                 }
                 try
                 {
-                    검사정보 항목정보 = Global.모델자료.선택모델.검사설정.GetItem(항목.Type);
-                    Remove(항목);
+                    //검사정보 항목정보 = Global.모델자료.선택모델.검사설정.GetItem(항목.Type);
+                    //Remove(항목);
 
-                    if (항목정보.isShow == true)
-                        항목.Draw(항목, 정보.결과값, 정보.측정결과);
+                    //if (항목정보.isShow == true)
+                    항목.Draw(항목, 정보.결과값, 정보.측정결과);
                 }
                 catch (Exception ex) { Debug.WriteLine(ex.Message); }
             }

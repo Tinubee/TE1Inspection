@@ -9,9 +9,16 @@ using System.Reflection;
 
 namespace TE1
 {
+    public enum Pos
+    {
+        None = 0,
+        Plus = 1,
+        Minus = 2,
+    }
+
     public static class InsItems
     {
-        public static InsItem H01 = new InsItem(2, InsType.H, -7.75, +103.00, 6.5);
+        public static InsItem H01 = new InsItem(2, InsType.H, -7.75, +103.00, 6.5); // -974.5, 163
         public static InsItem H02 = new InsItem(2, InsType.H, -15.10, +116.00, 6.5);
         public static InsItem H03 = new InsItem(2, InsType.H, -7.75, -103.00, 6.5);
         public static InsItem H04 = new InsItem(2, InsType.H, -15.10, -116.00, 6.5);
@@ -42,7 +49,7 @@ namespace TE1
         public static InsItem H37 = new InsItem(2, InsType.H, -982.25, -63.00, 7.5); //Datum
         public static InsItem H38 = new InsItem(2, InsType.H, -8.75, -63.00, 7.5); //Datum
         public static InsItem R01 = new InsItem(2, InsType.R, -7.75, +63.00, 9.5);
-       
+
         public static InsItem T001 = new InsItem(2, InsType.Y, -56.65, -202.58);
         public static InsItem T002 = new InsItem(2, InsType.Y, -149.98, -202.58);
         public static InsItem T003 = new InsItem(2, InsType.Y, -249.93, -202.58);
@@ -414,18 +421,30 @@ namespace TE1
         public Double CalX = Double.NaN;
         public Double CalY = Double.NaN;
         public Double L = Double.NaN; //위치도
-        public Double offsetX1 = Double.NaN;
-        public Double offsetY2 = Double.NaN;
-        public Double offsetX3 = Double.NaN;
-        public Double offsetY4 = Double.NaN;
+        public Double 원점X = 982.25;
+        public Double 원점Y = 63;
+        public Double SetX = Double.NaN;
+        public Double SetY = Double.NaN;
         public List<Double> DList = new List<Double>();
         public Double FontSize { get; set; } = 5;
         public InsItem() { }
         public InsItem(Int32 cam, InsType ins) { Camera = cam; InsType = ins; }
         public InsItem(Int32 cam, InsType ins, Double x, Double y) : this(cam, ins, x, y, 0) { }
-        public InsItem(Int32 cam, InsType ins, Double x, Double y, Double d) { Camera = cam; InsType = ins; X = x; Y = y; D = d; }
-
-        public InsItem(Int32 cam, InsType ins, Double x, Double y, Double d, Double h, Double offx1 = 0, Double offy2 = 0, Double offx3 = 0, Double offy4 = 0) { Camera = cam; InsType = ins; X = x; Y = y; D = d; H = h; offsetX1 = offx1; offsetY2 = offy2; offsetX3 = offx3; offsetY4 = offy4; }
+        public InsItem(Int32 cam, InsType ins, Double x, Double y, Double d)
+        {
+            //  public static InsItem H01 = new InsItem(2, InsType.H, -7.75, +103.00, 6.5 , Pos.Left); // -974.5, 163
+            Camera = cam;
+            InsType = ins;
+            if (cam != 2) { X = x; Y = y; }
+            else
+            {
+                X = x;
+                Y = y;
+                SetX = x + 원점X;
+                SetY = y + 원점Y;
+            }
+            D = d;
+        }
     }
 
     public class Result

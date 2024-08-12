@@ -238,12 +238,15 @@ namespace TE1.Schemas
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            Double leftAngle = 0.224395; //0.279972;
-            Double rightAngle = 0.177276; // 0.216211;
+            Double leftAngle = 0.115951; //0.279972;
+            Double rightAngle = 0.0634196; // 0.216211;
 
             Mat leftProcessed = ProcessImage(좌측이미지, leftAngle);
             Mat rightProcessed = ProcessImage(우측이미지, rightAngle);
-      
+
+            //Global.사진자료.SaveImage(leftProcessed, 1, 카메라구분.Cam01);
+            //Global.사진자료.SaveImage(rightProcessed, 1, 카메라구분.Cam02);
+
             Mat mergedImage = 이미지합성(leftProcessed, rightProcessed, LeftX, RightX);
             this.합성이미지들.Enqueue(mergedImage);
             stopwatch.Stop();
@@ -295,8 +298,8 @@ namespace TE1.Schemas
         }
         public Mat CropImage(Mat image, Boolean isLeft)
         {
-            int startRow = isLeft ? 48 : 0;
-            int endRow = isLeft ? image.Rows : image.Rows - 48;
+            int startRow = isLeft ? 62 : 0;
+            int endRow = isLeft ? image.Rows : image.Rows - 62;
             int startCol = 0;
             int endCol = image.Cols;
 

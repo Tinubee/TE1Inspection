@@ -100,7 +100,8 @@ namespace TE1.Schemas
                 select d;
             List<표면불량> 표면 = query3.AsNoTracking().ToList();
 
-            자료.ForEach(l => {
+            자료.ForEach(l =>
+            {
                 if (정보 != null && 정보.Count > 0)
                     l.AddRange(정보.Where(d => d.검사일시 == l.검사일시).ToList());
                 if (표면 != null && 표면.Count > 0)
@@ -183,6 +184,7 @@ namespace TE1.Schemas
             for (int i = 0; i < numberOfProducts; i++)
             {
                 List<List<decimal>> result = new List<List<decimal>>();
+
                 var groupedResults = new List<DateTime>();
                 var group = filteredResults
                     .Where((x, index) => (index % numberOfProducts) == i)
@@ -192,41 +194,28 @@ namespace TE1.Schemas
 
                 foreach (var 검사일시 in groupedResults)
                 {
-
-                    Console.WriteLine($"검사일시: {검사일시} {sheetnum}");
-
                     // 해당 검사일시에 대한 inspd 데이터 조회
                     var inspdData = this.검사정보
                         .Where(x => x.검사일시 == 검사일시)
                         .OrderBy(x => x.검사항목)
                         .ToList();
+
                     result.Add(inspdData.Select(x => x.결과값).ToList());
-                    foreach (var data in inspdData)
-                    {
-                        Console.WriteLine($"검사일시: {data.검사일시}, 결과값: {data.결과값}");
-                    }
-
-
+                    //foreach (var data in inspdData)
+                    //{
+                    //    Debug.WriteLine($"검사일시: {data.검사일시}, 결과값: {data.결과값}");
+                    //}
                     // 행과 열을 전치하여 새로운 데이터 구조 생성
                     var transposedResults = TransposeList(result);
 
                     // CSV 파일 경로
-
                     string csvFileFolder = "C:\\IVM\\RandR";
                     string csvFileName = $"GageR&R_{sheetnum}_{DateTime.Now.ToString("yyMMddHHmmss")}.csv";
 
-
-                    //var csvFilePath = $"C:\\IVM\\RandR\\GageR&R_{sheetnum}_{DateTime.Now.ToString("yyMMddHHmmss")}.csv";
-
-
                     // 폴더 없으면 만들고
                     if (!Directory.Exists(csvFileFolder)) Directory.CreateDirectory(csvFileFolder);
-
-
-
                     // CSV 파일 경로
                     var csvFilePath = Path.Combine(csvFileFolder, csvFileName);
-
                     // CSV 파일 쓰기
                     using (var writer = new StreamWriter(csvFilePath, false, System.Text.Encoding.UTF8))
                     {
@@ -235,8 +224,6 @@ namespace TE1.Schemas
                             writer.WriteLine(string.Join(",", row));
                         }
                     }
-
-
                 }
                 sheetnum--;
             }

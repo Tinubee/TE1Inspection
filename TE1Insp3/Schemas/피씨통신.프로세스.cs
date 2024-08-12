@@ -82,15 +82,11 @@ namespace TE1.Schemas
             if (검사 == null) return false;
 
             List<검사정보> 치수 = 자료.Get<List<검사정보>>();
-
-            Debug.WriteLine($"============================ {자료.번호} 검사결과 수신 Start ============================");
             foreach (검사정보 정보 in 치수)
             {
                 Debug.WriteLine($"{정보.검사항목} : {정보.측정값}");
                 검사.SetResult(정보.검사항목, (Double)정보.측정값);
             }
-            Debug.WriteLine($"============================ {자료.번호} 검사결과 수신 End ============================");
-
             return true;
         }
         private Boolean 평탄완료수신(통신자료 자료)

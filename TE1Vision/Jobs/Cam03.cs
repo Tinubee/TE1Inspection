@@ -417,13 +417,10 @@ namespace TE1.Cam03
                 }
                 else if (item.Value.InsType == InsType.I)
                 {
-                   
                     CogPMAlignTool tool = GetTool(item.Key) as CogPMAlignTool;
                     Int32 count = tool.Results.Count;
-
                     if (count == 0)
                     {
-                        Debug.WriteLine($"{item.Key}");
                         results.Add(new Result(item.Key, 0));
                         SetNgRegion(tool);
                     }
@@ -440,13 +437,20 @@ namespace TE1.Cam03
 
         private void SetNgRegion(CogPMAlignTool tool)
         {
-            ICogRecord record = tool.CreateLastRunRecord();
-            ICogRecord searchRegionRecord = record.SubRecords["InputImage"].SubRecords["SearchRegion"];
-            if (searchRegionRecord.Content is ICogGraphicInteractive searchRegion)
+            try
             {
-                CogRectangleAffine rectangle = searchRegion as CogRectangleAffine;
-                if (rectangle != null)
-                    rectangle.Color = CogColorConstants.Red;
+                ICogRecord record = tool.CreateLastRunRecord();
+                ICogRecord searchRegionRecord = record.SubRecords["InputImage"].SubRecords["SearchRegion"];
+                if (searchRegionRecord.Content is ICogGraphicInteractive searchRegion)
+                {
+                    CogRectangleAffine rectangle = searchRegion as CogRectangleAffine;
+                    if (rectangle != null)
+                        rectangle.Color = CogColorConstants.Red;
+                }
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine($"{ex.Message}");       
             }
         }
 

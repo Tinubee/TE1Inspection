@@ -86,8 +86,9 @@ namespace TE1.Cam02
         internal Double CalibY => Input<Double>("CalibY");
         internal Boolean Detected { get => Output<Boolean>("Detected"); set => Output("Detected", value); }
         internal CogFixtureTool Fixture => GetTool("Fixture") as CogFixtureTool;
+        internal CogFixtureTool MeasureFixture => GetTool("MeasureFixture") as CogFixtureTool;
         internal CogTransform2DLinear Transform => Fixture.RunParams.UnfixturedFromFixturedTransform as CogTransform2DLinear;
-
+        internal CogTransform2DLinear MeasureTransform => MeasureFixture.RunParams.UnfixturedFromFixturedTransform as CogTransform2DLinear;
         internal CogFindCircleTool CircleB => GetTool("CircleB") as CogFindCircleTool;
         internal CogFindCircleTool CircleC => GetTool("CircleC") as CogFindCircleTool;
         internal CogCreateSegmentTool LineBC => GetTool("LineBC") as CogCreateSegmentTool;
@@ -95,16 +96,19 @@ namespace TE1.Cam02
         internal CogCreateLinePerpendicularTool LineT => GetTool("LineT") as CogCreateLinePerpendicularTool;
         internal CogCreateLineParallelTool LineV => GetTool("LineV") as CogCreateLineParallelTool;
         internal CogIntersectLineLineTool Origin => GetTool("Origin") as CogIntersectLineLineTool;
+        internal CogFindLineTool SideLine => GetTool("SideLine") as CogFindLineTool;
+
 
         public override void AfterToolRun(ICogTool tool, CogToolResultConstants result)
         {
+            //Debug.WriteLine($"{tool.Name}");
             base.AfterToolRun(tool, result);
             if (result != CogToolResultConstants.Accept) return;
             if (tool == LineB) SetOriginX();
-            else if (tool == LineV) SetOriginY();
-            else if (tool.Name.Contains("H"))
+            else if (tool == LineV)
             {
-                //Debug.WriteLine($"{tool.Name} Run");
+                //Debug.WriteLine("LineV Tool");
+                SetOriginY();
             }
         }
 
@@ -113,7 +117,6 @@ namespace TE1.Cam02
             base.FinistedRun();
             Double y = Math.Round(LengthBC / LineBC.Segment.Length * 1000, 9);
             Debug.WriteLine($"{LengthBC} / {Math.Round(LineBC.Segment.Length, 2)} = {y}", "DatumBC");
-            //Debug.WriteLine($"CalibX => {CalibX} , CalibY => {CalibY}", "Calibration Value");
             Output("CalibX", CalibX);
             Output("CalibY", CalibY);
         }
@@ -124,7 +127,6 @@ namespace TE1.Cam02
             Point2d p = Base.CalculatePoint(new Point2d(LineBC.Segment.StartX, LineBC.Segment.StartY), length, LineB.GetOutputLine().Rotation);
             LineV.X = p.X;
             LineV.Y = p.Y;
-            //LineV.Line.Rotation = p.
         }
 
         internal virtual void SetOriginY()
@@ -133,16 +135,24 @@ namespace TE1.Cam02
             Point2d p = Base.CalculatePoint(new Point2d(LineV.X, LineV.Y), length, LineV.GetOutputLine().Rotation);
             LineT.X = p.X;
             LineT.Y = p.Y;
-            Transform.TranslationX = p.X;
-            Transform.TranslationY = p.Y;
-            Transform.Rotation = LineBC.Segment.Rotation + Math.PI / 2;
+
+            Point2d DatumPoint = new Point2d(CircleB.Results.GetCircle().CenterX, CircleB.Results.GetCircle().CenterY);
+
+            //Debug.WriteLine("SetOriginY");
+
+            Transform.TranslationX = DatumPoint.X; //p.X;
+            Transform.TranslationY = DatumPoint.Y; //p.Y;
+            Transform.Rotation = SideLine.Results.GetLine().Rotation + Math.PI / 2; //LineBC.Segment.Rotation + Math.PI / 2;
             Transform.Skew = 0;
-            Output("CenterX", p.X);
-            Output("CenterY", p.Y);
+            Output("CenterX", DatumPoint.X);
+            Output("CenterY", DatumPoint.Y);
             Output("Rotation", Transform.Rotation);
         }
 
-        internal virtual void SetFixture() { }
+        internal virtual void SetFixture()
+        {
+            MeasureTransform.Skew = 0;
+        }
     }
 
     public class DetectTools : BaseTool
@@ -246,13 +256,13 @@ namespace TE1.Cam02
         internal virtual void SetRectangle(CogToolBlock tool, InsItem p)
         {
             if (tool == null) return;
-            Base.Input(tool, "X", -p.Y / CalibX);
-            Base.Input(tool, "Y", -p.X / CalibY);
+            Base.Input(tool, "X", -p.SetY / CalibX);
+            Base.Input(tool, "Y", -p.SetX / CalibY);
         }
         internal virtual void SetBurr(CogFindCircleTool tool, InsItem p)
         {
-            Double x = -p.Y / CalibX;
-            Double y = -p.X / CalibY;
+            Double x = -p.SetY / CalibX;
+            Double y = -p.SetX / CalibY;
             Double r = p.R / CalibY;
 
             tool.RunParams.ExpectedCircularArc.CenterX = x;
@@ -273,8 +283,8 @@ namespace TE1.Cam02
         }
         internal virtual void SetBlob(CogBlobTool tool, InsItem p)
         {
-            Double x = -p.Y / CalibX;
-            Double y = -p.X / CalibY;
+            Double x = -p.SetY / CalibX;
+            Double y = -p.SetX / CalibY;
             Double r = p.R / CalibY;
 
             tool.RunParams.RegionMode = CogRegionModeConstants.PixelAlignedBoundingBoxAdjustMask;
@@ -306,8 +316,8 @@ namespace TE1.Cam02
 
         internal virtual void SetCircle(CogFindCircleTool tool, InsItem p, String name = null)
         {
-            Double x = -p.Y / CalibX;
-            Double y = -p.X / CalibY;
+            Double x = -p.SetY / CalibX;
+            Double y = -p.SetX / CalibY;
             Double r = p.R / CalibY;
 
             tool.RunParams.ExpectedCircularArc.CenterX = x;
@@ -322,13 +332,12 @@ namespace TE1.Cam02
             tool.RunParams.CaliperRunParams.FilterHalfSizeInPixels = 5;
 
             tool.RunParams.NumCalipers = 15;
-            //tool.InputImage = (CogImage8Grey)this.InputImage;
         }
 
         internal virtual void SetCaliper(CogCaliperTool tool, InsItem p)
         {
-            Double x = -p.Y / CalibX;
-            Double y = -p.X / CalibY;
+            Double x = -p.SetY / CalibX;
+            Double y = -p.SetX / CalibY;
             tool.Region.CenterX = x;
             tool.Region.CenterY = y;
             tool.Region.SideXLength = 200;
@@ -409,7 +418,7 @@ namespace TE1.Cam02
                                     results.Add(new Result(item.Key + "X", r.X));
                                     results.Add(new Result(item.Key + "Y", r.Y));
                                 }
-                       
+
                                 results.Add(new Result(item.Key + "D", r.D));
                                 results.Add(new Result(item.Key + "P", r.L));
                             }
@@ -459,7 +468,7 @@ namespace TE1.Cam02
             if (tool.RunStatus.Result == CogToolResultConstants.Accept && tool.Results.GetCircle() != null)
             {
                 CogCircle c = tool.Results.GetCircle();
-                result.X = -Math.Round(c.CenterY, 3);
+                result.X = Math.Round(c.CenterY, 3);
                 result.Y = -Math.Round(c.CenterX, 3);
 
                 result.D = Math.Round(c.Radius * 2, 3);
