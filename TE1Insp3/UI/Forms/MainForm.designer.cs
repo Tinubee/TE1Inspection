@@ -61,6 +61,9 @@
             this.e장치설정 = new TE1.UI.Controls.DeviceSettings();
             this.t로그내역 = new DevExpress.XtraTab.XtraTabPage();
             this.e로그내역 = new TE1.UI.Controls.LogViewer();
+            this.p마스터모드설정 = new DevExpress.XtraBars.TabFormPage();
+            this.tabFormContentContainer4 = new DevExpress.XtraBars.TabFormContentContainer();
+            this.e마스터설정 = new TE1.UI.Controls.SetInspection();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageComboBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tabFormControl1)).BeginInit();
             this.tabFormContentContainer1.SuspendLayout();
@@ -81,6 +84,7 @@
             this.t검사설정.SuspendLayout();
             this.t장치설정.SuspendLayout();
             this.t로그내역.SuspendLayout();
+            this.tabFormContentContainer4.SuspendLayout();
             this.SuspendLayout();
             // 
             // repositoryItemImageComboBox1
@@ -103,7 +107,8 @@
             this.tabFormControl1.Pages.Add(this.p결과뷰어);
             this.tabFormControl1.Pages.Add(this.p검사내역);
             this.tabFormControl1.Pages.Add(this.p환경설정);
-            this.tabFormControl1.SelectedPage = this.p환경설정;
+            this.tabFormControl1.Pages.Add(this.p마스터모드설정);
+            this.tabFormControl1.SelectedPage = this.p마스터모드설정;
             this.tabFormControl1.ShowAddPageButton = false;
             this.tabFormControl1.ShowTabCloseButtons = false;
             this.tabFormControl1.ShowTabsInTitleBar = DevExpress.XtraBars.ShowTabsInTitleBar.True;
@@ -354,12 +359,36 @@
             this.e로그내역.Size = new System.Drawing.Size(1918, 979);
             this.e로그내역.TabIndex = 0;
             // 
+            // p마스터모드설정
+            // 
+            this.p마스터모드설정.ContentContainer = this.tabFormContentContainer4;
+            this.p마스터모드설정.ImageOptions.SvgImage = global::TE1.Properties.Resources.yaxissettings;
+            this.p마스터모드설정.Name = "p마스터모드설정";
+            this.p마스터모드설정.Text = "MasterSetting";
+            // 
+            // tabFormContentContainer4
+            // 
+            this.tabFormContentContainer4.Controls.Add(this.e마스터설정);
+            this.tabFormContentContainer4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabFormContentContainer4.Location = new System.Drawing.Point(0, 30);
+            this.tabFormContentContainer4.Name = "tabFormContentContainer4";
+            this.tabFormContentContainer4.Size = new System.Drawing.Size(1920, 1010);
+            this.tabFormContentContainer4.TabIndex = 3;
+            // 
+            // e마스터설정
+            // 
+            this.e마스터설정.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.e마스터설정.Location = new System.Drawing.Point(0, 0);
+            this.e마스터설정.Name = "e마스터설정";
+            this.e마스터설정.Size = new System.Drawing.Size(1920, 1010);
+            this.e마스터설정.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1920, 1040);
-            this.Controls.Add(this.tabFormContentContainer2);
+            this.Controls.Add(this.tabFormContentContainer4);
             this.Controls.Add(this.tabFormControl1);
             this.IconOptions.SvgImage = global::TE1.Properties.Resources.vision;
             this.Name = "MainForm";
@@ -386,6 +415,7 @@
             this.t검사설정.ResumeLayout(false);
             this.t장치설정.ResumeLayout(false);
             this.t로그내역.ResumeLayout(false);
+            this.tabFormContentContainer4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -423,5 +453,8 @@
         private UI.Controls.ResultInspection e결과뷰어;
         private DevExpress.XtraTab.XtraTabPage xtraTabPage3;
         private UI.Controls.ResultSearch e결과검색;
+        private DevExpress.XtraBars.TabFormPage p마스터모드설정;
+        private DevExpress.XtraBars.TabFormContentContainer tabFormContentContainer4;
+        private UI.Controls.SetInspection e마스터설정;
     }
 }

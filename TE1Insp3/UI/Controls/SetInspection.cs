@@ -2,12 +2,21 @@
 using DevExpress.XtraGrid.Views.Grid;
 using MvUtils;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using TE1.Schemas;
 
 namespace TE1.UI.Controls
 {
+    public enum 검사설정구분
+    {
+        [Description("Inspection")]
+        기본검사 = 1,
+        [Description("Master")]
+        마스터검사 = 2,
+    }
     public partial class SetInspection : XtraUserControl
     {
         public SetInspection()
@@ -20,7 +29,7 @@ namespace TE1.UI.Controls
         private LocalizationInspection 번역 = new LocalizationInspection();
         private static String 로그영역 = "Inspection Settings";
 
-        public void Init()
+        public void Init(검사설정구분 검사설정 = 검사설정구분.기본검사)
         {
             this.GridView1.Init(this.barManager1);
             this.GridView1.OptionsBehavior.Editable = true;
@@ -52,7 +61,24 @@ namespace TE1.UI.Controls
             Localization.SetColumnCaption(this.GridView1, typeof(검사정보));
             this.b설정저장.Text = 번역.설정저장;
             this.모델선택(this.e모델선택, EventArgs.Empty);
+
+            검사타입설정(검사설정);
         }
+
+        public void 검사타입설정(검사설정구분 검사설정)
+        {
+            this.col마스터값.Visible = 검사설정 != 검사설정구분.기본검사;
+            this.col마스터공차.Visible = 검사설정 != 검사설정구분.기본검사;
+
+            //for (int lop = 0; lop < GridView1.Columns.Count; lop++)
+            //{
+            //    if (GridView1.Columns[lop].Caption == this.col마스터값.Caption && 검사설정 == 검사설정구분.마스터검사)
+            //    {
+            //        this.col마스터값.Visible = false;
+            //    }
+            //}
+        }
+
         public void Close() { }
 
         private 모델구분 선택모델 => (모델구분)this.e모델선택.EditValue;

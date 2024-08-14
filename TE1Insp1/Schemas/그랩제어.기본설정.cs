@@ -69,6 +69,14 @@ namespace TE1.Schemas
         [JsonIgnore]
         internal Mat 합성이미지 => 합성이미지들.LastOrDefault<Mat>();
         [JsonIgnore]
+        internal Queue<Mat> 왼쪽이미지들 = new Queue<Mat>();
+        [JsonIgnore]
+        internal Mat 왼쪽이미지 => 왼쪽이미지들.LastOrDefault<Mat>();
+        [JsonIgnore]
+        internal Queue<Mat> 오른쪽이미지들 = new Queue<Mat>();
+        [JsonIgnore]
+        internal Mat 오른쪽이미지 => 오른쪽이미지들.LastOrDefault<Mat>();
+        [JsonIgnore]
         public const String 로그영역 = "Camera";
 
         public void Dispose()
@@ -313,7 +321,7 @@ namespace TE1.Schemas
             return rotatedImg;
         }
 
-        public Mat ResizeImage(Mat image, Double scaleFactor)
+        public Mat ResizeImage(Mat image, Double scaleFactor = 0.5)
         {
             var newSize = new OpenCvSharp.Size(image.Width * scaleFactor, image.Height * scaleFactor);
             return image.Resize(newSize, 0, 0, InterpolationFlags.Area);

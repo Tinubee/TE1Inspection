@@ -3,14 +3,17 @@ using Cognex.VisionPro.Blob;
 using Cognex.VisionPro.CalibFix;
 using Cognex.VisionPro.Caliper;
 using Cognex.VisionPro.Dimensioning;
+using Cognex.VisionPro.ImageProcessing;
 using Cognex.VisionPro.ToolBlock;
 using MvLibs;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
 namespace TE1.Cam02
@@ -75,6 +78,53 @@ namespace TE1.Cam02
             finally { Results = String.Empty; }
         }
     }
+
+    public class MergeTools : BaseTool
+    {
+        public MergeTools(CogToolBlock tool) : base(tool) { }
+        internal CogImage8Grey LeftImage => Input<CogImage8Grey>("LeftImage");
+        internal CogImage8Grey RightImage => Input<CogImage8Grey>("RightImage");
+        public override Cameras Camera => Cameras.Cam02;
+
+        internal CogAffineTransformTool LeftAffineImage => GetTool("LeftAffineImage") as CogAffineTransformTool;
+        internal CogAffineTransformTool RightAffineImage => GetTool("RightAffineImage") as CogAffineTransformTool;
+
+        internal CogCopyRegionTool CopyLeft => GetTool("CopyLeft") as CogCopyRegionTool;
+
+        internal CogCopyRegionTool CopyRight => GetTool("CopyRight") as CogCopyRegionTool;
+        public override void FinistedRun()
+        {
+            base.FinistedRun();
+            Debug.WriteLine($"FinistedRun");
+        }
+
+
+        public override void AfterToolRun(ICogTool tool, CogToolResultConstants result)
+        {
+            base.AfterToolRun(tool, result);
+            if (tool == LeftAffineImage) CopyLeft.InputImage = LeftAffineImage.OutputImage;
+            else if (tool == RightAffineImage) CopyRight.InputImage = RightAffineImage.OutputImage;
+
+            Debug.WriteLine($"AfterToolRun => {tool.Name}");
+        }
+
+        public override void StartedRun()
+        {
+            base.StartedRun();
+            InitTools();
+        }
+
+        internal virtual void InitTools()
+        {
+            Input("NewImage", new CogImage8Grey(14200 * 2, 60000));
+            //Debug.WriteLine("InitTools");
+            //CopyLeft.InputImage = LeftAffineImage.OutputImage;
+            //CopyRight.InputImage = RightAffineImage.OutputImage;
+            //CopyLeft.DestinationImage = new CogImage8Grey(14200 * 2, 60000);
+            //CopyRight.DestinationImage = new CogImage8Grey(14200 * 2, 60000);
+        }
+    }
+
 
     public class AlignTools : BaseTool
     {
@@ -142,7 +192,7 @@ namespace TE1.Cam02
 
             Transform.TranslationX = DatumPoint.X; //p.X;
             Transform.TranslationY = DatumPoint.Y; //p.Y;
-            Transform.Rotation = SideLine.Results.GetLine().Rotation + Math.PI / 2; //LineBC.Segment.Rotation + Math.PI / 2;
+            Transform.Rotation = LineBC.Segment.Rotation + Math.PI / 2; //SideLine.Results.GetLine().Rotation + Math.PI / 2; 
             Transform.Skew = 0;
             Output("CenterX", DatumPoint.X);
             Output("CenterY", DatumPoint.Y);
@@ -292,8 +342,8 @@ namespace TE1.Cam02
 
             rect.CenterX = x;
             rect.CenterY = y;
-            rect.SideXLength = 500;
-            rect.SideYLength = 500;
+            rect.SideXLength = 700;
+            rect.SideYLength = 700;
 
             tool.Region = rect;
             tool.RunParams.SegmentationParams.Mode = CogBlobSegmentationModeConstants.HardFixedThreshold;
@@ -340,7 +390,7 @@ namespace TE1.Cam02
             Double y = -p.SetX / CalibY;
             tool.Region.CenterX = x;
             tool.Region.CenterY = y;
-            tool.Region.SideXLength = 200;
+            tool.Region.SideXLength = 300;
             tool.Region.SideYLength = 50;
             if (p.InsType == InsType.X)
             {

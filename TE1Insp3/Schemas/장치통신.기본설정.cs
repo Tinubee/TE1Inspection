@@ -47,6 +47,7 @@ namespace TE1.Schemas
             [Address("B100E", 3000, 0, true)] 결과요청,
             [Address("B100F", 3000, 0, true)] 양품불량,
             [Address("B1010", 3000, 0, true)] 번호리셋,
+            [Address("B1011")] 마스터모드,
 
             [Address("W0")] 제품투입N,
             [Address("W1")] 평탄측정N,

@@ -223,28 +223,40 @@ namespace TE1
 
         public static ICogImage LoadImage(String path, Boolean Colored = false)
         {
-            Debug.WriteLine(path, "LoadImage");
             if (!File.Exists(path)) return null;
             try
             {
-                //원본
-                //using (Bitmap bitmap = new Bitmap(path))
-                //{
-                //    if (Colored) return new CogImage24PlanarColor(bitmap);
-                //    return new CogImage8Grey(bitmap);
-                //}
-                ////
-                ///
-
-                CogImageFileTool tool = new CogImageFileTool();
-                tool.Operator.Open(path, CogImageFileModeConstants.Read);
-                tool.Run();
-                CogImage8Grey image = tool.OutputImage as CogImage8Grey;
-
-                return image;
+                using (CogImageFileTool imageTool = new CogImageFileTool())
+                {
+                    imageTool.Operator.Open(path, CogImageFileModeConstants.Read);
+                    imageTool.Run();
+                    return imageTool.OutputImage.CopyBase(CogImageCopyModeConstants.CopyPixels);
+                }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message, "LoadImage"); }
             return null;
+            //Debug.WriteLine(path, "LoadImage");
+            //if (!File.Exists(path)) return null;
+            //try
+            //{
+            //    //원본
+            //    //using (Bitmap bitmap = new Bitmap(path))
+            //    //{
+            //    //    if (Colored) return new CogImage24PlanarColor(bitmap);
+            //    //    return new CogImage8Grey(bitmap);
+            //    //}
+            //    ////
+            //    ///
+
+            //    CogImageFileTool tool = new CogImageFileTool();
+            //    tool.Operator.Open(path, CogImageFileModeConstants.Read);
+            //    tool.Run();
+            //    CogImage8Grey image = tool.OutputImage as CogImage8Grey;
+
+            //    return image;
+            //}
+            //catch (Exception ex) { Debug.WriteLine(ex.Message, "LoadImage"); }
+            //return null;
         }
 
         //public static ICogImage LoadImage(String path, Boolean Colored = false)

@@ -26,7 +26,7 @@ namespace TE1.Schemas
         public String 로그영역 = "Vision Tool";
         public 모델구분 모델구분 = 모델구분.UPR3P24S;
         public 카메라구분 카메라 = 카메라구분.None;
-        public 사진형식 마스터형식 { get; set; } = 사진형식.Jpg;
+        public 사진형식 마스터형식 { get; set; } = 사진형식.Bmp;
         public String 도구명칭 => this.카메라.ToString();
         public String 도구경로 => Path.Combine(Global.환경설정.도구경로, ((Int32)모델구분).ToString("d2"), $"{도구명칭}.vpp");
         public String 마스터경로 => Path.Combine(Global.환경설정.마스터사진, $"{((Int32)모델구분).ToString("d2")}.{도구명칭}.{마스터형식.ToString()}");
@@ -36,6 +36,11 @@ namespace TE1.Schemas
         public CogToolBlock ToolBlock = null;
         public CogToolBlock AlignTools => this.GetTool("AlignTools") as CogToolBlock;
         public ICogImage InputImage { get => this.Input<ICogImage>("InputImage"); set => this.Input("InputImage", value); }
+
+        public ICogImage LeftImage { get => this.Input<ICogImage>("LeftImage"); set => this.Input("LeftImage", value); }
+
+        public ICogImage RightImage { get => this.Input<ICogImage>("RightImage"); set => this.Input("RightImage", value); }
+
         public ICogImage OutputImage => 비전검사.Output<ICogImage>(this.AlignTools, "OutputImage");
         public String ViewerRecodName => "AlignTools.Fixture.OutputImage";
 
@@ -221,14 +226,28 @@ namespace TE1.Schemas
         {
             if (image == null) return false;
             Global.검사자료.수동검사.Reset(this.카메라);
-            this.Run(image, Global.검사자료.수동검사);
+
+            if (this.카메라 == 카메라구분.Cam02)
+            {
+                String path = this.마스터경로.Replace(카메라구분.Cam02.ToString(), 카메라구분.Cam01.ToString());
+                ICogImage LeftImage = Common.LoadImage(path, this.컬러여부);
+                this.Run(LeftImage, image, Global.검사자료.수동검사);
+            }
+            else
+                this.Run(image, Global.검사자료.수동검사);
+
             Global.검사자료.수동검사결과(this.카메라, Global.검사자료.수동검사);
             return true;
         }
         public Boolean 다시검사()
         {
             Global.검사자료.수동검사.Reset(this.카메라);
-            this.Run(null, Global.검사자료.수동검사);
+            if (this.카메라 == 카메라구분.Cam02)
+            {
+                this.Run(null, null, Global.검사자료.수동검사);
+            }
+            else
+                this.Run(null, Global.검사자료.수동검사);
             Global.검사자료.수동검사결과(this.카메라, Global.검사자료.수동검사);
             return true;
         }
@@ -309,6 +328,32 @@ namespace TE1.Schemas
             {
                 if (image != null) this.InputImage = image;
                 if (this.InputImage == null) return false;
+                this.검사시작 = DateTime.Now;
+                Input("Results", String.Empty);
+                this.ToolBlock.Run();
+                accepted = this.IsAccepted();
+                카메라구분 구분 = this.카메라 == 카메라구분.Cam01 ? 카메라구분.Cam02 : this.카메라;
+                검사?.SetResults(구분, Output<String>("Results"));
+                this.표면검사(검사);
+                this.검사종료 = DateTime.Now;
+                Debug.WriteLine($"{this.카메라.ToString()} => {(검사종료 - 검사시작).TotalMilliseconds.ToString("#,0")} msec", "검사시간");
+                DisplayResult(검사, 구분);
+                Global.캘리브?.AddNew(this.ToolBlock, this.카메라, 검사.검사번호);
+                검사완료체크(검사);
+            }
+            catch (Exception ex) { Global.오류로그(로그영역, "Run", $"[{this.카메라.ToString()}] {ex.Message}", true); }
+            return accepted;
+        }
+
+        public Boolean Run(ICogImage leftImage, ICogImage rightImage, 검사결과 검사)
+        {
+            Boolean accepted = false;
+            try
+            {
+                if (leftImage != null) this.LeftImage = leftImage;
+                if (rightImage != null) this.RightImage = rightImage;
+
+                if (this.LeftImage == null || this.RightImage == null) return false;
                 this.검사시작 = DateTime.Now;
                 Input("Results", String.Empty);
                 this.ToolBlock.Run();

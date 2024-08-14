@@ -26,6 +26,7 @@ namespace TE1
         public virtual String ViewerRecodName => "AlignTools.Fixture.OutputImage";
         public virtual String Results { get => Input<String>("Results"); set => Input("Results", value); }
         public ICogImage InputImage => Input<ICogImage>("InputImage");
+ 
         public ICogTool GetTool(String name) => Base.GetTool(ToolBlock, name);
         public T Input<T>(String name) => Base.Input<T>(ToolBlock, name);
         public Boolean Input(String name, Object value) => Base.Input(ToolBlock, name, value);

@@ -93,7 +93,7 @@ namespace TE1.Schemas
         {
             if (장치 == null || 결과 == null) return false;
 
-            Boolean r = Merged == false ? Run(장치.구분, 장치.CogImage(), 결과) : Run(카메라구분.Cam02, Global.그랩제어.GetItem(카메라구분.Cam02).MergeCogImage(), 결과);
+            Boolean r = Merged == false ? Run(장치.구분, 장치.CogImage(), 결과) : Run(카메라구분.Cam02, Global.그랩제어.GetItem(카메라구분.Cam01).CogImage(), Global.그랩제어.GetItem(카메라구분.Cam02).CogImage(), 결과);
             if (Merged == false) Global.사진자료.SaveImage(장치, 결과);
             else
             {
@@ -112,6 +112,17 @@ namespace TE1.Schemas
             if (!this.ContainsKey(카메라)) return false;
             비전도구 도구 = this[카메라];
             return 도구.Run(image, 검사);
+        }
+        public Boolean Run(카메라구분 카메라, ICogImage LeftImage, ICogImage RightImage, 검사결과 검사)
+        {
+            if (LeftImage == null || RightImage == null)
+            {
+                Global.오류로그("비전검사", "이미지없음", $"{카메라} 검사할 이미지가 없습니다.", true);
+                return false;
+            }
+            if (!this.ContainsKey(카메라)) return false;
+            비전도구 도구 = this[카메라];
+            return 도구.Run(LeftImage, RightImage, 검사);
         }
         #endregion
 
