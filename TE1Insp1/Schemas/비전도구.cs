@@ -379,15 +379,14 @@ namespace TE1.Schemas
             if (검사.검사완료여부)
             {
                 Global.검사자료.검사수행알림(검사);
+              
+                foreach (검사정보 정보 in 검사.검사내역)
+                    검사.SetResult(정보.검사항목, (Double)정보.측정값);
+
                 Debug.WriteLine($"TE1 Vision 검사완료신호전송 => {검사.검사번호}");
                 Global.피씨통신.Publish(검사.검사번호, 검사.검사내역, 피씨명령.상부완료);
-
-                foreach (검사정보 정보 in 검사.검사내역)
-                {
-                    검사.SetResult(정보.검사항목, (Double)정보.측정값);
-                }
+                GC.Collect();
             }
-
         }
 
         public Dictionary<String, Object> GetResults()

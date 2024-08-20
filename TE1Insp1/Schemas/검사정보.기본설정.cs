@@ -275,7 +275,7 @@ namespace TE1.Schemas
         {
             Decimal result = PixelToMeter(검사, value);
 
-            if (검사.검사명칭.StartsWith("H"))
+            if (검사.검사명칭.StartsWith("H") || 검사.검사명칭.StartsWith("R"))
             {
                 if (검사.검사명칭.Contains("X"))
                     result = Math.Abs(result) - (Decimal)982.25;
@@ -284,14 +284,25 @@ namespace TE1.Schemas
             }
             else if (검사.검사명칭.StartsWith("T"))
             {
-                if (검사.instype == InsType.Y)
+                if(검사.검사항목 != 검사항목.T044)
                 {
-                    result = result + (Decimal)63;
+                    if (검사.instype == InsType.Y)
+                    {
+                        result = result + (Decimal)63;
+                    }
+                    else if (검사.instype == InsType.X) result = result + (Decimal)982.25;
                 }
-                else if (검사.instype == InsType.X) result = result + (Decimal)982.25;
             }
 
-            result += 검사.보정값;
+            //Debug.WriteLine($"{검사.검사명칭} => {result} / {검사.보정값}");
+            if (검사.검사명칭.StartsWith("T"))
+            {
+                result = Math.Abs(result) - Math.Abs(검사.보정값);
+                //result += 검사.보정값;
+            }
+            else
+                result += 검사.보정값;
+
             result *= 검사.결과부호;
 
             Boolean r = result >= 검사.최소값 && result <= 검사.최대값;
@@ -618,7 +629,7 @@ namespace TE1.Schemas
             try
             {
                 InsItem item = 정보.Attr.검사정보;
-                Debug.WriteLine($"{정보.검사명칭}");
+                //Debug.WriteLine($"{정보.검사명칭}");
                 //if (this.측정값 == 0) return false;
                 if (item.InsType == InsType.X || item.InsType == InsType.Y || item.InsType == InsType.S)
                 {
@@ -632,30 +643,57 @@ namespace TE1.Schemas
                     }
                     else
                     {
-                        if (item.InsType == InsType.Y)
+                        if(정보.검사항목 == 검사항목.T044)
                         {
-                            Decimal 적용값 = this.Y < 0 ? (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 - (Decimal)63) : (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 + (Decimal)63);
+                            Decimal 적용값 = (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
                             this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
-                            this.보정값 = Convert.ToDecimal(item.Y);
                         }
-                        if (item.InsType == InsType.X)
+                        else
                         {
-                            Decimal 적용값 = (Decimal)982.25 - (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
-                            this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
-                            this.보정값 = Convert.ToDecimal(item.X);
+                            if (item.InsType == InsType.Y)
+                            {
+                                Decimal 적용값 = this.Y < 0 ? (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 - (Decimal)63) : (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 + (Decimal)63);
+                                //Debug.WriteLine($"{적용값}");
+                                this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                                this.보정값 = Convert.ToDecimal(item.Y);
+                            }
+                            if (item.InsType == InsType.X)
+                            {
+                                Decimal 적용값 = (Decimal)982.25 - (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
+                                this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                                this.보정값 = Convert.ToDecimal(item.X);
+                            }
                         }
                     }
                 }
                 else
                 {
-                    if (item.InsType == InsType.H && (정보.검사명칭.Contains("X") || 정보.검사명칭.Contains("Y")))
+                    if ((item.InsType == InsType.H || item.InsType == InsType.R) && (정보.검사명칭.Contains("X") || 정보.검사명칭.Contains("Y")))
                     {
-                        if (정보.검사명칭.Contains("X")) this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(-((Decimal)982.25 - Math.Abs(this.실측값)) / this.측정값 * 1000, 9)));
+                        if (정보.검사명칭.Contains("X"))
+                        {
+                            if (this.X == -982.25)
+                            {
+                                Decimal 적용값 = this.실측값 - (Decimal)정보.X;
+
+                                if (정보.검사항목 == 검사항목.H18X || 정보.검사항목 == 검사항목.H19X)
+                                {
+                                    Decimal 추가보정 = 결과값 - 적용값;
+                                    Debug.WriteLine($"{정보.검사항목} => {적용값} / {this.결과값} / {this.측정값} / {추가보정}");
+                                    this.보정값 = (Decimal)982.25 - 추가보정;
+                                }
+                            }
+                            else
+                                this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(-((Decimal)982.25 - Math.Abs(this.실측값)) / this.측정값 * 1000, 9)));
+                        }
                         else if (정보.검사명칭.Contains("Y")) this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round((this.실측값 + (Decimal)63) / this.측정값 * 1000, 9)));
+
                     }
                     else
                     {
-                        this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(this.실측값 / this.측정값 * 1000, 9)));
+                        if (정보.검사명칭.Contains("Burr")) this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round((Decimal)this.D / this.측정값 * 1000, 9)));
+                        else
+                            this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(this.실측값 / this.측정값 * 1000, 9)));
                     }
                 }
 

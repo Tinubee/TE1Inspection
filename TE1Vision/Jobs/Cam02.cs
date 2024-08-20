@@ -417,7 +417,7 @@ namespace TE1.Cam02
                     {
                         if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
                         {
-                            results.Add(new Result(item.Key + "X", item.Value.X));
+                            results.Add(new Result(item.Key + "X", r.X));
                             results.Add(new Result(item.Key + "Y", item.Value.Y));
                             results.Add(new Result(item.Key + "D", r.D));
                             results.Add(new Result(item.Key + "P", r.L));

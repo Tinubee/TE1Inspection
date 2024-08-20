@@ -95,10 +95,10 @@ namespace TE1.Schemas
 
             Boolean r = Merged == false ? Run(장치.구분, 장치.CogImage(), 결과) : Run(카메라구분.Cam02, Global.그랩제어.GetItem(카메라구분.Cam01).CogImage(), Global.그랩제어.GetItem(카메라구분.Cam02).CogImage(), 결과);
             if (Merged == false) Global.사진자료.SaveImage(장치, 결과);
-            else
-            {
-                Global.사진자료.SaveImage(장치, 결과, Global.그랩제어.GetItem(카메라구분.Cam02).합성이미지);
-            }
+            //else
+            //{
+            //    Global.사진자료.SaveImage(장치, 결과, Global.그랩제어.GetItem(카메라구분.Cam02).합성이미지);
+            //}
 
             return r;
         }

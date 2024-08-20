@@ -224,7 +224,6 @@ namespace TE1.UI.Controls
                         정보.교정계산(정보);
                     }
                 }
-                   
             }
             this.GridView1.RefreshData();
         }
