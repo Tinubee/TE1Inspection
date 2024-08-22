@@ -37,7 +37,7 @@ namespace TE1.Schemas
         private Boolean 상태정보수신(통신자료 자료)
         {
             상태정보 정보 = 자료.Get<상태정보>();
-            Debug.WriteLine($"상태정보수신완료 => {정보.자동수동}");
+            Debug.WriteLine($"상태정보수신완료 => {Global.장치상태.자동수동} / {정보.자동수동}");
 
             if (정보 == null)
             {

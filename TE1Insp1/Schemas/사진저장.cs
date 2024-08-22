@@ -133,7 +133,8 @@ namespace TE1.Schemas
 
         public String CopyImagePath(DateTime 시간, 카메라구분 카메라, Boolean Merged = false)
         {
-            String path = Merged ? Path.Combine(Global.환경설정.사진저장, Utils.FormatDate(시간, "{0:yyyy-MM-dd}"), "MergedImage") : Path.Combine(Global.환경설정.사진저장, Utils.FormatDate(시간, "{0:yyyy-MM-dd}"), 카메라.ToString());
+            String path = Path.Combine(Global.환경설정.사진저장, Utils.FormatDate(시간, "{0:yyyy-MM-dd}"), 카메라.ToString());
+            //String path = Merged ? Path.Combine(Global.환경설정.사진저장, Utils.FormatDate(시간, "{0:yyyy-MM-dd}"), "MergedImage") : Path.Combine(Global.환경설정.사진저장, Utils.FormatDate(시간, "{0:yyyy-MM-dd}"), 카메라.ToString());
             Common.DirectoryExists(path, true);
             return path;
         }

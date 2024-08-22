@@ -180,6 +180,7 @@ namespace TE1.Schemas
         }
         private async void Publish(String topic, Byte[] payload)
         {
+            //Debug.WriteLine($"Payload Length : {payload.Length}");
             if (!연결여부) return;
             MqttApplicationMessageBuilder builder = new MqttApplicationMessageBuilder().WithPayload(payload).WithTopic(topic)
                 .WithQualityOfServiceLevel(MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce).WithRetainFlag(false);

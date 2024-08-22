@@ -84,6 +84,7 @@ namespace TE1.Cam02
         public MergeTools(CogToolBlock tool) : base(tool) { }
         internal CogImage8Grey LeftImage => Input<CogImage8Grey>("LeftImage");
         internal CogImage8Grey RightImage => Input<CogImage8Grey>("RightImage");
+        internal CogImage8Grey NewImage { get => Input<CogImage8Grey>("NewImage"); set => Input("NewImage", value); }
         public override Cameras Camera => Cameras.Cam02;
 
         internal CogAffineTransformTool LeftAffineImage => GetTool("LeftAffineImage") as CogAffineTransformTool;
@@ -95,18 +96,18 @@ namespace TE1.Cam02
         public override void FinistedRun()
         {
             base.FinistedRun();
-            Debug.WriteLine($"FinistedRun");
+            //Debug.WriteLine($"FinistedRun");
         }
 
 
-        public override void AfterToolRun(ICogTool tool, CogToolResultConstants result)
-        {
-            base.AfterToolRun(tool, result);
-            if (tool == LeftAffineImage) CopyLeft.InputImage = LeftAffineImage.OutputImage;
-            else if (tool == RightAffineImage) CopyRight.InputImage = RightAffineImage.OutputImage;
+        //public override void AfterToolRun(ICogTool tool, CogToolResultConstants result)
+        //{
+        //    base.AfterToolRun(tool, result);
+        //    if (tool == LeftAffineImage) CopyLeft.InputImage = LeftAffineImage.OutputImage;
+        //    else if (tool == RightAffineImage) CopyRight.InputImage = RightAffineImage.OutputImage;
 
-            Debug.WriteLine($"AfterToolRun => {tool.Name}");
-        }
+        //    Debug.WriteLine($"AfterToolRun => {tool.Name}");
+        //}
 
         public override void StartedRun()
         {
@@ -116,6 +117,7 @@ namespace TE1.Cam02
 
         internal virtual void InitTools()
         {
+            //NewImage?.Dispose();
             Input("NewImage", new CogImage8Grey(14200 * 2, 60000));
             //Debug.WriteLine("InitTools");
             //CopyLeft.InputImage = LeftAffineImage.OutputImage;
@@ -151,52 +153,77 @@ namespace TE1.Cam02
 
         public override void AfterToolRun(ICogTool tool, CogToolResultConstants result)
         {
-            //Debug.WriteLine($"{tool.Name}");
-            base.AfterToolRun(tool, result);
-            if (result != CogToolResultConstants.Accept) return;
-            if (tool == LineB) SetOriginX();
-            else if (tool == LineV)
+            try
             {
-                //Debug.WriteLine("LineV Tool");
-                SetOriginY();
+                //Debug.WriteLine($"AfterToolRun => {tool.Name}");
+                base.AfterToolRun(tool, result);
+                if (result != CogToolResultConstants.Accept) return;
+                if (tool == LineB) SetOriginX();
+                else if (tool == LineV)
+                    SetOriginY();
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message, "AfterToolRun Exception");
+            }
+
         }
 
         public override void FinistedRun()
         {
-            base.FinistedRun();
-            Double y = Math.Round(LengthBC / LineBC.Segment.Length * 1000, 9);
-            Debug.WriteLine($"{LengthBC} / {Math.Round(LineBC.Segment.Length, 2)} = {y}", "DatumBC");
-            Output("CalibX", CalibX);
-            Output("CalibY", CalibY);
+            try
+            {
+                //Debug.WriteLine($"FinistedRun => FinistedRun");
+                base.FinistedRun();
+                Double y = Math.Round(LengthBC / LineBC.Segment.Length * 1000, 9);
+                Debug.WriteLine($"{LengthBC} / {Math.Round(LineBC.Segment.Length, 2)} = {y}", "DatumBC");
+                Output("CalibX", CalibX);
+                Output("CalibY", CalibY);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message, "FinistedRun Exception");
+            }
         }
 
         internal virtual void SetOriginX()
         {
-            Double length = -63.0 / CalibX;
-            Point2d p = Base.CalculatePoint(new Point2d(LineBC.Segment.StartX, LineBC.Segment.StartY), length, LineB.GetOutputLine().Rotation);
-            LineV.X = p.X;
-            LineV.Y = p.Y;
+            try
+            {
+                //Debug.WriteLine($"SetOriginX => SetOriginX");
+                Double length = -63.0 / CalibX;
+                Point2d p = Base.CalculatePoint(new Point2d(LineBC.Segment.StartX, LineBC.Segment.StartY), length, LineB.GetOutputLine().Rotation);
+                LineV.X = p.X;
+                LineV.Y = p.Y;
+            }
+            catch (Exception ex) {
+                Debug.WriteLine(ex.Message, "SetOriginX Exception");
+            }
         }
 
         internal virtual void SetOriginY()
         {
-            Double length = 982.25 / CalibY;
-            Point2d p = Base.CalculatePoint(new Point2d(LineV.X, LineV.Y), length, LineV.GetOutputLine().Rotation);
-            LineT.X = p.X;
-            LineT.Y = p.Y;
+            try
+            {
+                //Debug.WriteLine($"SetOriginY => SetOriginY");
+                Double length = 982.25 / CalibY;
+                Point2d p = Base.CalculatePoint(new Point2d(LineV.X, LineV.Y), length, LineV.GetOutputLine().Rotation);
+                LineT.X = p.X;
+                LineT.Y = p.Y;
 
-            Point2d DatumPoint = new Point2d(CircleB.Results.GetCircle().CenterX, CircleB.Results.GetCircle().CenterY);
+                Point2d DatumPoint = new Point2d(CircleB.Results.GetCircle().CenterX, CircleB.Results.GetCircle().CenterY);
 
-            //Debug.WriteLine("SetOriginY");
-
-            Transform.TranslationX = DatumPoint.X; //p.X;
-            Transform.TranslationY = DatumPoint.Y; //p.Y;
-            Transform.Rotation = LineBC.Segment.Rotation + Math.PI / 2; //SideLine.Results.GetLine().Rotation + Math.PI / 2; 
-            Transform.Skew = 0;
-            Output("CenterX", DatumPoint.X);
-            Output("CenterY", DatumPoint.Y);
-            Output("Rotation", Transform.Rotation);
+                Transform.TranslationX = DatumPoint.X; //p.X;
+                Transform.TranslationY = DatumPoint.Y; //p.Y;
+                Transform.Rotation = LineBC.Segment.Rotation + Math.PI / 2; //SideLine.Results.GetLine().Rotation + Math.PI / 2; 
+                Transform.Skew = 0;
+                Output("CenterX", DatumPoint.X);
+                Output("CenterY", DatumPoint.Y);
+                Output("Rotation", Transform.Rotation);
+            }
+            catch (Exception ex) {
+                Debug.WriteLine(ex.Message, "SetOriginY Exception");
+            }
         }
 
         internal virtual void SetFixture()
@@ -319,7 +346,7 @@ namespace TE1.Cam02
             tool.RunParams.ExpectedCircularArc.CenterY = y;
             tool.RunParams.ExpectedCircularArc.Radius = r;
             tool.RunParams.ExpectedCircularArc.AngleStart = 0;
-            tool.RunParams.ExpectedCircularArc.AngleSpan = 360;
+            tool.RunParams.ExpectedCircularArc.AngleSpan = Math.PI * 2;
 
             tool.RunParams.CaliperSearchLength = 150;
             tool.RunParams.CaliperProjectionLength = 10;
@@ -370,18 +397,19 @@ namespace TE1.Cam02
             Double y = -p.SetX / CalibY;
             Double r = p.R / CalibY;
 
-            tool.RunParams.ExpectedCircularArc.CenterX = x;
-            tool.RunParams.ExpectedCircularArc.CenterY = y;
-            tool.RunParams.ExpectedCircularArc.Radius = r;
+            //tool.RunParams.ExpectedCircularArc.CenterX = x;
+            //tool.RunParams.ExpectedCircularArc.CenterY = y;
+            //tool.RunParams.ExpectedCircularArc.Radius = r;
 
             tool.RunParams.CaliperSearchLength = 150;
             tool.RunParams.CaliperProjectionLength = 10;
             tool.RunParams.CaliperSearchDirection = CogFindCircleSearchDirectionConstants.Outward;
             tool.RunParams.CaliperRunParams.Edge0Polarity = CogCaliperPolarityConstants.LightToDark;
-            tool.RunParams.CaliperRunParams.ContrastThreshold = 10;
-            tool.RunParams.CaliperRunParams.FilterHalfSizeInPixels = 5;
+            tool.RunParams.CaliperRunParams.ContrastThreshold = 5;
+            tool.RunParams.CaliperRunParams.FilterHalfSizeInPixels = 2;
 
-            tool.RunParams.NumCalipers = 15;
+            tool.RunParams.NumCalipers = 20;
+
         }
 
         internal virtual void SetCaliper(CogCaliperTool tool, InsItem p)
@@ -411,6 +439,7 @@ namespace TE1.Cam02
             Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
             foreach (var item in items)
             {
+                //Debug.WriteLine($"Items => {item.Key}");
                 if (item.Value.InsType == InsType.H)
                 {
                     if (item.Key == "H38")

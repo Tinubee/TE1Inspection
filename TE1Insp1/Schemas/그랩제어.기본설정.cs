@@ -231,14 +231,14 @@ namespace TE1.Schemas
         {
             if (this.Image != null) return this.Image;
             if (BufferAddress == IntPtr.Zero) return null;
-            return new Mat(ImageHeight, ImageWidth, ImageType, BufferAddress);
+            return Mat.FromPixelData(ImageHeight, ImageWidth, ImageType, BufferAddress);
         }
 
         public Mat MergeImage()
         {
             if (this.Image != null) return this.Image;
             if (BufferAddress == IntPtr.Zero) return null;
-            return new Mat(mergeImageHeight, mergeImageWidth, ImageType, mergeBufferAddress);
+            return Mat.FromPixelData(mergeImageHeight, mergeImageWidth, ImageType, mergeBufferAddress);
         }
 
         public void MergeImages(Mat 좌측이미지, Mat 우측이미지, int LeftX, int RightX)

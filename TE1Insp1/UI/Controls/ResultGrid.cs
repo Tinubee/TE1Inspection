@@ -61,27 +61,27 @@ namespace TE1.UI.Controls
         }
         private void FilterChanged(object sender, EventArgs e)
         {
-            if (this.Loading) return;
+            //if (this.Loading) return;
 
-            GridView view = sender as GridView;
-            List<검사항목> 필터리스트 = new List<검사항목>();
+            //GridView view = sender as GridView;
+            //List<검사항목> 필터리스트 = new List<검사항목>();
 
-            for (int i = 0; i < view.RowCount; i++)
-            {
-                int rowHandle = view.GetVisibleRowHandle(i);
-                검사정보 cellValue = view.GetRow(rowHandle) as 검사정보;
+            //for (int i = 0; i < view.RowCount; i++)
+            //{
+            //    int rowHandle = view.GetVisibleRowHandle(i);
+            //    검사정보 cellValue = view.GetRow(rowHandle) as 검사정보;
 
-                //검사정보 정보 = Global.모델자료.선택모델.검사설정.GetItem(cellValue.검사항목);
-                if (view.IsDataRow(rowHandle))
-                    필터리스트.Add(cellValue.검사항목);
-            }
+            //    //검사정보 정보 = Global.모델자료.선택모델.검사설정.GetItem(cellValue.검사항목);
+            //    if (view.IsDataRow(rowHandle))
+            //        필터리스트.Add(cellValue.검사항목);
+            //}
 
-            foreach (검사정보 정보 in Global.모델자료.선택모델.검사설정)
-            {
-                if (필터리스트.Contains(정보.검사항목)) 정보.isShow = true;
-                else 정보.isShow = false;
-            }
-            Global.MainForm.검사항목표시변경();
+            //foreach (검사정보 정보 in Global.모델자료.선택모델.검사설정)
+            //{
+            //    if (필터리스트.Contains(정보.검사항목)) 정보.isShow = true;
+            //    else 정보.isShow = false;
+            //}
+            //Global.MainForm.검사항목표시변경();
         }
         public void RefreshData()
         {

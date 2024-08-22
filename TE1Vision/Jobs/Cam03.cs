@@ -227,21 +227,17 @@ namespace TE1.Cam03
                 if (item.Value.InsType == InsType.I)
                 {
                     CogPMAlignTool tool;
+                    CogBlobTool blobTool;
                     if (ToolBlock.Tools.Contains(item.Key))
                     {
-                        tool = GetTool(item.Key) as CogPMAlignTool;
-
-                        if (tool.Name.Contains("TL") || tool.Name.Contains("BL"))
+                        if ((item.Key.StartsWith("ImSheet")))
                         {
-                            if (!tool.Pattern.Trained)
-                            {
-                                String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", tool.Name);
-                                tool.Pattern.PCPLoadFromFile($"{trainImagePath}.vpp");
-                                tool.Pattern.Train();
-                            }
+                            blobTool = GetTool(item.Key) as CogBlobTool;
+                            SetBlob(blobTool, item.Value);
                         }
                         else
                         {
+                            tool = GetTool(item.Key) as CogPMAlignTool;
                             String trainImagePath = Path.Combine($"{ToolsPath}\\TrainImage", tool.Name);
 
                             if (!Base.LoadTrainImage(tool, $"{trainImagePath}.bmp"))
@@ -250,9 +246,18 @@ namespace TE1.Cam03
                     }
                     else
                     {
-                        tool = new CogPMAlignTool();
-                        tool.Name = item.Key;
-                        this.ToolBlock.Tools.Add(tool);
+                        if (item.Key.StartsWith("ImSheet"))
+                        {
+                            blobTool = new CogBlobTool();
+                            blobTool.Name = item.Key;
+                            this.ToolBlock.Tools.Add(blobTool);
+                        }
+                        else
+                        {
+                            tool = new CogPMAlignTool();
+                            tool.Name = item.Key;
+                            this.ToolBlock.Tools.Add(tool);
+                        }
                     }
                 }
                 if (item.Value.InsType == InsType.B)
@@ -296,6 +301,40 @@ namespace TE1.Cam03
                 }
             }
         }
+
+        internal virtual void SetBlob(CogBlobTool tool, InsItem p)
+        {
+            //Double x = -p.SetY / CalibX;
+            //Double y = -p.SetX / CalibY;
+            //Double r = p.R / CalibY;
+
+            //tool.RunParams.RegionMode = CogRegionModeConstants.PixelAlignedBoundingBoxAdjustMask;
+            //CogRectangleAffine rect = new CogRectangleAffine();
+
+            //rect.CenterX = 0;
+            //rect.CenterY = 0;
+            //rect.SideXLength = 700;
+            //rect.SideYLength = 700;
+
+            //tool.Region = rect;
+            //tool.RunParams.SegmentationParams.Mode = CogBlobSegmentationModeConstants.HardFixedThreshold;
+            //tool.RunParams.SegmentationParams.HardFixedThreshold = 150;
+            //tool.RunParams.SegmentationParams.Polarity = CogBlobSegmentationPolarityConstants.LightBlobs;
+            //tool.RunParams.ConnectivityMinPixels = 1000;
+
+            //CogBlobMeasure item = new CogBlobMeasure();
+            //item.FilterMode = CogBlobFilterModeConstants.IncludeBlobsInRange;
+            //item.FilterRangeLow = 1;
+            //item.FilterRangeHigh = 1.03;
+            //item.Measure = CogBlobMeasureConstants.AcircularityRms;
+            //item.Mode = CogBlobMeasureModeConstants.Filter;
+
+            //tool.RunParams.RunTimeMeasures.Clear();
+            //tool.RunParams.RunTimeMeasures.Add(item);
+
+            //tool.InputImage = this.InputImage;
+        }
+
         internal virtual void SetPMAlign(CogPMAlignTool tool, InsItem p)
         {
             Double x = -p.Y / CalibX;
@@ -417,24 +456,59 @@ namespace TE1.Cam03
                 }
                 else if (item.Value.InsType == InsType.I)
                 {
-                    CogPMAlignTool tool = GetTool(item.Key) as CogPMAlignTool;
-                    Int32 count = tool.Results.Count;
-                    if (count == 0)
+                    if (item.Key.StartsWith("ImSheet"))
                     {
-                        results.Add(new Result(item.Key, 0));
-                        SetNgRegion(tool);
+                        CogBlobTool tool = GetTool(item.Key) as CogBlobTool;
+                        Int32 count = tool.Results.GetBlobs().Count;
+                        if (count == 0)
+                        {
+                            results.Add(new Result(item.Key, 0));
+                            results.Add(new Result($"{item.Key}Width", 0));
+                            results.Add(new Result($"{item.Key}Height", 0));
+                            //SetNgRegion(tool);
+                        }
+                        else
+                        {
+                            CogBlobResult b= GetBlob(tool);
+                            CogRectangleAffine r = b.GetBoundingBox(CogBlobAxisConstants.SelectedSpace); //X:가로(Width) Y:세로(Height)
+                          
+                            Debug.WriteLine($"{item.Key} => {r.SideXLength} / {r.SideYLength}");
+
+                            results.Add(new Result(item.Key, count));
+                            results.Add(new Result($"{item.Key}Width", r.SideXLength));
+                            results.Add(new Result($"{item.Key}Height", r.SideYLength));
+                        }
                     }
                     else
                     {
-                        if (CalResult(GetTool(item.Key) as CogPMAlignTool, item.Value, out InsItem r))
-                            results.Add(new Result(item.Key, r.D));
+                        CogPMAlignTool tool = GetTool(item.Key) as CogPMAlignTool;
+                        Int32 count = tool.Results.Count;
+                        if (count == 0)
+                        {
+                            results.Add(new Result(item.Key, 0));
+                            SetNgRegion(tool);
+                        }
+                        else
+                        {
+                            if (CalResult(GetTool(item.Key) as CogPMAlignTool, item.Value, out InsItem r))
+                                results.Add(new Result(item.Key, r.D));
+                        }
                     }
                 }
             }
 
             Output("Results", JsonConvert.SerializeObject(results));
         }
-
+        public CogBlobResult GetBlob(CogBlobTool tool, Int32 Idx = 0)
+        {
+            if (tool.RunStatus.Result != CogToolResultConstants.Accept || tool.Results == null) return null;
+            CogBlobResultCollection Blobs = tool.Results.GetBlobs();
+            if (Blobs == null || Blobs.Count < 1) return null;
+            if (Idx == 0) return Blobs[0];
+            if (Idx < 0) return Blobs[Blobs.Count - 1];
+            if (Idx >= Blobs.Count) Idx = Blobs.Count - 1;
+            return Blobs[Idx];
+        }
         private void SetNgRegion(CogPMAlignTool tool)
         {
             try
@@ -448,9 +522,9 @@ namespace TE1.Cam03
                         rectangle.Color = CogColorConstants.Red;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                Debug.WriteLine($"{ex.Message}");       
+                Debug.WriteLine($"{ex.Message}");
             }
         }
 
@@ -496,9 +570,9 @@ namespace TE1.Cam03
                 else
                 {
                     if (ins.InsType == InsType.X)
-                        result.D = r.PositionY;
+                        result.D = Math.Abs(r.PositionY);
                     else if (ins.InsType == InsType.Y)
-                        result.D = r.PositionX;
+                        result.D = Math.Abs(r.PositionX);
                 }
             }
             else

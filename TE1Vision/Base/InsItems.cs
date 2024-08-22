@@ -80,7 +80,8 @@ namespace TE1
         public static InsItem T028 = new InsItem(2, InsType.Y, -736.17, +230.58);
         public static InsItem T029 = new InsItem(2, InsType.Y, -625.03, +230.58);
         public static InsItem T030 = new InsItem(2, InsType.Y, -603.09, 215.56);
-        public static InsItem T031 = new InsItem(2, InsType.Y, -560.18, +230.58);
+        //public static InsItem T031 = new InsItem(2, InsType.Y, -560.18, +230.58);
+        public static InsItem T031 = new InsItem(2, InsType.Y, -562.18, +230.58);
         public static InsItem T032 = new InsItem(2, InsType.X, -553.50, +218.26);
         public static InsItem T033 = new InsItem(2, InsType.Y, -533.90, +205.58);
         public static InsItem T034 = new InsItem(2, InsType.Y, -466.38, +205.58);
@@ -372,7 +373,7 @@ namespace TE1
         public static InsItem ImMiddle3 = new InsItem(3, InsType.I, 0, 0);
         public static InsItem ImSheetM1TR = new InsItem(3, InsType.I, 0, 0);
         public static InsItem ImSheetM1BR = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImSheetM1TL = new InsItem(3, InsType.I, 0, 0);
+        public static InsItem ImSheetM1TL = new InsItem(3, InsType.I, 0, 0); 
         public static InsItem ImSheetM1BL = new InsItem(3, InsType.I, 0, 0);
         public static InsItem ImSheetM2TR = new InsItem(3, InsType.I, 0, 0);
         public static InsItem ImSheetM2BR = new InsItem(3, InsType.I, 0, 0);

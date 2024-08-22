@@ -3,6 +3,7 @@ using DevExpress.XtraBars.ViewInfo;
 using HelixToolkit.Wpf;
 using MvUtils;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
@@ -15,6 +16,7 @@ namespace TE1.Schemas
 
         public abstract class Base3D
         {
+            internal static String PrefixItemName = "@";
             public readonly 검사항목 Type = 검사항목.None;
             public virtual String Name { get; set; } = String.Empty;
             public virtual String Label { get; set; } = String.Empty;
@@ -24,11 +26,30 @@ namespace TE1.Schemas
             public virtual Color BackColor => Color.FromArgb(64, Color.R, Color.G, Color.B);
             public virtual Point3D Point { get; set; } = new Point3D(Double.NaN, Double.NaN, Double.NaN);
             public virtual Boolean HasPoint => !(Double.IsNaN(Point.X) || Double.IsNaN(Point.Y) || Double.IsNaN(Point.Z));
-
+            public List<Visual3D> Items = new List<Visual3D>();
+            public Boolean Added = false;
             public Base3D(검사항목 항목) { Type = 항목; }
             public abstract void Create(Visual3DCollection collectioin);
             public abstract void Clear(Visual3DCollection collectioin);
             public abstract void Draw();
+
+            public virtual void AddItem(Visual3DCollection collectioin, Visual3D item)
+            {
+                item.SetName($"{PrefixItemName}{Type.ToString()}");
+                //if (collectioin.Contains(item)) return;
+                //if (Added) return;
+                Items.Add(item);
+                collectioin.Add(item);
+                Added = true;
+            }
+
+            public virtual void RemoveItems(Visual3DCollection collectioin)
+            {
+                foreach (Visual3D item in Items)
+                    collectioin.Remove(item);
+
+                Added = false;
+            }
             public virtual void Draw(Base3D 항목, Decimal value, 결과구분 결과)
             {
                 Value = value;
@@ -97,7 +118,8 @@ namespace TE1.Schemas
                 {
                     p = Origin;
                     Indicator = CreateArrowLine(Origin, Point, Color);
-                    collectioin.Add(Indicator);
+                    AddItem(collectioin, Indicator);
+                    //collectioin.Add(Indicator);
                 }
                 p.Z += 0.6;
                 if (Indicator != null)
@@ -108,14 +130,15 @@ namespace TE1.Schemas
                 TextLabel = Schemas.Viewport.CreateLabel(p, Label, FontHeight, Color);
                 if (Transform != null) TextLabel.Transform = Transform;
 
-                collectioin.Add(TextLabel);
+                //collectioin.Add(TextLabel);
+                AddItem(collectioin, TextLabel);
                 if (!String.IsNullOrEmpty(Name))
                 {
                     if (LabelStyle == NamePrintType.Up)
                         TextName = Schemas.Viewport.CreateLabel(new Point3D(p.X, p.Y + FontHeight * 0.6, p.Z + 0.2), Name, FontHeight, Color);
                     else if (LabelStyle == NamePrintType.Down)
                         TextName = Schemas.Viewport.CreateLabel(new Point3D(p.X, p.Y - FontHeight * 0.6, p.Z + 0.2), Name, FontHeight, Color);
-                    if (TextName != null) collectioin.Add(TextName);
+                    if (TextName != null) AddItem(collectioin, TextName); //collectioin.Add(TextName);
                     else
                     {
                         if (LabelStyle == NamePrintType.Left) TextLabel.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
@@ -151,7 +174,7 @@ namespace TE1.Schemas
                 if (!HasPoint) Point = new Point3D(PointE.X, PointE.Y, PointE.Z);
                 base.Create(collectioin);
                 ArrowLine = CreateArrowLine(PointS, PointE, Color);
-                collectioin.Add(ArrowLine);
+                AddItem(collectioin, ArrowLine);
             }
 
             public override void Draw()
@@ -175,14 +198,14 @@ namespace TE1.Schemas
             {
                 base.Create(collectioin);
                 ArrowLine2 = CreateArrowLine(Center, PointE, Color);
-                collectioin.Add(ArrowLine2);
+                AddItem(collectioin, ArrowLine2);
                 if (!String.IsNullOrEmpty(LabelS))
                 {
                     Point3D point = new Point3D(PointS.X, PointS.Y, PointS.Z);
                     if (LabelStyle == NamePrintType.Left || LabelStyle == NamePrintType.Right) point.X -= LabelMargin;
                     else point.Y -= LabelMargin;
                     Text3DS = Schemas.Viewport.CreateLabel(point, LabelS, base.FontHeight, Color);
-                    collectioin.Add(Text3DS);
+                    AddItem(collectioin, Text3DS);
                 }
                 if (!String.IsNullOrEmpty(LabelE))
                 {
@@ -190,7 +213,7 @@ namespace TE1.Schemas
                     if (LabelStyle == NamePrintType.Left || LabelStyle == NamePrintType.Right) point.X += LabelMargin;
                     else point.Y += LabelMargin;
                     Text3DE = Schemas.Viewport.CreateLabel(point, LabelE, base.FontHeight, Color);
-                    collectioin.Add(Text3DE);
+                    AddItem(collectioin, Text3DE);
                 }
             }
 
@@ -215,7 +238,7 @@ namespace TE1.Schemas
             {
                 base.Create(collectioin);
                 Rect = CreateRectangle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Width, Height, BackColor, Normal);
-                collectioin.Add(Rect);
+                AddItem(collectioin, Rect);
             }
             public override void Draw()
             {
@@ -235,7 +258,7 @@ namespace TE1.Schemas
                 base.Create(collectioin);
                 Color 적용색상 = this.Type == 검사항목.PThickness ? Colors.Olive : Colors.Aqua;
                 Circle = CreateCircle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Radius, 적용색상);
-                collectioin.Add(Circle);
+                AddItem(collectioin, Circle);
             }
             public override void Draw()
             {

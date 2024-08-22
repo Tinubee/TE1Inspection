@@ -39,8 +39,8 @@ namespace TE1.UI.Controls
                 Global.검사자료.검사완료알림 += 검사완료알림;
                 검사완료알림(Global.검사자료.현재검사찾기());
             }
-            this.e결과목록.FilterActive();
-            this.검사항목변경알림();
+            //this.e결과목록.FilterActive();
+            //this.검사항목변경알림();
             this.e큐알코드.ButtonClick += (object sender, ButtonPressedEventArgs e) => Clipboard.SetText(this.e큐알코드.Text);
         }
 

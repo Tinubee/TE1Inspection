@@ -123,9 +123,10 @@ namespace TE1.Schemas
         internal virtual Visual3D Add(Visual3D item) { Children.Add(item); return item; }
         internal virtual Boolean Remove(Visual3D item) => Children.Remove(item);
         //Filter
-        internal virtual void Remove(Base3D item) => item.Clear(Children);
+        //internal virtual void Remove(Base3D item) => item.Clear(Children);
         internal virtual void Add(Base3D item)
         {
+            //if(Children.Contains(item))
             item.Create(Children);
         }
       

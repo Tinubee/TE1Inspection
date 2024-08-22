@@ -1,5 +1,6 @@
 ﻿using Cognex.VisionPro;
 using Cognex.VisionPro.ImageFile;
+using DevExpress.Utils.Extensions;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
@@ -14,35 +15,16 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 
-namespace TE1
+namespace TE1.Schemas
 {
-    //public enum EXECUTION_STATE : uint
-    //{
-    //    ES_AWAYMODE_REQUIRED = 0x00000040,
-    //    ES_CONTINUOUS = 0x80000000,
-    //    ES_DISPLAY_REQUIRED = 0x00000002,
-    //}
-
     public static class Common
     {
         [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
         public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
-
         [DllImport("User32.dll")]
         public static extern Int32 SetForegroundWindow(int hWnd);
-
-        //[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        //public static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
-
-        //public static void Prevent_Screensaver(bool enable)
-        //{
-        //    if (enable) SetThreadExecutionState(EXECUTION_STATE.ES_DISPLAY_REQUIRED | EXECUTION_STATE.ES_CONTINUOUS);
-        //    else SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
-        //}
-
         [DllImport("winmm.dll", EntryPoint = "timeBeginPeriod", SetLastError = true)]
         public static extern uint TimeBeginPeriod(uint uMilliseconds);
-
         [DllImport("winmm.dll", EntryPoint = "timeEndPeriod", SetLastError = true)]
         public static extern uint TimeEndPeriod(uint uMilliseconds);
 
@@ -57,26 +39,75 @@ namespace TE1
             return true;
         }
 
-        public static Mat ToMat(ICogImage image)
+        public static Double StandardDeviation(IEnumerable<Double> data)
+        {
+            Int32 count = data.Count();
+            if (data == null || count < 1) return 0;
+            Double mean = data.Average();
+            Double sumOfSquaresOfDifferences = data.Select(val => (val - mean) * (val - mean)).Sum();
+            Double variance = sumOfSquaresOfDifferences / count;
+            return Math.Sqrt(variance);
+        }
+
+        public static Double StandardDeviation<T>(IEnumerable<T> data) where T : IConvertible
+        {
+            Int32 count = data.Count();
+            if (data == null || count < 1) return 0;
+            Double mean = data.Average(val => val.ToDouble(null));
+            Double sumOfSquaresOfDifferences = data.Select(val => (val.ToDouble(null) - mean) * (val.ToDouble(null) - mean)).Sum();
+            Double variance = sumOfSquaresOfDifferences / count;
+            return Math.Sqrt(variance);
+        }
+
+        public static ICogImage8PixelMemory[] GetChannels(ICogImage image)
         {
             if (image == null) return null;
             if (image.GetType() == typeof(CogImage8Grey))
+                return new ICogImage8PixelMemory[] { (image as CogImage8Grey).Get8GreyPixelMemory(CogImageDataModeConstants.Read, 0, 0, image.Width, image.Height) };
+            if (image.GetType() == typeof(CogImage24PlanarColor))
             {
-                using (ICogImage8PixelMemory mem = (image as CogImage8Grey).Get8GreyPixelMemory(CogImageDataModeConstants.Read, 0, 0, image.Width, image.Height))
-                    return new Mat(image.Height, image.Width, MatType.CV_8UC1, mem.Scan0);
-            }
-            else if (image.GetType() == typeof(CogImage24PlanarColor))
-            {
-                using (Bitmap bitmap = (image as CogImage24PlanarColor)?.ToBitmap())
-                    return BitmapConverter.ToMat(bitmap);
+                ICogImage8PixelMemory[] c = new ICogImage8PixelMemory[3];
+                (image as CogImage24PlanarColor).Get24PlanarColorPixelMemory(CogImageDataModeConstants.Read, 0, 0, image.Width, image.Height, out c[0], out c[1], out c[2]);
+                return c;
             }
             return null;
         }
-        public static Mat ToMat(Bitmap image)
+
+        public static Mat ToMat(ICogImage image)
         {
-            if (image == null) return null;
-            return new Mat(image.GetHbitmap());
+            //DateTime s = DateTime.Now;
+            ICogImage8PixelMemory[] channels = GetChannels(image);
+            if (channels == null || channels.Length < 1) return null;
+            Mat mat = null;
+            if (channels.Length == 1) mat = Mat.FromPixelData(image.Height, image.Width, MatType.CV_8UC1, channels[0].Scan0);
+            else
+            {
+                mat = new Mat(image.Height, image.Width, MatType.CV_8UC3);
+                Mat[] mats = new Mat[] {
+                    Mat.FromPixelData(image.Height, image.Width, MatType.CV_8UC1, channels[2].Scan0), // B
+                    Mat.FromPixelData(image.Height, image.Width, MatType.CV_8UC1, channels[1].Scan0), // G
+                    Mat.FromPixelData(image.Height, image.Width, MatType.CV_8UC1, channels[0].Scan0), // R
+                };
+                Cv2.Merge(mats, mat);
+                mats.ForEach(m => m.Dispose());
+            }
+            channels.ForEach(c => c.Dispose());
+            //Debug.WriteLine((DateTime.Now - s).TotalMilliseconds, "ToMat");
+            return mat;
+
+            //if (image == null) return null;
+            //if (image.GetType() == typeof(CogImage8Grey))
+            //{
+            //    using (ICogImage8PixelMemory mem = (image as CogImage8Grey).Get8GreyPixelMemory(CogImageDataModeConstants.Read, 0, 0, image.Width, image.Height))
+            //        return new Mat(image.Height, image.Width, MatType.CV_8UC1, mem.Scan0);
+            //}
+            //else if (image.GetType() == typeof(CogImage24PlanarColor))
+            //{
+            //    using (Bitmap bitmap = (image as CogImage24PlanarColor)?.ToBitmap())
+            //        return BitmapConverter.ToMat(bitmap);
+            //}
         }
+
         public static ICogImage ToCogImage(Mat mat)
         {
             if (mat == null) return null;
@@ -91,13 +122,6 @@ namespace TE1
             return image;
         }
 
-        public static void RotateImage(double angle, double scale, Mat src, Mat dst)
-        {
-            var imageCenter = new Point2f(src.Cols / 2f, src.Rows / 2f);
-            var rotationMat = Cv2.GetRotationMatrix2D(imageCenter, angle, scale);
-            Cv2.WarpAffine(src, dst, rotationMat, src.Size());
-        }
-
         public static Mat ConcatHorizontal(Mat image1, Mat image2, Int32 padding = 0)
         {
             if (image1 == null || image2 == null) return null;
@@ -109,29 +133,6 @@ namespace TE1
             padded[region] = image;
             image.Dispose();
             return padded;
-        }
-
-        public static CogImage8Grey CopyToCogImage(Mat image)
-        {
-            if (image == null) return null;
-            Int32 bufferSize = image.Width * image.Height;
-            IntPtr bufferAddress = Marshal.AllocHGlobal(bufferSize);
-            Common.CopyMemory(bufferAddress, image.Ptr(0), (UInt32)bufferSize);
-            return Common.LoadImage(bufferAddress, image.Width, image.Height);
-        }
-
-        public static void CogImageDispose(ICogImage image)
-        {
-            if (image == null) return;
-            try
-            {
-                if (image.GetType() == typeof(CogImage8Grey))
-                    (image as CogImage8Grey).Dispose();
-                else if (image.GetType() == typeof(CogImage24PlanarColor))
-                    (image as CogImage24PlanarColor).Dispose();
-            }
-            catch (Exception ex) { Debug.WriteLine(ex.Message, "CogImageDispose"); }
-            image = null;
         }
 
         public static Mat CopyRectangle(Mat image, Rect region, Color background) =>
@@ -174,7 +175,8 @@ namespace TE1
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.Filter = "Image Files(*.bmp; *.png; *.jpg; *.jpeg)|*.bmp; *.png; *.jpg; *.jpeg";
-                if (openFileDialog.ShowDialog() != DialogResult.OK) return String.Empty;
+                try { if (openFileDialog.ShowDialog() != DialogResult.OK) return String.Empty; }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); return String.Empty; }
                 return openFileDialog.FileName;
             }
         }
@@ -232,57 +234,16 @@ namespace TE1
                     imageTool.Run();
                     return imageTool.OutputImage.CopyBase(CogImageCopyModeConstants.CopyPixels);
                 }
+                // 대용량 이미지 로드 못함
+                //using (Bitmap bitmap = new Bitmap(path))
+                //{
+                //    if (Colored) return new CogImage24PlanarColor(bitmap);
+                //    return new CogImage8Grey(bitmap);
+                //}
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message, "LoadImage"); }
             return null;
-            //Debug.WriteLine(path, "LoadImage");
-            //if (!File.Exists(path)) return null;
-            //try
-            //{
-            //    //원본
-            //    //using (Bitmap bitmap = new Bitmap(path))
-            //    //{
-            //    //    if (Colored) return new CogImage24PlanarColor(bitmap);
-            //    //    return new CogImage8Grey(bitmap);
-            //    //}
-            //    ////
-            //    ///
-
-            //    CogImageFileTool tool = new CogImageFileTool();
-            //    tool.Operator.Open(path, CogImageFileModeConstants.Read);
-            //    tool.Run();
-            //    CogImage8Grey image = tool.OutputImage as CogImage8Grey;
-
-            //    return image;
-            //}
-            //catch (Exception ex) { Debug.WriteLine(ex.Message, "LoadImage"); }
-            //return null;
         }
-
-        //public static ICogImage LoadImage(String path, Boolean Colored = false)
-        //{
-        //    FileInfo fi = new FileInfo(path);
-        //    if (!fi.Exists) return null;
-        //    try
-        //    {
-        //        ICogImage image = null;
-        //        Bitmap bitmap = null;
-        //        if (fi.Extension.ToLower() == ".png")
-        //        {
-        //            ImreadModes mode = Colored ? ImreadModes.Color : ImreadModes.Grayscale;
-        //            using (Mat mat = new Mat(path, mode))
-        //                bitmap = BitmapConverter.ToBitmap(mat);
-        //        }
-        //        else bitmap = new Bitmap(path);
-
-        //        if (Colored) image = new CogImage24PlanarColor(bitmap);
-        //        else image = new CogImage8Grey(bitmap);
-        //        bitmap?.Dispose();
-        //        return image;
-        //    }
-        //    catch (Exception ex) { Debug.WriteLine(ex.Message, "LoadImage"); }
-        //    return null;
-        //}
 
         public static Boolean ImageSaveAs(Bitmap bitmap, out String error, Int32 compression = 3) => ImageSaveAs(bitmap, String.Empty, out error, compression);
         public static Boolean ImageSaveAs(Bitmap bitmap, String fileName, out String error, Int32 compression = 3)
@@ -291,7 +252,7 @@ namespace TE1
             if (bitmap == null) return false;
             String path = SaveImagePath(fileName);
             if (String.IsNullOrEmpty(path)) return false;
-            using (Mat mat = ToMat(bitmap))
+            using (Mat mat = BitmapConverter.ToMat(bitmap))
                 return ImageSavePng(mat, path, out error, compression);
         }
         public static Boolean ImageSaveAs(CogImage8Grey image, String fileName, out String error, Int32 compression = 3)
@@ -342,7 +303,7 @@ namespace TE1
         //ImwriteFlags.JpegRstInterval
         //  JPEG 이미지의 재설정 (RST) 마커를 삽입할 간격을 설정합니다.이 값은 0부터 65535까지의 정수로 지정됩니다.
         //  RST 마커는 이미지를 더 작은 블록으로 나누는 데 사용되며, 재복구 및 디코딩에 도움이 됩니다.
-        public static Boolean ImageSaveJpeg(Mat image, String fileName, out String error, Int32 quality = 90)
+        public static Boolean ImageSaveJpg(Mat image, String fileName, out String error, Int32 quality = 90)
         {
             error = String.Empty;
             if (image == null) return false;
@@ -357,11 +318,24 @@ namespace TE1
             catch (Exception ex) { error = ex.Message; }
             return false;
         }
+        public static Boolean ImageSaveJpeg(Mat image, String fileName, out String error, Int32 quality = 90) => ImageSaveJpg(image, fileName, out error, quality);
 
-        public static Boolean ImageSaveJpeg(ICogImage image, String fileName, out String error, Int32 quality = 90)
+        public static Boolean ImageSaveJpg(ICogImage image, String fileName, out String error, Int32 quality = 90)
         {
             using (Mat mat = ToMat(image))
-                return ImageSaveJpeg(mat, fileName, out error, quality);
+                return ImageSaveJpg(mat, fileName, out error, quality);
+
+            // 저장 속도가 쓰레기임
+            //try
+            //{
+            //    CogImageFileJPEG jpeg = new CogImageFileJPEG() { Quality = quality };
+            //    jpeg.Open(fileName, CogImageFileModeConstants.Write);
+            //    jpeg.Append(image);
+            //    jpeg.Close();
+            //    error = String.Empty;
+            //    return true;
+            //}
+            //catch (Exception ex) { error = ex.Message; return false; }
         }
 
         public static Boolean ImageSaveBmp(Mat image, String fileName, out String error)
@@ -391,14 +365,40 @@ namespace TE1
             return false;
         }
 
-        public static Boolean DirectoryExists(String path) => DirectoryExists(path, false);
-        public static Boolean DirectoryExists(String path, Boolean Create)
+        public static String CreateDirectory(List<String> dirs)
         {
             try
             {
-                if (Directory.Exists(path)) return true;
-                if (Create) Directory.CreateDirectory(path);
-                return Directory.Exists(path);
+                String path = String.Empty;
+                foreach (String dir in dirs)
+                {
+                    if (String.IsNullOrEmpty(path)) path = dir;
+                    else path = Path.Combine(path, dir);
+                    if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+                }
+                return path;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            return String.Empty;
+        }
+
+        public static bool DirectoryExists(string Path)
+        {
+            return DirectoryExists(Path, false);
+        }
+
+        public static bool DirectoryExists(string Path, bool Create)
+        {
+            try
+            {
+                if (Directory.Exists(Path))
+                    return true;
+
+                Directory.CreateDirectory(Path);
+                return Directory.Exists(Path);
             }
             catch (Exception ex)
             {
@@ -407,7 +407,7 @@ namespace TE1
             }
         }
 
-        public static Boolean Ping(String host)
+        public static Boolean Ping(String Host)
         {
             // Use the default Ttl value which is 128,
             // but change the fragmentation behavior.
@@ -416,8 +416,8 @@ namespace TE1
             try
             {
                 // Create a buffer of 32 bytes of data to be transmitted.
-                PingReply reply = pingSender.Send(host, 1000, Encoding.ASCII.GetBytes("TEST"), options);
-                Debug.WriteLine($"PingTest {host}[{reply.Status}]");
+                PingReply reply = pingSender.Send(Host, 1000, Encoding.ASCII.GetBytes("TEST"), options);
+                Debug.WriteLine($"PingTest {Host}[{reply.Status}]");
                 return reply.Status == IPStatus.Success;
             }
             catch (Exception ex)

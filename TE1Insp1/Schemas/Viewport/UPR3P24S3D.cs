@@ -157,36 +157,38 @@ namespace TE1.Schemas
         public virtual Color GetColor(결과구분 결과) => 결과 == 결과구분.OK ? MajorColors.GoodColor : MajorColors.BadColor;
         public void 검사항목표시변경()
         {
-            foreach (Base3D 항목 in InspItems)
-            {
-                검사정보 정보 = Global.모델자료.선택모델.검사설정.GetItem(항목.Type);
-                Remove(항목);
+            //foreach (Base3D 항목 in InspItems)
+            //{
+            //    검사정보 정보 = Global.모델자료.선택모델.검사설정.GetItem(항목.Type);
+            //    Remove(항목);
 
-                if (정보.isShow == true)
-                    Add(항목);
-            }
+            //    if (정보.isShow == true)
+            //        Add(항목);
+            //}
         }
         public void SetResults(검사결과 결과)
         {
             foreach (Base3D 항목 in InspItems)
             {
                 검사정보 정보 = 결과.GetItem(항목.Type);
+
+                //if (정보.중요검사포인트 == false) 항목.RemoveItems(Children);
+                //else
+                //{
+                //항목.RemoveItems(Children);
+                //Add(항목);
                 if (정보 == null)
                 {
-                    //Debug.WriteLine($"{항목.Name}");
                     항목.Draw(항목, Decimal.MinValue, 결과구분.PS);
                     continue;
                 }
                 try
                 {
-                    //검사정보 항목정보 = Global.모델자료.선택모델.검사설정.GetItem(항목.Type);
-                    //Remove(항목);
-
-                    //if (항목정보.isShow == true)
                     항목.Draw(항목, 정보.결과값, 정보.측정결과);
                 }
                 catch (Exception ex) { Debug.WriteLine(ex.Message); }
             }
+            //}
             foreach (var item in SurfaceItems)
                 Remove(item);
             foreach (var item in 결과.표면불량)

@@ -22,6 +22,13 @@ using Newtonsoft.Json;
 
 namespace TE1.UI.Controls
 {
+    public enum 검사설정구분
+    {
+        [Description("Inspection")]
+        기본검사 = 1,
+        [Description("Master")]
+        마스터검사 = 2,
+    }
     public partial class SetInspection : XtraUserControl
     {
         public SetInspection()
@@ -34,7 +41,7 @@ namespace TE1.UI.Controls
         private LocalizationInspection 번역 = new LocalizationInspection();
         private static String 로그영역 = "Inspection Settings";
 
-        public void Init()
+        public void Init(검사설정구분 검사설정 = 검사설정구분.기본검사)
         {
             this.GridView1.Init(this.barManager1);
             this.GridView1.OptionsBehavior.Editable = true;
@@ -75,8 +82,22 @@ namespace TE1.UI.Controls
             Localization.SetColumnCaption(this.GridView1, typeof(검사정보));
             this.b설정저장.Text = 번역.설정저장;
             this.모델선택(this.e모델선택, EventArgs.Empty);
+            검사타입설정(검사설정);
         }
+        public void 검사타입설정(검사설정구분 검사설정)
+        {
+            this.col마스터값.Visible = 검사설정 != 검사설정구분.기본검사;
+            this.col마스터공차.Visible = 검사설정 != 검사설정구분.기본검사;
 
+            this.col최대값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col최소값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col실측값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col보정값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col마진값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col기준값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.colX.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.colY.Visible = 검사설정 != 검사설정구분.마스터검사;
+        }
         private void B엑셀데이터불러오기_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -99,7 +120,7 @@ namespace TE1.UI.Controls
 
                 정보.실측값 = value;
 
-                if (value != 0 && 정보.측정값 != 0 && 정보.X != 0)
+                if (정보.측정값 != 0 && 정보.X != 0)// if (value != 0 && 정보.측정값 != 0 && 정보.X != 0)
                 {
                     정보.교정계산(정보);
                 }
@@ -207,23 +228,24 @@ namespace TE1.UI.Controls
             for (int lop = 0; lop < this.검사설정.Count; lop++)
             {
                 검사정보 정보 = this.검사설정[lop] as 검사정보;
-
-                if (정보.검사명칭.Contains("Burr"))
+                if (정보.검사명칭.StartsWith("M"))
                     정보.교정계산(정보);
+                //if (정보.검사명칭.Contains("Burr"))
+                //    정보.교정계산(정보);
 
-                if (정보.검사명칭.StartsWith("H") && (정보.검사명칭.Contains("X") || 정보.검사명칭.Contains("Y")))
-                    정보.교정계산(정보);
+                //if (정보.검사명칭.StartsWith("H") && (정보.검사명칭.Contains("X") || 정보.검사명칭.Contains("Y")))
+                //    정보.교정계산(정보);
 
-                if (정보.검사명칭.StartsWith("H") && 정보.검사명칭.Contains("D"))
-                    정보.교정계산(정보);
+                //if (정보.검사명칭.StartsWith("H") && 정보.검사명칭.Contains("D"))
+                //    정보.교정계산(정보);
 
-                if (정보.검사명칭.StartsWith("T"))
-                {
-                    if (정보.검사항목 != 검사항목.T044)
-                    {
-                        정보.교정계산(정보);
-                    }
-                }
+                //if (정보.검사명칭.StartsWith("T"))
+                //{
+                //    if (정보.검사항목 != 검사항목.T044)
+                //    {
+                //        정보.교정계산(정보);
+                //    }
+                //}
             }
             this.GridView1.RefreshData();
         }

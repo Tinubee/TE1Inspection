@@ -70,6 +70,14 @@ namespace TE1.UI.Controls
             this.col마스터값.Visible = 검사설정 != 검사설정구분.기본검사;
             this.col마스터공차.Visible = 검사설정 != 검사설정구분.기본검사;
 
+            this.col최대값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col최소값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col실측값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col보정값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col마진값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.col기준값.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.colX.Visible = 검사설정 != 검사설정구분.마스터검사;
+            this.colY.Visible = 검사설정 != 검사설정구분.마스터검사;
             //for (int lop = 0; lop < GridView1.Columns.Count; lop++)
             //{
             //    if (GridView1.Columns[lop].Caption == this.col마스터값.Caption && 검사설정 == 검사설정구분.마스터검사)

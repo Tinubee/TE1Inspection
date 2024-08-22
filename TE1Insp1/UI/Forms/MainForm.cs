@@ -107,6 +107,7 @@ namespace TE1
             this.e결과뷰어.Init(UI.Controls.ResultInspection.ViewTypes.Auto);
             this.e검사도구.Init();
             this.e검사설정.Init();
+            this.e마스터설정.Init(UI.Controls.검사설정구분.마스터검사);
             this.e장치설정.Init();
             this.e상태뷰어.Init();
             this.e로그내역.Init();

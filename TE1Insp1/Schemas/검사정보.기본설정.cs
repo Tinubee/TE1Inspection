@@ -284,13 +284,21 @@ namespace TE1.Schemas
             }
             else if (검사.검사명칭.StartsWith("T"))
             {
-                if(검사.검사항목 != 검사항목.T044)
+                if (검사.검사항목 != 검사항목.T044)
                 {
                     if (검사.instype == InsType.Y)
                     {
                         result = result + (Decimal)63;
                     }
-                    else if (검사.instype == InsType.X) result = result + (Decimal)982.25;
+                    else if (검사.instype == InsType.X)
+                    {
+                        if (검사.검사항목 == 검사항목.T015 || 검사.검사항목 == 검사항목.T016 || 검사.검사항목 == 검사항목.T017 || 검사.검사항목 == 검사항목.T018 || 검사.검사항목 == 검사항목.T019)
+                            result = result + (Decimal)982.25;
+                        else
+                        {
+                            result = (Decimal)982.25 - Math.Abs(result);
+                        }
+                    }
                 }
             }
 
@@ -299,6 +307,10 @@ namespace TE1.Schemas
             {
                 result = Math.Abs(result) - Math.Abs(검사.보정값);
                 //result += 검사.보정값;
+            }
+            else if (검사.검사명칭.StartsWith("M"))
+            {
+                result = Math.Abs(result) - Math.Abs(검사.보정값);
             }
             else
                 result += 검사.보정값;
@@ -376,6 +388,8 @@ namespace TE1.Schemas
                 //Debug.WriteLine($"{검사.검사항목} : {검사.측정값} / {검사.최소값} / {검사.최대값} / {okL}");
                 return 검사;
             }
+
+            //Debug.WriteLine($"{검사.검사항목} => {value}");
 
             Boolean ok = SetResultValue(검사, value, out Decimal 결과값, out Decimal 측정값);
             검사.측정값 = 측정값;
@@ -543,7 +557,7 @@ namespace TE1.Schemas
         [NotMapped, JsonProperty("isShow")]
         public Boolean isShow { get; set; } = true;
         [NotMapped, JsonProperty("imPoint")]
-        public Boolean 중요검사포인트 { get; set; } = true;
+        public Boolean 중요검사포인트 { get; set; } = false;
         [NotMapped, JsonIgnore]
         public Double 검사시간 = 0;
         [NotMapped, JsonIgnore]
@@ -590,17 +604,19 @@ namespace TE1.Schemas
             this.X = InsItems.GetItem(this.검사명칭).X;
             this.Y = InsItems.GetItem(this.검사명칭).Y;
 
-            if (this.검사명칭.StartsWith("M"))
-            {
-                this.교정값 = 29;
-                Int32 type = Convert.ToInt32(this.검사명칭.Substring(this.검사명칭.Length - 1));
-                if (type % 2 == 1)
-                {
-                    this.보정값 = Convert.ToDecimal(InsItems.GetItem(this.검사명칭).X);
-                }
-                else
-                    this.보정값 = Convert.ToDecimal(InsItems.GetItem(this.검사명칭).Y);
-            }
+            //this.중요검사포인트 = false;
+
+            //if (this.검사명칭.StartsWith("M"))
+            //{
+            //    this.교정값 = 29;
+            //    Int32 type = Convert.ToInt32(this.검사명칭.Substring(this.검사명칭.Length - 1));
+            //    if (type % 2 == 1)
+            //    {
+            //        this.보정값 = Convert.ToDecimal(InsItems.GetItem(this.검사명칭).X);
+            //    }
+            //    else
+            //        this.보정값 = Convert.ToDecimal(InsItems.GetItem(this.검사명칭).Y);
+            //}
         }
 
         public 검사정보 Set(검사정보 정보, DateTime 일시)
@@ -640,10 +656,15 @@ namespace TE1.Schemas
                         Decimal 적용값 = check == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
                         this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
                         this.보정값 = check == InsType.X ? Convert.ToDecimal(item.X) : Convert.ToDecimal(item.Y);
+
+                        //if (정보.검사명칭.Contains("X1") || 정보.검사명칭.Contains("Y4"))
+                        //    this.Attr.결과부호 = -1;
+                        //else
+                        //    this.Attr.결과부호 = 1;
                     }
                     else
                     {
-                        if(정보.검사항목 == 검사항목.T044)
+                        if (정보.검사항목 == 검사항목.T044)
                         {
                             Decimal 적용값 = (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
                             this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
@@ -659,7 +680,16 @@ namespace TE1.Schemas
                             }
                             if (item.InsType == InsType.X)
                             {
-                                Decimal 적용값 = (Decimal)982.25 - (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
+                                Decimal 적용값 = 0;
+                                if (정보.검사항목 == 검사항목.T015 || 정보.검사항목 == 검사항목.T016 || 정보.검사항목 == 검사항목.T017 || 정보.검사항목 == 검사항목.T018 || 정보.검사항목 == 검사항목.T019)
+                                {
+                                    적용값 = (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값) - (Decimal)982.25;
+                                }
+                                else
+                                {
+                                    적용값 = (Decimal)982.25 - (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
+                                }
+
                                 this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
                                 this.보정값 = Convert.ToDecimal(item.X);
                             }

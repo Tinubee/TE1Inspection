@@ -31,16 +31,16 @@ namespace TE1.UI.Controls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetInspection));
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions3 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject9 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject10 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject11 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject12 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
             DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
             this.GridControl1 = new MvUtils.CustomGrid();
             this.검사설정Bind = new System.Windows.Forms.BindingSource(this.components);
             this.GridView1 = new MvUtils.CustomView();
@@ -78,6 +78,7 @@ namespace TE1.UI.Controls
             this.barDockControlLeft = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlRight = new DevExpress.XtraBars.BarDockControl();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
+            this.b엑셀데이터불러오기 = new DevExpress.XtraEditors.SimpleButton();
             this.b홀XY옵셋전체입력 = new DevExpress.XtraEditors.SimpleButton();
             this.b홀버전체보정 = new DevExpress.XtraEditors.SimpleButton();
             this.b측정정보 = new DevExpress.XtraEditors.SimpleButton();
@@ -88,7 +89,9 @@ namespace TE1.UI.Controls
             this.b분류설정 = new DevExpress.XtraEditors.PopupContainerEdit();
             this.popupContainerControl1 = new DevExpress.XtraEditors.PopupContainerControl();
             this.e분류자료 = new TE1.UI.Controls.Categorys();
-            this.b엑셀데이터불러오기 = new DevExpress.XtraEditors.SimpleButton();
+            this.col마스터값 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col마스터공차 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col중요검사포인트 = new DevExpress.XtraGrid.Columns.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).BeginInit();
@@ -157,7 +160,10 @@ namespace TE1.UI.Controls
             this.col실측값,
             this.col마진값,
             this.col측정결과,
+            this.col마스터값,
+            this.col마스터공차,
             this.col검사여부,
+            this.col중요검사포인트,
             this.col변수명칭,
             this.col카메라여부,
             this.col결과부호,
@@ -386,6 +392,8 @@ namespace TE1.UI.Controls
             this.col측정결과.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.col측정결과.FieldName = "측정결과";
             this.col측정결과.Name = "col측정결과";
+            this.col측정결과.Visible = true;
+            this.col측정결과.VisibleIndex = 18;
             // 
             // col검사여부
             // 
@@ -394,7 +402,7 @@ namespace TE1.UI.Controls
             this.col검사여부.FieldName = "검사여부";
             this.col검사여부.Name = "col검사여부";
             this.col검사여부.Visible = true;
-            this.col검사여부.VisibleIndex = 18;
+            this.col검사여부.VisibleIndex = 21;
             // 
             // col변수명칭
             // 
@@ -485,6 +493,18 @@ namespace TE1.UI.Controls
             this.panelControl1.Size = new System.Drawing.Size(1442, 52);
             this.panelControl1.TabIndex = 5;
             // 
+            // b엑셀데이터불러오기
+            // 
+            this.b엑셀데이터불러오기.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            this.b엑셀데이터불러오기.Appearance.Options.UseFont = true;
+            this.b엑셀데이터불러오기.Dock = System.Windows.Forms.DockStyle.Right;
+            this.b엑셀데이터불러오기.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
+            this.b엑셀데이터불러오기.Location = new System.Drawing.Point(697, 5);
+            this.b엑셀데이터불러오기.Name = "b엑셀데이터불러오기";
+            this.b엑셀데이터불러오기.Size = new System.Drawing.Size(140, 42);
+            this.b엑셀데이터불러오기.TabIndex = 24;
+            this.b엑셀데이터불러오기.Text = "excel";
+            // 
             // b홀XY옵셋전체입력
             // 
             this.b홀XY옵셋전체입력.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -533,10 +553,10 @@ namespace TE1.UI.Controls
             this.b도구설정.Properties.Appearance.Font = new System.Drawing.Font("맑은 고딕", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.b도구설정.Properties.Appearance.Options.UseFont = true;
             this.b도구설정.Properties.AutoHeight = false;
-            editorButtonImageOptions3.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions3.SvgImage")));
+            editorButtonImageOptions1.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions1.SvgImage")));
             this.b도구설정.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions3, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject9, serializableAppearanceObject10, serializableAppearanceObject11, serializableAppearanceObject12, "도구설정", "도구설정", null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "도구설정", "도구설정", null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.b도구설정.Properties.NullText = "[카메라 선택]";
             this.b도구설정.Size = new System.Drawing.Size(300, 42);
             this.b도구설정.TabIndex = 10;
@@ -592,12 +612,12 @@ namespace TE1.UI.Controls
             this.b분류설정.Name = "b분류설정";
             this.b분류설정.Properties.Appearance.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.b분류설정.Properties.Appearance.Options.UseFont = true;
-            editorButtonImageOptions1.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions1.SvgImage")));
-            editorButtonImageOptions1.SvgImageSize = new System.Drawing.Size(40, 40);
-            serializableAppearanceObject1.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            serializableAppearanceObject1.Options.UseFont = true;
+            editorButtonImageOptions2.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions2.SvgImage")));
+            editorButtonImageOptions2.SvgImageSize = new System.Drawing.Size(40, 40);
+            serializableAppearanceObject5.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            serializableAppearanceObject5.Options.UseFont = true;
             this.b분류설정.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "Categorys", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "Categorys", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "Categorys", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "Categorys", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.b분류설정.Properties.NullText = "Categorys";
             this.b분류설정.Properties.PopupControl = this.popupContainerControl1;
             this.b분류설정.Size = new System.Drawing.Size(175, 42);
@@ -620,17 +640,32 @@ namespace TE1.UI.Controls
             this.e분류자료.Size = new System.Drawing.Size(500, 400);
             this.e분류자료.TabIndex = 0;
             // 
-            // b엑셀데이터불러오기
+            // col마스터값
             // 
-            this.b엑셀데이터불러오기.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            this.b엑셀데이터불러오기.Appearance.Options.UseFont = true;
-            this.b엑셀데이터불러오기.Dock = System.Windows.Forms.DockStyle.Right;
-            this.b엑셀데이터불러오기.ImageOptions.SvgImageSize = new System.Drawing.Size(16, 16);
-            this.b엑셀데이터불러오기.Location = new System.Drawing.Point(697, 5);
-            this.b엑셀데이터불러오기.Name = "b엑셀데이터불러오기";
-            this.b엑셀데이터불러오기.Size = new System.Drawing.Size(140, 42);
-            this.b엑셀데이터불러오기.TabIndex = 24;
-            this.b엑셀데이터불러오기.Text = "excel";
+            this.col마스터값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col마스터값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col마스터값.FieldName = "마스터값";
+            this.col마스터값.Name = "col마스터값";
+            this.col마스터값.Visible = true;
+            this.col마스터값.VisibleIndex = 19;
+            // 
+            // col마스터공차
+            // 
+            this.col마스터공차.AppearanceHeader.Options.UseTextOptions = true;
+            this.col마스터공차.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col마스터공차.FieldName = "마스터공차";
+            this.col마스터공차.Name = "col마스터공차";
+            this.col마스터공차.Visible = true;
+            this.col마스터공차.VisibleIndex = 20;
+            // 
+            // col중요검사포인트
+            // 
+            this.col중요검사포인트.AppearanceHeader.Options.UseTextOptions = true;
+            this.col중요검사포인트.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col중요검사포인트.FieldName = "중요검사포인트";
+            this.col중요검사포인트.Name = "col중요검사포인트";
+            this.col중요검사포인트.Visible = true;
+            this.col중요검사포인트.VisibleIndex = 22;
             // 
             // SetInspection
             // 
@@ -715,5 +750,8 @@ namespace TE1.UI.Controls
         private DevExpress.XtraEditors.SimpleButton b홀버전체보정;
         private DevExpress.XtraEditors.SimpleButton b홀XY옵셋전체입력;
         private DevExpress.XtraEditors.SimpleButton b엑셀데이터불러오기;
+        private DevExpress.XtraGrid.Columns.GridColumn col마스터값;
+        private DevExpress.XtraGrid.Columns.GridColumn col마스터공차;
+        private DevExpress.XtraGrid.Columns.GridColumn col중요검사포인트;
     }
 }

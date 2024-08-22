@@ -179,10 +179,8 @@ namespace TE1.Schemas
             if (this.InputImage == null) return false;
             Boolean r = false;
             String error = String.Empty;
-            //if      (this.마스터형식 == 사진형식.Bmp) r = Common.ImageSaveBmp(this.InputImage, this.마스터경로, out error);
-            //else if (this.마스터형식 == 사진형식.Png) r = Common.ImageSavePng(this.InputImage, this.마스터경로, out error);
-            //else 
-            if (this.마스터형식 == 사진형식.Jpg) r = Common.ImageSaveJpeg(this.InputImage, this.마스터경로, out error);
+            if      (this.마스터형식 == 사진형식.Bmp) r = Common.ImageSaveBmp(this.InputImage, this.마스터경로, out error);
+            else if (this.마스터형식 == 사진형식.Jpg) r = Common.ImageSaveJpg(this.InputImage, this.마스터경로, out error);
             else return false;
             if (!r) Utils.WarningMsg("마스터 이미지 등록실패!!!\n" + error);
             return r;
@@ -350,8 +348,16 @@ namespace TE1.Schemas
             Boolean accepted = false;
             try
             {
-                if (leftImage != null) this.LeftImage = leftImage;
-                if (rightImage != null) this.RightImage = rightImage;
+                if (leftImage != null)
+                {
+                    //(this.LeftImage as CogImage8Grey)?.Dispose();
+                    this.LeftImage = leftImage;
+                }
+                if (rightImage != null)
+                {
+                    //(this.RightImage as CogImage8Grey)?.();
+                    this.RightImage = rightImage;
+                }
 
                 if (this.LeftImage == null || this.RightImage == null) return false;
                 this.검사시작 = DateTime.Now;
@@ -362,7 +368,7 @@ namespace TE1.Schemas
                 검사?.SetResults(구분, Output<String>("Results"));
                 this.표면검사(검사);
                 this.검사종료 = DateTime.Now;
-                Debug.WriteLine($"{this.카메라.ToString()} => {(검사종료 - 검사시작).TotalMilliseconds.ToString("#,0")} msec", "검사시간");
+                Debug.WriteLine($"{this.카메라.ToString()} => {(검사종료 - 검사시작).TotalMilliseconds.ToString("#,0")} msec", $"Index[ {검사.검사번호} ] 검사시간");
                 DisplayResult(검사, 구분);
                 Global.캘리브?.AddNew(this.ToolBlock, this.카메라, 검사.검사번호);
                 검사완료체크(검사);
@@ -373,19 +379,20 @@ namespace TE1.Schemas
 
         private void 검사완료체크(검사결과 검사)
         {
-            if (검사 == null || Global.장치상태.자동수동 && 검사.검사완료.Contains(카메라)) return;
-            if (!검사.검사완료.Contains(this.카메라)) 검사.검사완료.Add(this.카메라);
+            if (검사 == null || 검사.검사완료.Contains(카메라)) return;
+            검사.검사완료.Add(this.카메라);
             검사.검사완료여부 = 검사.검사완료.Count >= 2;
             if (검사.검사완료여부)
             {
                 Global.검사자료.검사수행알림(검사);
-              
+                //DisplayResult(검사, 구분);
                 foreach (검사정보 정보 in 검사.검사내역)
                     검사.SetResult(정보.검사항목, (Double)정보.측정값);
 
                 Debug.WriteLine($"TE1 Vision 검사완료신호전송 => {검사.검사번호}");
-                Global.피씨통신.Publish(검사.검사번호, 검사.검사내역, 피씨명령.상부완료);
-                GC.Collect();
+                if (Global.장치상태.자동수동)
+                    Global.피씨통신.Publish(검사.검사번호, 검사.검사내역, 피씨명령.상부완료);
+
             }
         }
 
