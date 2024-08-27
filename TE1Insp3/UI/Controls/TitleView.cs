@@ -40,7 +40,7 @@ namespace TE1.UI.Controls
             }
 
             Global.피씨통신.VIP모드상태전송(Global.환경설정.VIP모드);
-            this.lb모드.ForeColor = Global.환경설정.VIP모드 ? Color.FromArgb(56, 126, 150) : Color.FromArgb(56, 126, 196);
+            this.lb모드.ForeColor = Global.환경설정.VIP모드 ? Color.FromArgb(189, 160, 27) : Color.FromArgb(56, 126, 196);
         }
     }
 }

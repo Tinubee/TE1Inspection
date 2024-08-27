@@ -427,6 +427,7 @@ namespace TE1.Cam03
 
                     if (count == 0)
                     {
+                       
                         results.Add(new Result(item.Key + "X", 0));
                         results.Add(new Result(item.Key + "Y", 0));
                         results.Add(new Result(item.Key + "D", 0));
@@ -465,14 +466,14 @@ namespace TE1.Cam03
                             results.Add(new Result(item.Key, 0));
                             results.Add(new Result($"{item.Key}Width", 0));
                             results.Add(new Result($"{item.Key}Height", 0));
-                            //SetNgRegion(tool);
+                            SetNgRegion(tool);
                         }
                         else
                         {
                             CogBlobResult b= GetBlob(tool);
                             CogRectangleAffine r = b.GetBoundingBox(CogBlobAxisConstants.SelectedSpace); //X:가로(Width) Y:세로(Height)
                           
-                            Debug.WriteLine($"{item.Key} => {r.SideXLength} / {r.SideYLength}");
+                            //Debug.WriteLine($"{item.Key} => {r.SideXLength} / {r.SideYLength}");
 
                             results.Add(new Result(item.Key, count));
                             results.Add(new Result($"{item.Key}Width", r.SideXLength));
@@ -528,11 +529,31 @@ namespace TE1.Cam03
             }
         }
 
+        private void SetNgRegion(CogBlobTool tool)
+        {
+            try
+            {
+                //tool.LastRunRecordDiagEnable = CogBlobLastRunRecordDiagConstants.Region;
+                //ICogRecord record = tool.CreateLastRunRecord();
+                //ICogRecord searchRegionRecord = record.SubRecords["InputImage"].SubRecords["Region"];
+                //if (searchRegionRecord.Content is ICogGraphicInteractive searchRegion)
+                //{
+                //    CogRectangleAffine rectangle = searchRegion as CogRectangleAffine;
+                //    if (rectangle != null)
+                //        rectangle.Color = CogColorConstants.Red;
+                //}
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"{ex.Message}");
+            }
+        }
+
         internal virtual Boolean CalResult(CogFindCircleTool tool, InsItem ins, out InsItem result)
         {
             result = new InsItem() { InsType = ins.InsType };
             if (tool == null) return false;
-            if (tool.RunStatus.Result == CogToolResultConstants.Accept && tool.Results.Count != 0)
+            if (tool.RunStatus.Result == CogToolResultConstants.Accept && tool.Results.GetCircle() != null)
             {
                 CogCircle c = tool.Results.GetCircle();
                 result.X = -Math.Round(c.CenterY, 3);
@@ -550,7 +571,7 @@ namespace TE1.Cam03
             if (tool == null) return false;
             if (tool.RunStatus.Result == CogToolResultConstants.Accept && tool.Results.Count != 0)
             {
-                result.D = tool.Results[0].Score;
+                result.D = tool.Results[0].Score * 100;
             }
             return true;
         }

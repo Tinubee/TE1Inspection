@@ -90,7 +90,7 @@ namespace TE1.Schemas
             new Thread(() => {
                 String file = String.Empty;
                 if (!정보.사본저장) return;
-                file = CopyImageFile(시간, 번호, 카메라, 사진형식.Bmp, Merged);
+                file = CopyImageFile(시간, 번호, 카메라, 사진형식.Jpg, Merged);
                 //file = CopyImageFile(시간, 번호, 카메라, 정보.사본유형, Merged);
                 Double scale = Math.Max(0.1, Math.Min((Double)정보.사진비율 / 100, 1.0));
                 //Debug.WriteLine($"Scale: {정보.사진비율} => {scale}", 카메라.ToString());
@@ -107,7 +107,7 @@ namespace TE1.Schemas
             new Thread(() => {
                 String file = String.Empty;
                 사진저장 정보 = this[카메라];
-                file = CopyImageFile(DateTime.Now, 번호, 카메라, 사진형식.Bmp);
+                file = CopyImageFile(DateTime.Now, 번호, 카메라, 사진형식.Jpg);
                 //file = CopyImageFile(시간, 번호, 카메라, 정보.사본유형, Merged);
                 //Double scale = Math.Max(0.1, Math.Min((Double)정보.사진비율 / 100, 1.0));
                 //Debug.WriteLine($"Scale: {정보.사진비율} => {scale}", 카메라.ToString());

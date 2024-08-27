@@ -85,11 +85,19 @@ namespace TE1.Schemas
         }
         public void Active(카메라구분 구분) => this.GetItem(구분)?.Active();
 
+        Boolean 검사중 = false;
         public void 그랩완료(그랩장치 장치)
         {
             if (장치.구분 == 카메라구분.Cam03)
                 new Thread(() => Global.조명제어.TurnOff()).Start();
-         
+            //if (장치.구분 == 카메라구분.Cam01 || 장치.구분 == 카메라구분.Cam02)
+            //{
+            //    if (검사.그랩완료.Contains(장치.구분)) return;
+            //    검사.그랩완료.Add(장치.구분);
+            //    Debug.WriteLine($"Index => {검사번호} / {장치.구분} / {검사.그랩완료.Count}개");
+            //}
+
+
             if (Global.장치상태.자동수동)
             {
                 Int32 검사번호 = Global.피씨통신.상부치수번호;
@@ -98,19 +106,18 @@ namespace TE1.Schemas
 
                 if (장치.구분 == 카메라구분.Cam01 || 장치.구분 == 카메라구분.Cam02)
                 {
-                    Debug.WriteLine($"Index => {검사번호} / {장치.구분} / {검사.그랩완료.Count}개");
                     if (검사.그랩완료.Contains(장치.구분)) return;
-                    
                     검사.그랩완료.Add(장치.구분);
+                    Debug.WriteLine($"Index => {검사번호} / {장치.구분} / {검사.그랩완료.Count}개");
                     //if (Global.환경설정.Cam0102개별이미지저장)
                     Global.사진자료.SaveImage(장치, 검사);
 
                     if (검사.그랩완료.Count == 2) //동시에 들어가서 Run이 2번되는 경우발생...
                     {
-                        Debug.WriteLine($"{장치.구분} 검사 그랩완료 들어옴");
+                        검사.그랩완료.Clear();
+                        Debug.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} / {장치.구분} 검사 그랩완료 들어옴");
                         Global.비전검사.Run(장치, 검사, true);
                     }
-
                 }
                 else
                     Global.비전검사.Run(장치, 검사);
@@ -127,7 +134,7 @@ namespace TE1.Schemas
                 }
                 else
                     Global.비전검사.Run(장치, Global.검사자료.수동검사);
-              
+
                 this.그랩완료보고?.Invoke(장치);
             }
         }

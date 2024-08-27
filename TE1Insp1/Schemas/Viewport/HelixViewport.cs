@@ -129,7 +129,7 @@ namespace TE1.Schemas
             //if(Children.Contains(item))
             item.Create(Children);
         }
-      
+
         internal virtual Boolean Remove(GeometryModel3D item) => ModelGroup.Children.Remove(item);
 
         internal virtual void AddArrowLine(Point3D s, Point3D e, Color color)
@@ -193,6 +193,7 @@ namespace TE1.Schemas
                 Background = new SolidColorBrush(Colors.Transparent),
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                 VerticalAlignment = System.Windows.VerticalAlignment.Center,
+                //Transform = new RotateTransform3D(new AxisAngleRotation3D(new Vector3D(0, 0, 1), 90)),
             };
 
         public static ArrowVisual3D CreateArrowLine(Point3D s, Point3D e, Color color) =>

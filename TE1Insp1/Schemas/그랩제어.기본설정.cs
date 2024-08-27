@@ -167,7 +167,8 @@ namespace TE1.Schemas
                     this.ImageWidth = width;
                     this.ImageHeight = height;
                 }
-                this.MergedImageDispose();
+                Debug.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} => {this.구분} 그랩완료.");
+                //this.MergedImageDispose();
                 Global.그랩제어.그랩완료(this);
             }
             catch (Exception ex)
@@ -209,23 +210,6 @@ namespace TE1.Schemas
         public ICogImage MergeCogImage()
         {
             return Common.ToCogImage(this.합성이미지);
-            //try
-            //{
-            //    //if (this.Image != null) return Common.ToCogImage(this.Image);
-            //    if (this.mergeBufferAddress == IntPtr.Zero) return null;
-            //    using (CogImage8Root cogImage8Root = new CogImage8Root())
-            //    {
-            //        CogImage8Grey image = new CogImage8Grey();
-            //        cogImage8Root.Initialize(mergeImageWidth, mergeImageHeight, mergeBufferAddress, mergeImageWidth, null);
-            //        image.SetRoot(cogImage8Root);
-            //        return image;
-            //    }
-            //}
-            //catch (Exception e)
-            //{
-            //    Global.오류로그(로그영역, "Acquisition", $"[{this.구분.ToString()}] {e.Message}", true);
-            //}
-            //return null;
         }
         public Mat MatImage()
         {

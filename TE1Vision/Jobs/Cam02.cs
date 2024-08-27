@@ -251,14 +251,29 @@ namespace TE1.Cam02
 
         public override void StartedRun()
         {
-            base.StartedRun();
-            InitTools();
+            try
+            {
+                base.StartedRun();
+                InitTools();
+            }
+            catch(Exception ee) 
+            {
+                Debug.WriteLine(ee.Message);
+            }
+        
         }
 
         public override void FinistedRun()
         {
-            base.FinistedRun();
-            CalResults();
+            try
+            {
+                base.FinistedRun();
+                CalResults();
+            }
+            catch (Exception ee)
+            { 
+                Debug.WriteLine($"{ee.Message}");
+            }
         }
 
         private Double CenterX => InputImage.Width / 2 - Input<Double>("CenterX");
@@ -378,15 +393,15 @@ namespace TE1.Cam02
             tool.RunParams.SegmentationParams.Polarity = CogBlobSegmentationPolarityConstants.LightBlobs;
             tool.RunParams.ConnectivityMinPixels = 10000;
 
-            CogBlobMeasure item = new CogBlobMeasure();
-            item.FilterMode = CogBlobFilterModeConstants.IncludeBlobsInRange;
-            item.FilterRangeLow = 1;
-            item.FilterRangeHigh = 1.03;
-            item.Measure = CogBlobMeasureConstants.AcircularityRms;
-            item.Mode = CogBlobMeasureModeConstants.Filter;
+            //CogBlobMeasure item = new CogBlobMeasure();
+            //item.FilterMode = CogBlobFilterModeConstants.IncludeBlobsInRange;
+            //item.FilterRangeLow = 1;
+            //item.FilterRangeHigh = 1.03;
+            //item.Measure = CogBlobMeasureConstants.AcircularityRms;
+            //item.Mode = CogBlobMeasureModeConstants.Filter;
 
-            tool.RunParams.RunTimeMeasures.Clear();
-            tool.RunParams.RunTimeMeasures.Add(item);
+            //tool.RunParams.RunTimeMeasures.Clear();
+            //tool.RunParams.RunTimeMeasures.Add(item);
 
             tool.InputImage = this.InputImage;
         }

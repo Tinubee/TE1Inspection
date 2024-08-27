@@ -22,6 +22,7 @@ namespace TE1.Schemas
             public virtual String Label { get; set; } = String.Empty;
             public virtual NamePrintType LabelStyle { get; set; } = NamePrintType.Left;
             public virtual Decimal Value { get; set; } = 0;
+            //public virtual 큐알등급 QRValue { get; set; } = 큐알등급.X;
             public virtual Color Color { get; set; } = ToColor(환경설정.ResultColor(결과구분.OK));
             public virtual Color BackColor => Color.FromArgb(64, Color.R, Color.G, Color.B);
             public virtual Point3D Point { get; set; } = new Point3D(Double.NaN, Double.NaN, Double.NaN);
@@ -29,7 +30,7 @@ namespace TE1.Schemas
             public List<Visual3D> Items = new List<Visual3D>();
             public Boolean Added = false;
             public Base3D(검사항목 항목) { Type = 항목; }
-            public abstract void Create(Visual3DCollection collectioin);
+            public abstract void Create(Visual3DCollection collectioin, Boolean rotation = false);
             public abstract void Clear(Visual3DCollection collectioin);
             public abstract void Draw();
 
@@ -74,6 +75,9 @@ namespace TE1.Schemas
                     case "P":
                         Color = ToColor(환경설정.ThicknessResultColor(결과));
                         break;
+                    default:
+                        Color = ToColor(환경설정.ResultColor(결과));
+                        break;
                 }
                 Label = CreateLabelText();
                 Draw();
@@ -109,7 +113,7 @@ namespace TE1.Schemas
                 collectioin.Remove(Indicator);
                //collectioin.InternalRemoveAt(0);
             }
-            public override void Create(Visual3DCollection collectioin)
+            public override void Create(Visual3DCollection collectioin, Boolean rotation = false)
             {
                 Label = CreateLabelText();
                 Point3D p = new Point3D();
@@ -128,6 +132,7 @@ namespace TE1.Schemas
                     else if (LabelStyle == NamePrintType.Down) p.Y -= FontHeight * 0.3;
                 }
                 TextLabel = Schemas.Viewport.CreateLabel(p, Label, FontHeight, Color);
+                if (rotation) TextLabel.Angle = -90;
                 if (Transform != null) TextLabel.Transform = Transform;
 
                 //collectioin.Add(TextLabel);
@@ -169,7 +174,7 @@ namespace TE1.Schemas
             public ArrowVisual3D ArrowLine = null;
 
             public Length3D(검사항목 항목) : base(항목) { }
-            public override void Create(Visual3DCollection collectioin)
+            public override void Create(Visual3DCollection collectioin, Boolean rotation = false)
             {
                 if (!HasPoint) Point = new Point3D(PointE.X, PointE.Y, PointE.Z);
                 base.Create(collectioin);
@@ -194,7 +199,7 @@ namespace TE1.Schemas
             public TextVisual3D Text3DE = null;
 
             public Width3D(검사항목 항목) : base(항목) { }
-            public override void Create(Visual3DCollection collectioin)
+            public override void Create(Visual3DCollection collectioin, Boolean rotation = false)
             {
                 base.Create(collectioin);
                 ArrowLine2 = CreateArrowLine(Center, PointE, Color);
@@ -232,18 +237,19 @@ namespace TE1.Schemas
             public Double Height { get; set; } = 10;
             public Vector3D Normal { get; set; } = new Vector3D(0, 0, 1);
             public RectangleVisual3D Rect = null;
+            public Boolean 회전 = false;
 
             public Rectangle3D(검사항목 항목) : base(항목) { }
-            public override void Create(Visual3DCollection collectioin)
+            public override void Create(Visual3DCollection collectioin, Boolean rotation = false)
             {
-                base.Create(collectioin);
+                base.Create(collectioin, 회전);
                 Rect = CreateRectangle(new Point3D(Point.X, Point.Y, Point.Z + 1.0), Width, Height, BackColor, Normal);
                 AddItem(collectioin, Rect);
             }
             public override void Draw()
             {
                 base.Draw();
-                Rect.Fill = new SolidColorBrush(Colors.Yellow);
+                Rect.Fill = new SolidColorBrush(BackColor);
             }
         }
 
@@ -253,7 +259,7 @@ namespace TE1.Schemas
             public PieSliceVisual3D Circle = null;
 
             public Circle3D(검사항목 항목) : base(항목) { }
-            public override void Create(Visual3DCollection collectioin)
+            public override void Create(Visual3DCollection collectioin, Boolean rotation = false)
             {
                 base.Create(collectioin);
                 Color 적용색상 = this.Type == 검사항목.PThickness ? Colors.Olive : Colors.Aqua;

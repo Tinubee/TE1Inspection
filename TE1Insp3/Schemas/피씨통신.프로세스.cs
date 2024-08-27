@@ -84,7 +84,7 @@ namespace TE1.Schemas
             List<검사정보> 치수 = 자료.Get<List<검사정보>>();
             foreach (검사정보 정보 in 치수)
             {
-                Debug.WriteLine($"{정보.검사항목} : {정보.측정값}");
+                //Debug.WriteLine($"{정보.검사항목} : {정보.측정값}");
                 검사.SetResult(정보.검사항목, (Double)정보.측정값);
             }
             return true;

@@ -364,26 +364,27 @@ namespace TE1
         public static InsItem M60X3 = new InsItem(3, InsType.S, -887.50, 181.90);
         public static InsItem M60Y4 = new InsItem(3, InsType.S, -837.50, 194.40);
 
-        public static InsItem ImTopPlus = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImBottomPlus = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImTopMinus = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImBottomMinus = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImMiddle1 = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImMiddle2 = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImMiddle3 = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImSheetM1TR = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImSheetM1BR = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImSheetM1TL = new InsItem(3, InsType.I, 0, 0); 
-        public static InsItem ImSheetM1BL = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImSheetM2TR = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImSheetM2BR = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImSheetM2TL = new InsItem(3, InsType.I, 0, 0);
-        public static InsItem ImSheetM2BL = new InsItem(3, InsType.I, 0, 0);
+        public static InsItem ImTopPlus = new InsItem(3, InsType.I, -65, 165);
+        public static InsItem ImBottomPlus = new InsItem(3, InsType.I, -920, -165);
+        public static InsItem ImTopMinus = new InsItem(3, InsType.I, -65, -165); // -102.50, -181.90); //-102.50, -148.90);
+        public static InsItem ImBottomMinus = new InsItem(3, InsType.I, -920, 165);
+        public static InsItem ImMiddle1 = new InsItem(3, InsType.I, -900, 0);
+        public static InsItem ImMiddle2 = new InsItem(3, InsType.I, -920, 0);
+        public static InsItem ImMiddle3 = new InsItem(3, InsType.I, -940, 0);
+        public static InsItem ImSheetM1TR = new InsItem(3, InsType.I, -99, -177); //-102.50, -181.90
+        public static InsItem ImSheetM1BR = new InsItem(3, InsType.I, -400, -177);
+        public static InsItem ImSheetM1TL = new InsItem(3, InsType.I, -99, 190);
+        public static InsItem ImSheetM1BL = new InsItem(3, InsType.I, -400, 190);
+        public static InsItem ImSheetM2TR = new InsItem(3, InsType.I, -583, -177); // -592.50, -181.90);
+        public static InsItem ImSheetM2BR = new InsItem(3, InsType.I, -890, -177); //-887.50, -181.90);
+        public static InsItem ImSheetM2TL = new InsItem(3, InsType.I, -583, 190);  // -592.50, 181.90);
+        public static InsItem ImSheetM2BL = new InsItem(3, InsType.I, -890, 190);  // -887.50, 181.90);
 
         public static InsItem GetItem(String name)
         {
             if (name.StartsWith("H") || name.StartsWith("R")) name = name.Substring(0, 3);
             if (name.StartsWith("B")) name = name.Substring(0, 2);
+            if(name.StartsWith("ImSheet")) name = name.Substring(0, 11);
             FieldInfo field = typeof(InsItems).GetField(name, BindingFlags.Static | BindingFlags.Public);
             if (field == null) return new InsItem();
             return field.GetValue(null) as InsItem;
