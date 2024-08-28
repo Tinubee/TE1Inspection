@@ -24,9 +24,10 @@ namespace TE1
         public CogToolBlock ToolBlock;
         public virtual Cameras Camera => Cameras.None;
         public virtual String ViewerRecodName => "AlignTools.Fixture.OutputImage";
+        public virtual String ViewerRecodFilterName => "DetectTools.CogIPOneImageTool1.OutputImage";
         public virtual String Results { get => Input<String>("Results"); set => Input("Results", value); }
         public ICogImage InputImage => Input<ICogImage>("InputImage");
- 
+        public ICogTool GetTool(CogToolBlock toolblock ,String name) => Base.GetTool(toolblock, name);
         public ICogTool GetTool(String name) => Base.GetTool(ToolBlock, name);
         public T Input<T>(String name) => Base.Input<T>(ToolBlock, name);
         public Boolean Input(String name, Object value) => Base.Input(ToolBlock, name, value);

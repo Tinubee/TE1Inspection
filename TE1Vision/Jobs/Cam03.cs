@@ -40,35 +40,46 @@ namespace TE1.Cam03
         }
         internal void ModifyRecords(ICogRecord lastRecord)
         {
-            if (!lastRecord.SubRecords.ContainsKey(ViewerRecodName)) return;
-            ICogRecord record = lastRecord.SubRecords[ViewerRecodName];
+            if (!lastRecord.SubRecords.ContainsKey(ViewerRecodFilterName)) return;
+            ICogRecord record = lastRecord.SubRecords[ViewerRecodFilterName];
 
             if (String.IsNullOrEmpty(Results)) return;
 
             try
             {
                 List<DisplayResult> results = JsonConvert.DeserializeObject<List<DisplayResult>>(Results);
-                AddDefectsGraphics(lastRecord, results);
+                //Debug.WriteLine($"{results.}");
+                //AddDefectsGraphics(lastRecord, results);
+                Dictionary<String, CogRectangleAffine> regions = new Dictionary<String, CogRectangleAffine>();
 
-                Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
                 foreach (ICogRecord rcd in record.SubRecords)
                 {
-                    if (rcd.ContentType == typeof(CogGraphicLabel))
+                    Debug.WriteLine($"{rcd.ContentType}");
+                    if (rcd.ContentType == typeof(ICogGraphicInteractive))
                     {
-                        CogGraphicLabel label = rcd.Content as CogGraphicLabel;
-                        labels.Add(label.Text, label);
+                        CogRectangleAffine region = rcd.Content as CogRectangleAffine;
+                        Debug.WriteLine($"{region.TipText}");
+                        if (region.TipText != "")
+                            regions.Add(region.TipText, region);
                     }
                 }
-                foreach (DisplayResult r in results.Where(r => r.KeyName.StartsWith("THK")).ToList())
+                //Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
+
+                //foreach (ICogRecord rcd in record.SubRecords)
+                //{
+                //    if (rcd.ContentType == typeof(CogGraphicLabel))
+                //    {
+                //        CogGraphicLabel label = rcd.Content as CogGraphicLabel;
+                //        labels.Add(label.Text, label);
+                //    }
+                //}
+                foreach (DisplayResult r in results.Where(r => r.KeyName.StartsWith("M")).ToList())
                 {
-                    String name = r.KeyName.Replace("THK", "");
-                    if (labels.ContainsKey(name))
+                    String name = r.KeyName;
+                    if (regions.ContainsKey(name))
                     {
-                        CogGraphicLabel label = labels[name];
-                        label.Text = $"{name}: {r.Display}";
-                        label.Color = r.Color;
-                        label.X += 200;
-                        label.Alignment = CogGraphicLabelAlignmentConstants.BaselineLeft;
+                        CogRectangleAffine region = regions[name];
+                        region.Color = r.Color;
                     }
                 }
             }
@@ -385,6 +396,7 @@ namespace TE1.Cam03
             else if (tool.Name == "M32X3") tool.Region.CenterY = y - 30;
 
             tool.Region.Rotation = lop % 2 == 1 ? -Math.PI / 2 : 0;
+            tool.Region.TipText = tool.Name;
             tool.RunParams.EdgeMode = CogCaliperEdgeModeConstants.SingleEdge;
             tool.LastRunRecordDiagEnable = CogCaliperLastRunRecordDiagConstants.InputImageByReference | CogCaliperLastRunRecordDiagConstants.Region;
 
@@ -427,7 +439,7 @@ namespace TE1.Cam03
 
                     if (count == 0)
                     {
-                       
+
                         results.Add(new Result(item.Key + "X", 0));
                         results.Add(new Result(item.Key + "Y", 0));
                         results.Add(new Result(item.Key + "D", 0));
@@ -470,9 +482,9 @@ namespace TE1.Cam03
                         }
                         else
                         {
-                            CogBlobResult b= GetBlob(tool);
+                            CogBlobResult b = GetBlob(tool);
                             CogRectangleAffine r = b.GetBoundingBox(CogBlobAxisConstants.SelectedSpace); //X:가로(Width) Y:세로(Height)
-                          
+
                             //Debug.WriteLine($"{item.Key} => {r.SideXLength} / {r.SideYLength}");
 
                             results.Add(new Result(item.Key, count));

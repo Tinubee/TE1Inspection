@@ -431,7 +431,14 @@ namespace TE1.Schemas
                 List<Result> results = JsonConvert.DeserializeObject<List<Result>>(json);
                 foreach (Result result in results)
                 {
-                    SetResult(result.K, result.V);
+                    검사정보 결과 = SetResult(result.K, result.V);
+                    //if(결과 != null)
+                    //{
+                    //    if (결과.측정결과 != 결과구분.OK)
+                    //    {
+                    //        Debug.WriteLine($"{result.K}");
+                    //    }
+                    //}
                 }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message, "Inspection"); }
@@ -721,7 +728,7 @@ namespace TE1.Schemas
                     }
                     else
                     {
-                        if (정보.검사명칭.Contains("Burr")) this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round((Decimal)this.D / this.측정값 * 1000, 9)));
+                        if (정보.검사명칭.Contains("Burr")) this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round((Decimal)this.D / 2 / this.측정값 * 1000, 9)));
                         else
                             this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(this.실측값 / this.측정값 * 1000, 9)));
                     }

@@ -302,7 +302,7 @@ namespace TE1.Schemas
         public static CogColorConstants CogColor(System.Drawing.Color color) => (CogColorConstants)System.Drawing.ColorTranslator.ToOle(color);
         public static CogColorConstants CogColor(결과구분 판정)
         {
-            if (판정 == 결과구분.OK) return CogColorConstants.DarkGreen;
+            if (판정 == 결과구분.OK) return CogColorConstants.Green;
             if (판정 == 결과구분.NG) return CogColorConstants.Red;
             if (판정 == 결과구분.ER) return CogColorConstants.Magenta;
             return CogColorConstants.LightGrey;

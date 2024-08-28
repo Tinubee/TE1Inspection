@@ -12,6 +12,7 @@ using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
@@ -42,6 +43,7 @@ namespace TE1.Cam02
         }
         internal void ModifyRecords(ICogRecord lastRecord)
         {
+            //Debug.WriteLine("Modify Records");
             if (!lastRecord.SubRecords.ContainsKey(ViewerRecodName)) return;
             ICogRecord record = lastRecord.SubRecords[ViewerRecodName];
 
@@ -50,8 +52,7 @@ namespace TE1.Cam02
             try
             {
                 List<DisplayResult> results = JsonConvert.DeserializeObject<List<DisplayResult>>(Results);
-                AddDefectsGraphics(lastRecord, results);
-
+               
                 Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
                 foreach (ICogRecord rcd in record.SubRecords)
                 {
@@ -61,18 +62,47 @@ namespace TE1.Cam02
                         labels.Add(label.Text, label);
                     }
                 }
-                foreach (DisplayResult r in results.Where(r => r.KeyName.StartsWith("THK")).ToList())
+               
+
+                foreach (DisplayResult r in results.ToList())
                 {
-                    String name = r.KeyName.Replace("THK", "");
+                    Debug.WriteLine($"{r.KeyName}");
+                    String name = r.KeyName;
+
+                    if (r.Color == CogColorConstants.Red && name.StartsWith("H")) 
+                        name = name.Substring(0, 3);
+
                     if (labels.ContainsKey(name))
                     {
                         CogGraphicLabel label = labels[name];
-                        label.Text = $"{name}: {r.Display}";
+                        label.Text = $"{name}";
                         label.Color = r.Color;
-                        label.X += 200;
                         label.Alignment = CogGraphicLabelAlignmentConstants.BaselineLeft;
                     }
                 }
+                //List<DisplayResult> results = JsonConvert.DeserializeObject<List<DisplayResult>>(Results);
+                ////AddDefectsGraphics(lastRecord, results);
+
+                //Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
+                //foreach (ICogRecord rcd in record.SubRecords)
+                //{
+                //    //Debug.WriteLine($"{rcd.ContentType} / {rcd.Content} / {rcd.RecordKey} / {rcd.Annotation}");
+                //    if (rcd.ContentType == typeof(CogGraphicCollection))
+                //    {
+                //        CogGraphicCollection cgc = rcd.Content as CogGraphicCollection;
+
+                //        //CogGraphicLabel label = rcd.Content as CogGraphicLabel;
+                //        //labels.Add(label.Text, label);
+                //    }
+                //}
+                //CogToolBlock DetectTools = GetTool("DetectTools") as CogToolBlock;
+                //foreach (DisplayResult r in results.Where(r => r.KeyName.StartsWith("T")).ToList())
+                //{
+                //    String name = $"{r.KeyName}label";
+                //    CogCreateGraphicLabelTool tool = GetTool(DetectTools, name) as CogCreateGraphicLabelTool;
+
+                //    Debug.WriteLine($"{r.KeyName} => {r.Color}");
+                //}
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             finally { Results = String.Empty; }
@@ -196,7 +226,8 @@ namespace TE1.Cam02
                 LineV.X = p.X;
                 LineV.Y = p.Y;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.WriteLine(ex.Message, "SetOriginX Exception");
             }
         }
@@ -221,7 +252,8 @@ namespace TE1.Cam02
                 Output("CenterY", DatumPoint.Y);
                 Output("Rotation", Transform.Rotation);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.WriteLine(ex.Message, "SetOriginY Exception");
             }
         }
@@ -256,11 +288,11 @@ namespace TE1.Cam02
                 base.StartedRun();
                 InitTools();
             }
-            catch(Exception ee) 
+            catch (Exception ee)
             {
                 Debug.WriteLine(ee.Message);
             }
-        
+
         }
 
         public override void FinistedRun()
@@ -271,7 +303,7 @@ namespace TE1.Cam02
                 CalResults();
             }
             catch (Exception ee)
-            { 
+            {
                 Debug.WriteLine($"{ee.Message}");
             }
         }
@@ -290,6 +322,8 @@ namespace TE1.Cam02
                     CogFindCircleTool tool;
                     CogBlobTool blobTool;
                     CogFindCircleTool BurrTool;
+                    CogCreateGraphicLabelTool label;
+                    String labelToolName = $"{item.Key}label";
 
                     if (ToolBlock.Tools.Contains(item.Key)) tool = GetTool(item.Key) as CogFindCircleTool;
                     else
@@ -317,11 +351,25 @@ namespace TE1.Cam02
                         }
                         SetBurr(BurrTool, item.Value);
                     }
+
+                    if (ToolBlock.Tools.Contains(labelToolName)) label = GetTool(labelToolName) as CogCreateGraphicLabelTool;
+                    else
+                    {
+                        label = new CogCreateGraphicLabelTool();
+                        label.Name = labelToolName;
+                        this.ToolBlock.Tools.Add(label);
+                    }
+
+                    SetLabel(label, item.Value);
                 }
                 if (item.Value.InsType == InsType.R) SetRectangle(GetTool(item.Key) as CogToolBlock, item.Value);
                 else if (item.Value.InsType == InsType.X || item.Value.InsType == InsType.Y)
                 {
+
                     CogCaliperTool tool;
+                    CogCreateGraphicLabelTool label;
+                    String labelToolName = $"{item.Key}label";
+
                     if (ToolBlock.Tools.Contains(item.Key)) tool = GetTool(item.Key) as CogCaliperTool;
                     else
                     {
@@ -329,7 +377,18 @@ namespace TE1.Cam02
                         tool.Name = item.Key;
                         this.ToolBlock.Tools.Add(tool);
                     }
+
                     SetCaliper(tool, item.Value);
+
+                    if (ToolBlock.Tools.Contains(labelToolName)) label = GetTool(labelToolName) as CogCreateGraphicLabelTool;
+                    else
+                    {
+                        label = new CogCreateGraphicLabelTool();
+                        label.Name = labelToolName;
+                        this.ToolBlock.Tools.Add(label);
+                    }
+
+                    SetLabel(label, item.Value);
                 }
             }
         }
@@ -425,6 +484,19 @@ namespace TE1.Cam02
 
             tool.RunParams.NumCalipers = 20;
 
+        }
+
+        internal virtual void SetLabel(CogCreateGraphicLabelTool Labeltool, InsItem p)
+        {
+            Double x = -p.SetY / CalibX;
+            Double y = -p.SetX / CalibY;
+
+            Labeltool.InputImage = this.InputImage;
+            Labeltool.InputGraphicLabel.Text = Labeltool.Name.Replace("label", "");
+            Labeltool.InputGraphicLabel.X = x;
+            Labeltool.InputGraphicLabel.Y = y;
+            Labeltool.InputGraphicLabel.Font = new Font("맑은 고딕", 8, FontStyle.Bold);
+            Labeltool.OutputColor = CogColorConstants.Green;
         }
 
         internal virtual void SetCaliper(CogCaliperTool tool, InsItem p)
