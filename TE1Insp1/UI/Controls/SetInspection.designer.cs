@@ -67,7 +67,10 @@ namespace TE1.UI.Controls
             this.ｅ교정 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.col마진값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col측정결과 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col마스터값 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col마스터공차 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col검사여부 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col중요검사포인트 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col변수명칭 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col카메라여부 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col결과부호 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -89,9 +92,8 @@ namespace TE1.UI.Controls
             this.b분류설정 = new DevExpress.XtraEditors.PopupContainerEdit();
             this.popupContainerControl1 = new DevExpress.XtraEditors.PopupContainerControl();
             this.e분류자료 = new TE1.UI.Controls.Categorys();
-            this.col마스터값 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.col마스터공차 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.col중요검사포인트 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemToggleSwitch1 = new DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch();
+            this.repositoryItemToggleSwitch2 = new DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).BeginInit();
@@ -107,6 +109,8 @@ namespace TE1.UI.Controls
             ((System.ComponentModel.ISupportInitialize)(this.b분류설정.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.popupContainerControl1)).BeginInit();
             this.popupContainerControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch2)).BeginInit();
             this.SuspendLayout();
             // 
             // GridControl1
@@ -118,7 +122,9 @@ namespace TE1.UI.Controls
             this.GridControl1.Name = "GridControl1";
             this.GridControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.ｅ교정,
-            this.e분류});
+            this.e분류,
+            this.repositoryItemToggleSwitch1,
+            this.repositoryItemToggleSwitch2});
             this.GridControl1.Size = new System.Drawing.Size(1442, 729);
             this.GridControl1.TabIndex = 0;
             this.GridControl1.UseDirectXPaint = DevExpress.Utils.DefaultBoolean.True;
@@ -395,14 +401,43 @@ namespace TE1.UI.Controls
             this.col측정결과.Visible = true;
             this.col측정결과.VisibleIndex = 18;
             // 
+            // col마스터값
+            // 
+            this.col마스터값.AppearanceHeader.Options.UseTextOptions = true;
+            this.col마스터값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col마스터값.FieldName = "마스터값";
+            this.col마스터값.Name = "col마스터값";
+            this.col마스터값.Visible = true;
+            this.col마스터값.VisibleIndex = 19;
+            // 
+            // col마스터공차
+            // 
+            this.col마스터공차.AppearanceHeader.Options.UseTextOptions = true;
+            this.col마스터공차.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col마스터공차.FieldName = "마스터공차";
+            this.col마스터공차.Name = "col마스터공차";
+            this.col마스터공차.Visible = true;
+            this.col마스터공차.VisibleIndex = 20;
+            // 
             // col검사여부
             // 
             this.col검사여부.AppearanceHeader.Options.UseTextOptions = true;
             this.col검사여부.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col검사여부.ColumnEdit = this.repositoryItemToggleSwitch2;
             this.col검사여부.FieldName = "검사여부";
             this.col검사여부.Name = "col검사여부";
             this.col검사여부.Visible = true;
             this.col검사여부.VisibleIndex = 21;
+            // 
+            // col중요검사포인트
+            // 
+            this.col중요검사포인트.AppearanceHeader.Options.UseTextOptions = true;
+            this.col중요검사포인트.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col중요검사포인트.ColumnEdit = this.repositoryItemToggleSwitch1;
+            this.col중요검사포인트.FieldName = "중요검사포인트";
+            this.col중요검사포인트.Name = "col중요검사포인트";
+            this.col중요검사포인트.Visible = true;
+            this.col중요검사포인트.VisibleIndex = 22;
             // 
             // col변수명칭
             // 
@@ -640,32 +675,19 @@ namespace TE1.UI.Controls
             this.e분류자료.Size = new System.Drawing.Size(500, 400);
             this.e분류자료.TabIndex = 0;
             // 
-            // col마스터값
+            // repositoryItemToggleSwitch1
             // 
-            this.col마스터값.AppearanceHeader.Options.UseTextOptions = true;
-            this.col마스터값.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col마스터값.FieldName = "마스터값";
-            this.col마스터값.Name = "col마스터값";
-            this.col마스터값.Visible = true;
-            this.col마스터값.VisibleIndex = 19;
+            this.repositoryItemToggleSwitch1.AutoHeight = false;
+            this.repositoryItemToggleSwitch1.Name = "repositoryItemToggleSwitch1";
+            this.repositoryItemToggleSwitch1.OffText = "Off";
+            this.repositoryItemToggleSwitch1.OnText = "On";
             // 
-            // col마스터공차
+            // repositoryItemToggleSwitch2
             // 
-            this.col마스터공차.AppearanceHeader.Options.UseTextOptions = true;
-            this.col마스터공차.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col마스터공차.FieldName = "마스터공차";
-            this.col마스터공차.Name = "col마스터공차";
-            this.col마스터공차.Visible = true;
-            this.col마스터공차.VisibleIndex = 20;
-            // 
-            // col중요검사포인트
-            // 
-            this.col중요검사포인트.AppearanceHeader.Options.UseTextOptions = true;
-            this.col중요검사포인트.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col중요검사포인트.FieldName = "중요검사포인트";
-            this.col중요검사포인트.Name = "col중요검사포인트";
-            this.col중요검사포인트.Visible = true;
-            this.col중요검사포인트.VisibleIndex = 22;
+            this.repositoryItemToggleSwitch2.AutoHeight = false;
+            this.repositoryItemToggleSwitch2.Name = "repositoryItemToggleSwitch2";
+            this.repositoryItemToggleSwitch2.OffText = "Off";
+            this.repositoryItemToggleSwitch2.OnText = "On";
             // 
             // SetInspection
             // 
@@ -695,6 +717,8 @@ namespace TE1.UI.Controls
             ((System.ComponentModel.ISupportInitialize)(this.b분류설정.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.popupContainerControl1)).EndInit();
             this.popupContainerControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -753,5 +777,7 @@ namespace TE1.UI.Controls
         private DevExpress.XtraGrid.Columns.GridColumn col마스터값;
         private DevExpress.XtraGrid.Columns.GridColumn col마스터공차;
         private DevExpress.XtraGrid.Columns.GridColumn col중요검사포인트;
+        private DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch repositoryItemToggleSwitch2;
+        private DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch repositoryItemToggleSwitch1;
     }
 }

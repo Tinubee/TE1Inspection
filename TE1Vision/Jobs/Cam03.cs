@@ -51,28 +51,34 @@ namespace TE1.Cam03
                 //Debug.WriteLine($"{results.}");
                 //AddDefectsGraphics(lastRecord, results);
                 Dictionary<String, CogRectangleAffine> regions = new Dictionary<String, CogRectangleAffine>();
+                Dictionary<String, CogGraphicCollection> lines = new Dictionary<string, CogGraphicCollection>();
+                Dictionary<String, CogPolygon> blobRegions = new Dictionary<string, CogPolygon>();
 
+
+                String t = String.Empty;
                 foreach (ICogRecord rcd in record.SubRecords)
                 {
-                    Debug.WriteLine($"{rcd.ContentType}");
                     if (rcd.ContentType == typeof(ICogGraphicInteractive))
                     {
                         CogRectangleAffine region = rcd.Content as CogRectangleAffine;
-                        Debug.WriteLine($"{region.TipText}");
+                        t = region.TipText;
                         if (region.TipText != "")
                             regions.Add(region.TipText, region);
                     }
+                    if (rcd.ContentType == typeof(CogGraphicCollection))
+                    {
+                        CogGraphicCollection line = rcd.Content as CogGraphicCollection;
+                        if (t != "")
+                            lines.Add(t, line);
+                    }
+                    if (rcd.ContentType == typeof(CogPolygon))
+                    {
+                        CogPolygon blobRegion = rcd.Content as CogPolygon;
+                        if (blobRegion.TipText != "")
+                            blobRegions.Add(blobRegion.TipText, blobRegion);
+                    }
                 }
-                //Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
 
-                //foreach (ICogRecord rcd in record.SubRecords)
-                //{
-                //    if (rcd.ContentType == typeof(CogGraphicLabel))
-                //    {
-                //        CogGraphicLabel label = rcd.Content as CogGraphicLabel;
-                //        labels.Add(label.Text, label);
-                //    }
-                //}
                 foreach (DisplayResult r in results.Where(r => r.KeyName.StartsWith("M")).ToList())
                 {
                     String name = r.KeyName;
@@ -80,6 +86,26 @@ namespace TE1.Cam03
                     {
                         CogRectangleAffine region = regions[name];
                         region.Color = r.Color;
+                        region.Visible = r.Color == CogColorConstants.Red ? true : false;
+                    }
+                    if (lines.ContainsKey(name))
+                    {
+                        CogGraphicCollection line = lines[name];
+                        if (line.Count > 0)
+                        {
+                            line[0].Visible = r.Color == CogColorConstants.Red ? false : true;
+                        }
+                    }
+                }
+
+                foreach (DisplayResult r in results.Where(r => r.KeyName.StartsWith("ImSheet")).ToList())
+                {
+                    String name = r.KeyName.Substring(0,11);
+                    if (blobRegions.ContainsKey(name))
+                    {
+                        CogPolygon region = blobRegions[name];
+                        region.Color = r.Color;
+                        //region.Visible = r.Color == CogColorConstants.Red ? true : false;
                     }
                 }
             }
@@ -315,6 +341,12 @@ namespace TE1.Cam03
 
         internal virtual void SetBlob(CogBlobTool tool, InsItem p)
         {
+            CogPolygon region = tool.Region as CogPolygon;
+            if (region != null) 
+            {
+                region.TipText = tool.Name;
+                tool.Region = region;
+            }
             //Double x = -p.SetY / CalibX;
             //Double y = -p.SetX / CalibY;
             //Double r = p.R / CalibY;
@@ -423,6 +455,7 @@ namespace TE1.Cam03
             Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
             foreach (var item in items)
             {
+                //Debug.WriteLine(item.Key);
                 if (item.Value.InsType == InsType.H)
                 {
                     if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
@@ -473,20 +506,18 @@ namespace TE1.Cam03
                     {
                         CogBlobTool tool = GetTool(item.Key) as CogBlobTool;
                         Int32 count = tool.Results.GetBlobs().Count;
+                        
                         if (count == 0)
                         {
                             results.Add(new Result(item.Key, 0));
                             results.Add(new Result($"{item.Key}Width", 0));
                             results.Add(new Result($"{item.Key}Height", 0));
-                            SetNgRegion(tool);
+                            //SetNgRegion(tool);
                         }
                         else
                         {
                             CogBlobResult b = GetBlob(tool);
                             CogRectangleAffine r = b.GetBoundingBox(CogBlobAxisConstants.SelectedSpace); //X:가로(Width) Y:세로(Height)
-
-                            //Debug.WriteLine($"{item.Key} => {r.SideXLength} / {r.SideYLength}");
-
                             results.Add(new Result(item.Key, count));
                             results.Add(new Result($"{item.Key}Width", r.SideXLength));
                             results.Add(new Result($"{item.Key}Height", r.SideYLength));
@@ -545,15 +576,15 @@ namespace TE1.Cam03
         {
             try
             {
-                //tool.LastRunRecordDiagEnable = CogBlobLastRunRecordDiagConstants.Region;
-                //ICogRecord record = tool.CreateLastRunRecord();
-                //ICogRecord searchRegionRecord = record.SubRecords["InputImage"].SubRecords["Region"];
-                //if (searchRegionRecord.Content is ICogGraphicInteractive searchRegion)
-                //{
-                //    CogRectangleAffine rectangle = searchRegion as CogRectangleAffine;
-                //    if (rectangle != null)
-                //        rectangle.Color = CogColorConstants.Red;
-                //}
+                tool.LastRunRecordDiagEnable = CogBlobLastRunRecordDiagConstants.Region;
+                ICogRecord record = tool.CreateLastRunRecord();
+                ICogRecord searchRegionRecord = record.SubRecords["InputImage"].SubRecords["Region"];
+                if (searchRegionRecord.Content is ICogGraphicInteractive searchRegion)
+                {
+                    CogPolygon polygon = searchRegion as CogPolygon;
+                    if (polygon != null)
+                        polygon.Color = CogColorConstants.Red;
+                }
             }
             catch (Exception ex)
             {

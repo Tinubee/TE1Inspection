@@ -65,6 +65,8 @@
             this.col가로길이 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col세로길이 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col회전각도 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col중요검사포인트 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemToggleSwitch1 = new DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind검사정보)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
@@ -77,6 +79,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.GridControl2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind표면검사)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch1)).BeginInit();
             this.SuspendLayout();
             // 
             // barManager1
@@ -131,7 +134,8 @@
             this.GridControl1.MainView = this.GridView1;
             this.GridControl1.Name = "GridControl1";
             this.GridControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
-            this.e분류});
+            this.e분류,
+            this.repositoryItemToggleSwitch1});
             this.GridControl1.Size = new System.Drawing.Size(651, 652);
             this.GridControl1.TabIndex = 4;
             this.GridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -159,7 +163,8 @@
             this.col최대값,
             this.col보정값,
             this.col결과값,
-            this.col측정결과});
+            this.col측정결과,
+            this.col중요검사포인트});
             this.GridView1.FooterPanelHeight = 21;
             this.GridView1.GridControl = this.GridControl1;
             this.GridView1.GroupRowHeight = 21;
@@ -188,6 +193,8 @@
             this.col검사분류.ColumnEdit = this.e분류;
             this.col검사분류.FieldName = "검사분류";
             this.col검사분류.Name = "col검사분류";
+            this.col검사분류.Visible = true;
+            this.col검사분류.VisibleIndex = 0;
             // 
             // e분류
             // 
@@ -210,7 +217,7 @@
             this.col검사명칭.FieldName = "검사명칭";
             this.col검사명칭.Name = "col검사명칭";
             this.col검사명칭.Visible = true;
-            this.col검사명칭.VisibleIndex = 0;
+            this.col검사명칭.VisibleIndex = 1;
             // 
             // col검사그룹
             // 
@@ -236,7 +243,7 @@
             this.col측정단위.FieldName = "측정단위";
             this.col측정단위.Name = "col측정단위";
             this.col측정단위.Visible = true;
-            this.col측정단위.VisibleIndex = 1;
+            this.col측정단위.VisibleIndex = 2;
             // 
             // col측정값
             // 
@@ -258,7 +265,7 @@
             this.col기준값.FieldName = "기준값";
             this.col기준값.Name = "col기준값";
             this.col기준값.Visible = true;
-            this.col기준값.VisibleIndex = 3;
+            this.col기준값.VisibleIndex = 4;
             // 
             // col최소값
             // 
@@ -270,7 +277,7 @@
             this.col최소값.FieldName = "최소값";
             this.col최소값.Name = "col최소값";
             this.col최소값.Visible = true;
-            this.col최소값.VisibleIndex = 2;
+            this.col최소값.VisibleIndex = 3;
             // 
             // col최대값
             // 
@@ -282,7 +289,7 @@
             this.col최대값.FieldName = "최대값";
             this.col최대값.Name = "col최대값";
             this.col최대값.Visible = true;
-            this.col최대값.VisibleIndex = 4;
+            this.col최대값.VisibleIndex = 5;
             // 
             // col보정값
             // 
@@ -304,7 +311,7 @@
             this.col결과값.FieldName = "결과값";
             this.col결과값.Name = "col결과값";
             this.col결과값.Visible = true;
-            this.col결과값.VisibleIndex = 5;
+            this.col결과값.VisibleIndex = 6;
             // 
             // col측정결과
             // 
@@ -316,7 +323,7 @@
             this.col측정결과.FieldName = "측정결과";
             this.col측정결과.Name = "col측정결과";
             this.col측정결과.Visible = true;
-            this.col측정결과.VisibleIndex = 6;
+            this.col측정결과.VisibleIndex = 7;
             // 
             // xtraTabControl1
             // 
@@ -472,6 +479,23 @@
             this.col회전각도.FieldName = "회전각도";
             this.col회전각도.Name = "col회전각도";
             // 
+            // col중요검사포인트
+            // 
+            this.col중요검사포인트.AppearanceHeader.Options.UseTextOptions = true;
+            this.col중요검사포인트.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col중요검사포인트.ColumnEdit = this.repositoryItemToggleSwitch1;
+            this.col중요검사포인트.FieldName = "중요검사포인트";
+            this.col중요검사포인트.Name = "col중요검사포인트";
+            this.col중요검사포인트.Visible = true;
+            this.col중요검사포인트.VisibleIndex = 8;
+            // 
+            // repositoryItemToggleSwitch1
+            // 
+            this.repositoryItemToggleSwitch1.AutoHeight = false;
+            this.repositoryItemToggleSwitch1.Name = "repositoryItemToggleSwitch1";
+            this.repositoryItemToggleSwitch1.OffText = "Off";
+            this.repositoryItemToggleSwitch1.OnText = "On";
+            // 
             // ResultGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -495,6 +519,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.GridControl2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind표면검사)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -538,5 +563,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn col세로길이;
         private DevExpress.XtraGrid.Columns.GridColumn col회전각도;
         private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit e분류;
+        private DevExpress.XtraGrid.Columns.GridColumn col중요검사포인트;
+        private DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch repositoryItemToggleSwitch1;
     }
 }

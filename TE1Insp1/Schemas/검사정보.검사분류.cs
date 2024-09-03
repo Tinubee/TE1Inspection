@@ -21,6 +21,8 @@ namespace TE1.Schemas
         public String 라벨 { get; set; } = String.Empty;
         [JsonProperty("Group"), Translation("Group", "그룹")]
         public 검사그룹 그룹 { get; set; } = 검사그룹.없음;
+        [JsonProperty("Show"), Translation("Show", "표시")]
+        public Boolean 중요포인트표시  { get; set; } = false;
 
         public void Set(분류정보 정보)
         {
@@ -28,6 +30,7 @@ namespace TE1.Schemas
             명칭 = 정보.명칭;
             그룹 = 정보.그룹;
             라벨 = 정보.라벨;
+            중요포인트표시 = 정보.중요포인트표시;
         }
     }
 
@@ -88,11 +91,24 @@ namespace TE1.Schemas
             if (!Utils.WriteAllText(저장파일, JsonConvert.SerializeObject(this, Utils.JsonSetting())))
                 Global.오류로그(로그영역, "Save", "Saving failed.", true);
             else Global.정보로그(로그영역, "Save", "Saved.", true);
+
+            foreach (분류정보 item in this)
+            {
+                List<검사정보> 정보들 = Global.모델자료.선택모델.검사설정.GetItem(item.코드);
+                if (item.중요포인트표시)
+                {
+                    foreach (검사정보 정보 in 정보들)
+                        정보.중요검사포인트 = true;
+                }
+                else
+                {
+                    foreach (검사정보 정보 in 정보들)
+                        정보.중요검사포인트 = false;
+                }
+            }
         }
 
         public 분류정보 GetItem(Int32 코드) => this.Where(e => e.코드 == 코드).FirstOrDefault();
-
         public List<분류정보> GetItemList(Int32 코드) => this.Where(e => e.코드 == 코드).ToList();
-        //public 분류정보 GetName(Int32 코드) => this.Where(e => e.코드 == 코드);
     }
 }

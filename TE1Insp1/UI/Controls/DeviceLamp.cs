@@ -27,6 +27,7 @@ namespace TE1.UI.Controls
             this.카메라1 = new 장치상태(this.e카메라1);
             this.카메라2 = new 장치상태(this.e카메라2);
             this.카메라3 = new 장치상태(this.e카메라3);
+            Global.피씨통신.통신상태알림 += 통신상태알림;
             this.통신상태알림();
         }
 

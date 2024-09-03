@@ -54,6 +54,7 @@ namespace TE1.Schemas
                 Global.장치상태.자동수동 = 정보.자동수동;
                 Global.장치상태.시작정지 = 정보.시작정지;
                 동작상태알림?.Invoke();
+                //통신상태알림?.Invoke();
             }
             return true;
         }

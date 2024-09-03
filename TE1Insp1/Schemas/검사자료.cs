@@ -39,6 +39,11 @@ namespace TE1.Schemas
             //    Global.오류로그("검사자료", "검사자료", $"{ex.Message}", true);
             //}
         }
+        
+        //public void SetFilter()
+        //{
+
+        //}
 
         public Boolean Close() => true;
 

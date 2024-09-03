@@ -43,7 +43,6 @@ namespace TE1.Cam02
         }
         internal void ModifyRecords(ICogRecord lastRecord)
         {
-            //Debug.WriteLine("Modify Records");
             if (!lastRecord.SubRecords.ContainsKey(ViewerRecodName)) return;
             ICogRecord record = lastRecord.SubRecords[ViewerRecodName];
 
@@ -62,11 +61,9 @@ namespace TE1.Cam02
                         labels.Add(label.Text, label);
                     }
                 }
-               
 
                 foreach (DisplayResult r in results.ToList())
                 {
-                    Debug.WriteLine($"{r.KeyName}");
                     String name = r.KeyName;
 
                     if (r.Color == CogColorConstants.Red && name.StartsWith("H")) 
@@ -80,29 +77,6 @@ namespace TE1.Cam02
                         label.Alignment = CogGraphicLabelAlignmentConstants.BaselineLeft;
                     }
                 }
-                //List<DisplayResult> results = JsonConvert.DeserializeObject<List<DisplayResult>>(Results);
-                ////AddDefectsGraphics(lastRecord, results);
-
-                //Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
-                //foreach (ICogRecord rcd in record.SubRecords)
-                //{
-                //    //Debug.WriteLine($"{rcd.ContentType} / {rcd.Content} / {rcd.RecordKey} / {rcd.Annotation}");
-                //    if (rcd.ContentType == typeof(CogGraphicCollection))
-                //    {
-                //        CogGraphicCollection cgc = rcd.Content as CogGraphicCollection;
-
-                //        //CogGraphicLabel label = rcd.Content as CogGraphicLabel;
-                //        //labels.Add(label.Text, label);
-                //    }
-                //}
-                //CogToolBlock DetectTools = GetTool("DetectTools") as CogToolBlock;
-                //foreach (DisplayResult r in results.Where(r => r.KeyName.StartsWith("T")).ToList())
-                //{
-                //    String name = $"{r.KeyName}label";
-                //    CogCreateGraphicLabelTool tool = GetTool(DetectTools, name) as CogCreateGraphicLabelTool;
-
-                //    Debug.WriteLine($"{r.KeyName} => {r.Color}");
-                //}
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             finally { Results = String.Empty; }
@@ -128,17 +102,7 @@ namespace TE1.Cam02
             base.FinistedRun();
             //Debug.WriteLine($"FinistedRun");
         }
-
-
-        //public override void AfterToolRun(ICogTool tool, CogToolResultConstants result)
-        //{
-        //    base.AfterToolRun(tool, result);
-        //    if (tool == LeftAffineImage) CopyLeft.InputImage = LeftAffineImage.OutputImage;
-        //    else if (tool == RightAffineImage) CopyRight.InputImage = RightAffineImage.OutputImage;
-
-        //    Debug.WriteLine($"AfterToolRun => {tool.Name}");
-        //}
-
+        
         public override void StartedRun()
         {
             base.StartedRun();
@@ -196,7 +160,6 @@ namespace TE1.Cam02
             {
                 Debug.WriteLine(ex.Message, "AfterToolRun Exception");
             }
-
         }
 
         public override void FinistedRun()

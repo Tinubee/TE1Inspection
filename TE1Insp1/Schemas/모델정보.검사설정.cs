@@ -103,5 +103,8 @@ namespace TE1.Schemas
         public 검사정보 GetItem(검사항목 항목) => this.Where(e => e.검사항목 == 항목).FirstOrDefault();
 
         public 검사정보 GetItem(String 항목) => this.Where(e => e.검사명칭 == 항목).FirstOrDefault();
+
+        public List<검사정보> GetItem(Int32 분류) => this.Where(e => e.검사분류 == 분류).ToList();
     }
 }
+

@@ -63,8 +63,11 @@ namespace TE1.UI.Controls
         {
             //if (this.Loading) return;
 
-            //GridView view = sender as GridView;
-            //List<검사항목> 필터리스트 = new List<검사항목>();
+            GridView view = sender as GridView;
+            List<검사항목> 필터리스트 = new List<검사항목>();
+           
+            //Debug.WriteLine($"{view.ActiveFilterString}");
+
 
             //for (int i = 0; i < view.RowCount; i++)
             //{

@@ -35,7 +35,7 @@ namespace TE1.UI.Controls
             if (this.RunType == ViewTypes.Auto)
             {
                 Global.검사자료.검사완료알림 += 검사완료알림;
-                //검사완료알림(??);
+                검사완료알림(Global.검사자료.현재검사찾기());
             }
             this.e큐알코드.ButtonClick += (object sender, ButtonPressedEventArgs e) => Clipboard.SetText(this.e큐알코드.Text);
         }

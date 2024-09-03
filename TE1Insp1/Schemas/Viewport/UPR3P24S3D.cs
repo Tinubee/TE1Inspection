@@ -187,12 +187,10 @@ namespace TE1.Schemas
             foreach (Base3D 항목 in InspItems)
             {
                 검사정보 정보 = 결과.GetItem(항목.Type);
+                항목.RemoveItems(Children);
+                if (정보.중요검사포인트 || 정보.측정결과 != 결과구분.OK)
+                    Add(항목);
 
-                //if (정보.중요검사포인트 == false) 항목.RemoveItems(Children);
-                //else
-                //{
-                //항목.RemoveItems(Children);
-                //Add(항목);
                 if (정보 == null)
                 {
                     항목.Draw(항목, Decimal.MinValue, 결과구분.PS);

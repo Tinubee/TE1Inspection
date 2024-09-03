@@ -47,7 +47,7 @@ namespace TE1.Schemas
         public const String Root = "TE1";
         private IMqttClient Client = null;
         private Timer Worker;
-
+        public event Global.BaseEvent 통신상태알림;
         public void Init()
         {
             서버주소 = Global.환경설정.서버주소;
@@ -72,6 +72,8 @@ namespace TE1.Schemas
                 try { Client.ConnectAsync(options, token.Token).Wait(); }
                 catch (Exception ex) { Debug.WriteLine(ex.Message, "Connection"); }
             }
+
+            통신상태알림?.Invoke();   
             return 연결여부;
         }
 

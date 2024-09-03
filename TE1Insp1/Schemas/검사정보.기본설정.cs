@@ -245,6 +245,8 @@ namespace TE1.Schemas
         public 검사정보 GetItem(장치구분 장치, String name) => 검사내역.Where(e => e.검사장치 == 장치 && e.변수명칭 == name).FirstOrDefault();
         public 검사정보 GetItem(검사항목 항목) => 검사내역.Where(e => e.검사항목 == 항목).FirstOrDefault();
 
+        //public List<검사정보> GetItem(Int32 분류) => 검사내역.Where(e => e.검사분류 == 분류).ToList();
+
         private String[] AppearanceFields = new String[] { nameof(측정결과), nameof(치수결과), nameof(외관결과) };
         public void SetAppearance(DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
         {
@@ -611,6 +613,10 @@ namespace TE1.Schemas
             this.X = InsItems.GetItem(this.검사명칭).X;
             this.Y = InsItems.GetItem(this.검사명칭).Y;
 
+            //Debug.WriteLine($"{this.검사항목} => {this.검사분류} / {Global.분류자료.GetItem(this.검사분류).명칭}");
+
+            //this.중요검사포인트 = Global.분류자료.GetItem(this.검사분류).중요포인트표시;
+
             //this.중요검사포인트 = false;
 
             //if (this.검사명칭.StartsWith("M"))
@@ -643,6 +649,7 @@ namespace TE1.Schemas
             this.측정값 = 0;
             this.결과값 = 0;
             this.측정결과 = 결과구분.WA;
+            //this.검사분류 = 정보.검사분류;
             this.Init();
             return this;
         }
