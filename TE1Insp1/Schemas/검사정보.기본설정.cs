@@ -303,23 +303,27 @@ namespace TE1.Schemas
                     }
                 }
             }
-
-            //Debug.WriteLine($"{검사.검사명칭} => {result} / {검사.보정값}");
             if (검사.검사명칭.StartsWith("T"))
-            {
                 result = Math.Abs(result) - Math.Abs(검사.보정값);
-                //result += 검사.보정값;
-            }
             else if (검사.검사명칭.StartsWith("M"))
-            {
                 result = Math.Abs(result) - Math.Abs(검사.보정값);
-            }
             else
                 result += 검사.보정값;
 
             result *= 검사.결과부호;
 
-            Boolean r = result >= 검사.최소값 && result <= 검사.최대값;
+
+            Boolean r = false;
+            if (Global.장치상태.마스터모드)
+            {
+                Decimal 최소값 = 검사.마스터값 - 검사.마스터공차;
+                Decimal 최대값 = 검사.마스터값 + 검사.마스터공차;
+
+                r = result >= 최소값 && result <= 최대값;
+            }
+            else
+                 r = result >= 검사.최소값 && result <= 검사.최대값;
+
             if (Global.환경설정.VIP모드 && (검사.검사명칭.StartsWith("M") || 검사.검사명칭.StartsWith("B")))
             {
                 if (r)
@@ -338,8 +342,7 @@ namespace TE1.Schemas
                         결과값 = 검사.최소값 + Convert.ToDecimal(offset);
                     else
                         결과값 = 검사.최대값 - Convert.ToDecimal(offset);
-                    //결과값 = result;
-                    Debug.WriteLine($"검사항목[{검사.검사항목}] VIP모드 실행 => {결과값}");
+
                     측정값 = (Decimal)Math.Round(결과값, Global.환경설정.결과자릿수);
                     return true;
                 }
@@ -391,8 +394,6 @@ namespace TE1.Schemas
                 return 검사;
             }
 
-            //Debug.WriteLine($"{검사.검사항목} => {value}");
-
             Boolean ok = SetResultValue(검사, value, out Decimal 결과값, out Decimal 측정값);
             검사.측정값 = 측정값;
             검사.결과값 = 결과값;
@@ -406,8 +407,20 @@ namespace TE1.Schemas
             결과값 = 0;
             측정값 = 0;
 
-            String xStr = 검사.검사명칭.StartsWith("B") ? 검사.검사명칭.Substring(0, 2) + "X" : 검사.검사명칭.Substring(0, 3) + "X";
-            String yStr = 검사.검사명칭.StartsWith("B") ? 검사.검사명칭.Substring(0, 2) + "Y" : 검사.검사명칭.Substring(0, 3) + "Y";
+            //Debug.WriteLine($"{검사.검사명칭.Substring(0, 6)}");
+            String xStr = String.Empty;
+            String yStr = String.Empty;
+            if (검사.검사명칭.StartsWith("B"))
+            {
+                //BoltTop, BoltBottom
+                xStr = 검사.검사명칭.Contains("Top") ? 검사.검사명칭.Substring(0, 7) + "X" : 검사.검사명칭.Substring(0, 10) + "X";
+                yStr = 검사.검사명칭.Contains("Top") ? 검사.검사명칭.Substring(0, 7) + "Y" : 검사.검사명칭.Substring(0, 10) + "Y";
+            }
+            else
+            {
+                xStr = 검사.검사명칭.Substring(0, 3) + "X";
+                yStr = 검사.검사명칭.Substring(0, 3) + "Y";
+            }
 
             검사정보 정보X = 검사내역.Where(e => e.검사항목.ToString() == xStr).FirstOrDefault();
             검사정보 정보Y = 검사내역.Where(e => e.검사항목.ToString() == yStr).FirstOrDefault();
@@ -418,7 +431,16 @@ namespace TE1.Schemas
             결과값 = Convert.ToDecimal(Math.Sqrt(편차X * 편차X + 편차Y * 편차Y)) * 2;
             측정값 = 결과값;
 
-            Boolean r = 결과값 >= 검사.최소값 && 결과값 <= 검사.최대값;
+            Boolean r = false;
+
+            if (Global.장치상태.마스터모드)
+            {
+                Decimal 최소값 = 검사.마스터값 - 검사.마스터공차;
+                Decimal 최대값 = 검사.마스터값 + 검사.마스터공차;
+                r = 결과값 >= 최소값 && 결과값 <= 최대값;
+            }
+            else
+                r = 결과값 >= 검사.최소값 && 결과값 <= 검사.최대값;
 
             return r;
         }
@@ -434,13 +456,6 @@ namespace TE1.Schemas
                 foreach (Result result in results)
                 {
                     검사정보 결과 = SetResult(result.K, result.V);
-                    //if(결과 != null)
-                    //{
-                    //    if (결과.측정결과 != 결과구분.OK)
-                    //    {
-                    //        Debug.WriteLine($"{result.K}");
-                    //    }
-                    //}
                 }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message, "Inspection"); }
@@ -634,6 +649,7 @@ namespace TE1.Schemas
 
         public 검사정보 Set(검사정보 정보, DateTime 일시)
         {
+            //Debug.WriteLine($"{정보.검사명칭} => {정보.isShow}");
             if (정보 != null)
             {
                 foreach (PropertyInfo p in typeof(검사정보).GetProperties())
@@ -659,8 +675,6 @@ namespace TE1.Schemas
             try
             {
                 InsItem item = 정보.Attr.검사정보;
-                //Debug.WriteLine($"{정보.검사명칭}");
-                //if (this.측정값 == 0) return false;
                 if (item.InsType == InsType.X || item.InsType == InsType.Y || item.InsType == InsType.S)
                 {
                     if (item.InsType == InsType.S)
@@ -670,11 +684,6 @@ namespace TE1.Schemas
                         Decimal 적용값 = check == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
                         this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
                         this.보정값 = check == InsType.X ? Convert.ToDecimal(item.X) : Convert.ToDecimal(item.Y);
-
-                        //if (정보.검사명칭.Contains("X1") || 정보.검사명칭.Contains("Y4"))
-                        //    this.Attr.결과부호 = -1;
-                        //else
-                        //    this.Attr.결과부호 = 1;
                     }
                     else
                     {
@@ -688,7 +697,6 @@ namespace TE1.Schemas
                             if (item.InsType == InsType.Y)
                             {
                                 Decimal 적용값 = this.Y < 0 ? (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 - (Decimal)63) : (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 + (Decimal)63);
-                                //Debug.WriteLine($"{적용값}");
                                 this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
                                 this.보정값 = Convert.ToDecimal(item.Y);
                             }

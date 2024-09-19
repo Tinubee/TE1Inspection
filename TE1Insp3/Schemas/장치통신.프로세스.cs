@@ -56,13 +56,19 @@ namespace TE1.Schemas
             if (this.입출자료.Changed(정보주소.시작정지))
                 Debug.WriteLine($"{Utils.FormatDate(DateTime.Now, "{0:HH:mm:ss.fff}")} => {this.입출자료.Changed(정보주소.시작정지)}", "시작정지");
 
-            if (this.입출자료.Changed(정보주소.자동수동) || this.입출자료.Changed(정보주소.시작정지))
+            if (this.입출자료.Changed(정보주소.자동수동) || this.입출자료.Changed(정보주소.시작정지) || this.입출자료.Changed(정보주소.마스터모드))
             {
                 Global.상태정보.자동수동 = this.자동수동;
                 Global.상태정보.시작정지 = this.시작정지;
+                Global.상태정보.마스터모드 = this.마스터모드;
                 Global.피씨통신.제품상태전송(Global.상태정보);
                 this.동작상태알림?.Invoke();
             }
+
+            //if (this.입출자료.Changed(정보주소.마스터모드))
+            //{
+            //    Debug.WriteLine($"{Utils.FormatDate(DateTime.Now, "{0:HH:mm:ss.fff}")} => {this.입출자료.Changed(정보주소.마스터모드)}", "마스터모드");
+            //}
         }
 
         // 검사위치 변경 확인
@@ -297,7 +303,10 @@ namespace TE1.Schemas
         private void 영상촬영수행()
         {
             if (검사번호확인(정보주소.상부치수, out 검사결과 상부치수, Replys.Yes))
+            {
+                //Global.피씨통신.제품상태전송(Global.상태정보);
                 Global.피씨통신.상부치수전송(상부치수.검사번호);
+            }
             if (검사번호확인(정보주소.하부표면, out 검사결과 하부표면, Replys.Yes))
                 Global.피씨통신.하부표면전송(하부표면.검사번호);
             if (검사번호확인(정보주소.상부표면, out 검사결과 상부표면, Replys.Yes))

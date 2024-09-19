@@ -48,8 +48,6 @@ namespace TE1.Cam03
             try
             {
                 List<DisplayResult> results = JsonConvert.DeserializeObject<List<DisplayResult>>(Results);
-                //Debug.WriteLine($"{results.}");
-                //AddDefectsGraphics(lastRecord, results);
                 Dictionary<String, CogRectangleAffine> regions = new Dictionary<String, CogRectangleAffine>();
                 Dictionary<String, CogGraphicCollection> lines = new Dictionary<string, CogGraphicCollection>();
                 Dictionary<String, CogPolygon> blobRegions = new Dictionary<string, CogPolygon>();
@@ -100,7 +98,7 @@ namespace TE1.Cam03
 
                 foreach (DisplayResult r in results.Where(r => r.KeyName.StartsWith("ImSheet")).ToList())
                 {
-                    String name = r.KeyName.Substring(0,11);
+                    String name = r.KeyName.Substring(0, 11);
                     if (blobRegions.ContainsKey(name))
                     {
                         CogPolygon region = blobRegions[name];
@@ -210,8 +208,16 @@ namespace TE1.Cam03
 
         public override void FinistedRun()
         {
-            base.FinistedRun();
-            CalResults();
+            try
+            {
+                base.FinistedRun();
+                CalResults();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString(), "FinistedRun Cam03");
+            }
+
         }
 
         private Double CenterX => InputImage.Width / 2 - Input<Double>("CenterX");
@@ -219,10 +225,8 @@ namespace TE1.Cam03
         {
             CogCreateLineTool centerV = GetTool("CenterV") as CogCreateLineTool;
             if (centerV != null) centerV.Line.X = CenterX;
-
             //InsItems.LoadMica();  //위치 Setting을 위한 임시 생성.
             Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
-
             foreach (var item in items)
             {
                 if (item.Value.InsType == InsType.H)
@@ -342,7 +346,7 @@ namespace TE1.Cam03
         internal virtual void SetBlob(CogBlobTool tool, InsItem p)
         {
             CogPolygon region = tool.Region as CogPolygon;
-            if (region != null) 
+            if (region != null)
             {
                 region.TipText = tool.Name;
                 tool.Region = region;
@@ -455,7 +459,7 @@ namespace TE1.Cam03
             Dictionary<String, InsItem> items = InsItems.GetItems((Int32)Camera);
             foreach (var item in items)
             {
-                //Debug.WriteLine(item.Key);
+                //Debug.WriteLine($"CalResults => {item.Value}",item.Key);
                 if (item.Value.InsType == InsType.H)
                 {
                     if (CalResult(GetTool(item.Key) as CogFindCircleTool, item.Value, out InsItem r))
@@ -472,7 +476,6 @@ namespace TE1.Cam03
 
                     if (count == 0)
                     {
-
                         results.Add(new Result(item.Key + "X", 0));
                         results.Add(new Result(item.Key + "Y", 0));
                         results.Add(new Result(item.Key + "D", 0));
@@ -506,18 +509,17 @@ namespace TE1.Cam03
                     {
                         CogBlobTool tool = GetTool(item.Key) as CogBlobTool;
                         Int32 count = tool.Results.GetBlobs().Count;
-                        
+
                         if (count == 0)
                         {
                             results.Add(new Result(item.Key, 0));
                             results.Add(new Result($"{item.Key}Width", 0));
                             results.Add(new Result($"{item.Key}Height", 0));
-                            //SetNgRegion(tool);
                         }
                         else
                         {
                             CogBlobResult b = GetBlob(tool);
-                            CogRectangleAffine r = b.GetBoundingBox(CogBlobAxisConstants.SelectedSpace); //X:가로(Width) Y:세로(Height)
+                            CogRectangleAffine r = b.GetBoundingBox(CogBlobAxisConstants.SelectedSpace);
                             results.Add(new Result(item.Key, count));
                             results.Add(new Result($"{item.Key}Width", r.SideXLength));
                             results.Add(new Result($"{item.Key}Height", r.SideYLength));

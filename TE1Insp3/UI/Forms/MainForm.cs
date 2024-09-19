@@ -13,6 +13,7 @@ namespace TE1
         public event Global.BaseEvent 검사항목변경알림테스트;
         private LocalizationMain 번역 = new LocalizationMain();
         private UI.Forms.WaitForm WaitForm;
+        private UI.Forms.StateForm StateForm;
         public MainForm()
         {
             InitializeComponent();
@@ -94,8 +95,29 @@ namespace TE1
             if (Global.환경설정.동작구분 == 동작구분.Live)
                 this.WindowState = FormWindowState.Maximized;
             //this.ShowHideControl();
-        }
 
+            foreach (Screen s in Screen.AllScreens)
+            {
+                Debug.WriteLine(s.Bounds, s.DeviceName);
+                if (s.Primary) continue;
+                ShowStateForm(s);
+            }
+           
+            ShowStateForm(Screen.PrimaryScreen);
+        }
+        private void ShowStateForm(Screen s)
+        {
+            if (this.StateForm != null) return;
+            this.StateForm = new UI.Forms.StateForm() { StartPosition = FormStartPosition.Manual, WindowState = FormWindowState.Maximized };
+            this.StateForm.SetBounds(s.WorkingArea.X, s.WorkingArea.Y, s.WorkingArea.Width, s.WorkingArea.Height);
+            this.StateForm.FormClosed += StateFormClosed;
+            this.StateForm.Show(this);
+        }
+        private void StateFormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.StateForm?.Dispose();
+            this.StateForm = null;
+        }
         private void CloseForm()
         {
             this.e장치설정.Close();

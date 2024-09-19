@@ -45,6 +45,7 @@ namespace TE1
 
             public static Boolean 자동수동 = false;
             public static Boolean 시작정지 = false;
+            public static Boolean 마스터모드 = false;
         }
 
         public static Boolean Init()

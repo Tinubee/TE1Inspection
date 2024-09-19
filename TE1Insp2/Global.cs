@@ -46,6 +46,7 @@ namespace TE1
 
             public static Boolean 자동수동 = false;
             public static Boolean 시작정지 = false;
+            public static Boolean 마스터모드 = false;
         }
 
         public static Boolean Init()
@@ -78,7 +79,7 @@ namespace TE1
                 검사자료.Init();
                 평탄센서.Init();
                 if (!그랩제어.Init()) new Exception("Camera initialization failed.");
-                if (!피씨통신.Open()) new Exception("Unable to connect to server.");
+                //if (!피씨통신.Open()) new Exception("Unable to connect to server.");
                 Global.장치상태.센서 = 평탄센서.Ping();
                 if (!Global.장치상태.센서) new Exception("Unable to connect to sensor device.");
                 비전검사.Init(); // 그랩장치가 먼저 Init 되어야 함
@@ -126,7 +127,10 @@ namespace TE1
             return r;
         }
 
-        public static void Start() { }
+        public static void Start() 
+        {
+            if (!피씨통신.Open()) new Exception("Unable to connect to server.");
+        }
 
         public static void DxLocalization()
         {

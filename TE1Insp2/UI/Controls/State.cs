@@ -114,7 +114,8 @@ namespace TE1.UI.Controls
         private void 동작상태알림()
         {
             if (this.InvokeRequired) { this.BeginInvoke(new Action(동작상태알림)); return; }
-            this.b동작구분.Text = Global.장치상태.자동수동 ? 번역.자동 : 번역.수동;
+            this.b동작구분.Text = Global.장치상태.마스터모드 ? 번역.마스터 : Global.장치상태.자동수동 ? 번역.자동 : 번역.수동;
+            //this.b동작구분.Text = Global.장치상태.자동수동 ? 번역.자동 : 번역.수동;
             this.b동작구분.Appearance.ForeColor = Global.장치상태.시작정지 ? DXSkinColors.ForeColors.Information : DXSkinColors.ForeColors.DisabledText;
         }
 
@@ -155,12 +156,15 @@ namespace TE1.UI.Controls
                 리셋확인,
                 [Translation("Change the inspection model?", "검사모델을 변경하시겠습니까?")]
                 모델변경,
+                [Translation("Master", "마스터")]
+                마스터,
             }
 
             private String GetString(Items item) => Localization.GetString(item);
             public String 자동 => GetString(Items.자동);
             public String 수동 => GetString(Items.수동);
             public String 수량리셋 => GetString(Items.수량리셋);
+            public String 마스터 => GetString(Items.마스터);
             public String 리셋확인 => GetString(Items.리셋확인);
             public String 모델변경 => GetString(Items.모델변경);
             public String 양품갯수 => Localization.GetString(typeof(모델정보).GetProperty(nameof(모델정보.양품갯수)));

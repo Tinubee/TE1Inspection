@@ -25,6 +25,7 @@ namespace TE1.Schemas
 
         private Boolean 상태정보수신(통신자료 자료)
         {
+            Debug.WriteLine("상태정보수신");
             상태정보 정보 = 자료.Get<상태정보>();
             if (정보 == null)
             {
@@ -36,10 +37,11 @@ namespace TE1.Schemas
             else if (Global.모델자료.선택모델.양품갯수 != 정보.양품갯수 || Global.모델자료.선택모델.불량갯수 != 정보.불량갯수)
                 Global.모델자료.수량변경(Global.환경설정.선택모델, 정보.양품갯수, 정보.불량갯수);
 
-            if (Global.장치상태.자동수동 != 정보.자동수동 || Global.장치상태.시작정지 != 정보.시작정지)
+            if (Global.장치상태.자동수동 != 정보.자동수동 || Global.장치상태.시작정지 != 정보.시작정지 || Global.장치상태.마스터모드 != 정보.마스터모드)
             {
                 Global.장치상태.자동수동 = 정보.자동수동;
                 Global.장치상태.시작정지 = 정보.시작정지;
+                Global.장치상태.마스터모드 = 정보.마스터모드;
                 동작상태알림?.Invoke();
             }
             return true;

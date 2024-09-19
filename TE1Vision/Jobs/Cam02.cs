@@ -100,7 +100,6 @@ namespace TE1.Cam02
         public override void FinistedRun()
         {
             base.FinistedRun();
-            //Debug.WriteLine($"FinistedRun");
         }
         
         public override void StartedRun()
@@ -111,13 +110,7 @@ namespace TE1.Cam02
 
         internal virtual void InitTools()
         {
-            //NewImage?.Dispose();
             Input("NewImage", new CogImage8Grey(14200 * 2, 60000));
-            //Debug.WriteLine("InitTools");
-            //CopyLeft.InputImage = LeftAffineImage.OutputImage;
-            //CopyRight.InputImage = RightAffineImage.OutputImage;
-            //CopyLeft.DestinationImage = new CogImage8Grey(14200 * 2, 60000);
-            //CopyRight.DestinationImage = new CogImage8Grey(14200 * 2, 60000);
         }
     }
 

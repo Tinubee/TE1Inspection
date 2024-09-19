@@ -240,6 +240,7 @@ namespace TE1.Schemas
         [ProtoMember(1)]  public Boolean 자동수동 = false;
         [ProtoMember(2)]  public Boolean 시작정지 = false;
         [ProtoMember(3)]  public 모델구분 현재모델 = 모델구분.UPR3P24S;
+        [ProtoMember(4)] public Boolean 마스터모드 = false;
         [ProtoMember(10)] public Int32   양품갯수 = 0;
         [ProtoMember(11)] public Int32   불량갯수 = 0;
 
@@ -247,6 +248,7 @@ namespace TE1.Schemas
         {
             //this.자동수동 = Global.장치통신.자동수동;
             //this.시작정지 = Global.장치통신.시작정지;
+            //this.마스터모드 = Global.장치통신.마스터모드;
             this.현재모델 = Global.환경설정.선택모델;
             this.양품갯수 = Global.모델자료.선택모델.양품갯수;
             this.불량갯수 = Global.모델자료.선택모델.불량갯수;

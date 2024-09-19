@@ -43,6 +43,8 @@ namespace TE1
             public static Boolean 라벨인쇄 => Global.라벨인쇄.연결여부;
             public static Boolean 자동수동 => Global.장치통신.자동수동;
             public static Boolean 시작정지 => Global.장치통신.시작정지;
+
+            public static Boolean 마스터모드 => Global.장치통신.마스터모드;
         }
 
         public static Boolean Init()
@@ -78,7 +80,6 @@ namespace TE1
                 라벨인쇄.Init();
                 if (!장치통신.Open()) new Exception("Unable to connect to PLC.");
                 if (!피씨통신.Open()) new Exception("Unable to connect to server.");
-
                 상태정보.Init();
                 Global.정보로그(로그영역, "Initialize", "Initialize the system.", false);
                 Initialized?.Invoke(null, true);

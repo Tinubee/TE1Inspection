@@ -28,7 +28,15 @@ namespace TE1.Schemas
 
         private Boolean 피씨연결수신(통신자료 자료)
         {
-            //검사설정송신(자료.발신, Global.모델자료.선택모델.검사설정);
+            Debug.WriteLine($"PC 연결 수신완료.");
+
+            if (Global.상태정보.자동수동 != Global.장치상태.자동수동)
+                Global.상태정보.자동수동 = Global.장치상태.자동수동;
+            if (Global.상태정보.시작정지 != Global.장치상태.시작정지)
+                Global.상태정보.시작정지 = Global.장치상태.시작정지;
+            if (Global.상태정보.마스터모드 != Global.장치상태.마스터모드)
+                Global.상태정보.마스터모드 = Global.장치상태.마스터모드;
+
             제품상태전송(Global.상태정보);
             return true;
         }

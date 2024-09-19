@@ -31,11 +31,11 @@ namespace TE1.UI.Controls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SetInspection));
-            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
-            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
             this.GridControl1 = new MvUtils.CustomGrid();
             this.검사설정Bind = new System.Windows.Forms.BindingSource(this.components);
             this.GridView1 = new MvUtils.CustomView();
@@ -61,6 +61,7 @@ namespace TE1.UI.Controls
             this.col마스터값 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col마스터공차 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.col검사여부 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.col중요검사포인트 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
             this.barDockControlBottom = new DevExpress.XtraBars.BarDockControl();
@@ -73,7 +74,8 @@ namespace TE1.UI.Controls
             this.b분류설정 = new DevExpress.XtraEditors.PopupContainerEdit();
             this.popupContainerControl1 = new DevExpress.XtraEditors.PopupContainerControl();
             this.e분류자료 = new TE1.UI.Controls.Categorys();
-            this.col중요검사포인트 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemToggleSwitch1 = new DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch();
+            this.repositoryItemToggleSwitch2 = new DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.검사설정Bind)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).BeginInit();
@@ -88,6 +90,8 @@ namespace TE1.UI.Controls
             ((System.ComponentModel.ISupportInitialize)(this.b분류설정.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.popupContainerControl1)).BeginInit();
             this.popupContainerControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch2)).BeginInit();
             this.SuspendLayout();
             // 
             // GridControl1
@@ -99,7 +103,9 @@ namespace TE1.UI.Controls
             this.GridControl1.Name = "GridControl1";
             this.GridControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.ｅ교정,
-            this.e분류});
+            this.e분류,
+            this.repositoryItemToggleSwitch1,
+            this.repositoryItemToggleSwitch2});
             this.GridControl1.Size = new System.Drawing.Size(1244, 729);
             this.GridControl1.TabIndex = 0;
             this.GridControl1.UseDirectXPaint = DevExpress.Utils.DefaultBoolean.True;
@@ -385,10 +391,21 @@ namespace TE1.UI.Controls
             this.col검사여부.AppearanceHeader.Options.UseTextOptions = true;
             this.col검사여부.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.col검사여부.Caption = "검사여부";
+            this.col검사여부.ColumnEdit = this.repositoryItemToggleSwitch2;
             this.col검사여부.FieldName = "검사여부";
             this.col검사여부.Name = "col검사여부";
             this.col검사여부.Visible = true;
             this.col검사여부.VisibleIndex = 18;
+            // 
+            // col중요검사포인트
+            // 
+            this.col중요검사포인트.AppearanceHeader.Options.UseTextOptions = true;
+            this.col중요검사포인트.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col중요검사포인트.ColumnEdit = this.repositoryItemToggleSwitch1;
+            this.col중요검사포인트.FieldName = "중요검사포인트";
+            this.col중요검사포인트.Name = "col중요검사포인트";
+            this.col중요검사포인트.Visible = true;
+            this.col중요검사포인트.VisibleIndex = 19;
             // 
             // barManager1
             // 
@@ -493,12 +510,12 @@ namespace TE1.UI.Controls
             this.b분류설정.Name = "b분류설정";
             this.b분류설정.Properties.Appearance.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.b분류설정.Properties.Appearance.Options.UseFont = true;
-            editorButtonImageOptions2.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions2.SvgImage")));
-            editorButtonImageOptions2.SvgImageSize = new System.Drawing.Size(40, 40);
-            serializableAppearanceObject5.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-            serializableAppearanceObject5.Options.UseFont = true;
+            editorButtonImageOptions1.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions1.SvgImage")));
+            editorButtonImageOptions1.SvgImageSize = new System.Drawing.Size(40, 40);
+            serializableAppearanceObject1.Font = new System.Drawing.Font("맑은 고딕", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            serializableAppearanceObject1.Options.UseFont = true;
             this.b분류설정.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "Categorys", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "Categorys", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "Categorys", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "Categorys", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.b분류설정.Properties.NullText = "Categorys";
             this.b분류설정.Properties.PopupControl = this.popupContainerControl1;
             this.b분류설정.Size = new System.Drawing.Size(175, 42);
@@ -521,14 +538,19 @@ namespace TE1.UI.Controls
             this.e분류자료.Size = new System.Drawing.Size(500, 400);
             this.e분류자료.TabIndex = 0;
             // 
-            // col중요검사포인트
+            // repositoryItemToggleSwitch1
             // 
-            this.col중요검사포인트.AppearanceHeader.Options.UseTextOptions = true;
-            this.col중요검사포인트.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
-            this.col중요검사포인트.FieldName = "중요검사포인트";
-            this.col중요검사포인트.Name = "col중요검사포인트";
-            this.col중요검사포인트.Visible = true;
-            this.col중요검사포인트.VisibleIndex = 19;
+            this.repositoryItemToggleSwitch1.AutoHeight = false;
+            this.repositoryItemToggleSwitch1.Name = "repositoryItemToggleSwitch1";
+            this.repositoryItemToggleSwitch1.OffText = "Off";
+            this.repositoryItemToggleSwitch1.OnText = "On";
+            // 
+            // repositoryItemToggleSwitch2
+            // 
+            this.repositoryItemToggleSwitch2.AutoHeight = false;
+            this.repositoryItemToggleSwitch2.Name = "repositoryItemToggleSwitch2";
+            this.repositoryItemToggleSwitch2.OffText = "Off";
+            this.repositoryItemToggleSwitch2.OnText = "On";
             // 
             // SetInspection
             // 
@@ -557,6 +579,8 @@ namespace TE1.UI.Controls
             ((System.ComponentModel.ISupportInitialize)(this.b분류설정.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.popupContainerControl1)).EndInit();
             this.popupContainerControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -602,5 +626,7 @@ namespace TE1.UI.Controls
         private DevExpress.XtraGrid.Columns.GridColumn col마스터값;
         private DevExpress.XtraGrid.Columns.GridColumn col마스터공차;
         private DevExpress.XtraGrid.Columns.GridColumn col중요검사포인트;
+        private DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch repositoryItemToggleSwitch2;
+        private DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch repositoryItemToggleSwitch1;
     }
 }

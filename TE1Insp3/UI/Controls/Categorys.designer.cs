@@ -39,11 +39,14 @@
             this.col그룹 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.b저장 = new DevExpress.XtraEditors.SimpleButton();
+            this.col중요포인트표시 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemToggleSwitch1 = new DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch();
             ((System.ComponentModel.ISupportInitialize)(this.GridControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Bind검사분류)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch1)).BeginInit();
             this.SuspendLayout();
             // 
             // GridControl1
@@ -53,6 +56,8 @@
             this.GridControl1.Location = new System.Drawing.Point(0, 0);
             this.GridControl1.MainView = this.GridView1;
             this.GridControl1.Name = "GridControl1";
+            this.GridControl1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.repositoryItemToggleSwitch1});
             this.GridControl1.Size = new System.Drawing.Size(513, 386);
             this.GridControl1.TabIndex = 0;
             this.GridControl1.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -76,7 +81,8 @@
             this.col코드,
             this.col순번,
             this.col명칭,
-            this.col그룹});
+            this.col그룹,
+            this.col중요포인트표시});
             this.GridView1.FooterPanelHeight = 21;
             this.GridView1.GridControl = this.GridControl1;
             this.GridView1.GroupRowHeight = 21;
@@ -163,6 +169,23 @@
             this.b저장.TabIndex = 1;
             this.b저장.Text = "Save";
             // 
+            // col중요포인트표시
+            // 
+            this.col중요포인트표시.AppearanceHeader.Options.UseTextOptions = true;
+            this.col중요포인트표시.AppearanceHeader.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.col중요포인트표시.ColumnEdit = this.repositoryItemToggleSwitch1;
+            this.col중요포인트표시.FieldName = "중요포인트표시";
+            this.col중요포인트표시.Name = "col중요포인트표시";
+            this.col중요포인트표시.Visible = true;
+            this.col중요포인트표시.VisibleIndex = 3;
+            // 
+            // repositoryItemToggleSwitch1
+            // 
+            this.repositoryItemToggleSwitch1.AutoHeight = false;
+            this.repositoryItemToggleSwitch1.Name = "repositoryItemToggleSwitch1";
+            this.repositoryItemToggleSwitch1.OffText = "Off";
+            this.repositoryItemToggleSwitch1.OnText = "On";
+            // 
             // Categorys
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -176,6 +199,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.GridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemToggleSwitch1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -191,5 +215,7 @@
         private DevExpress.XtraGrid.Columns.GridColumn col순번;
         private DevExpress.XtraGrid.Columns.GridColumn col명칭;
         private DevExpress.XtraGrid.Columns.GridColumn col그룹;
+        private DevExpress.XtraGrid.Columns.GridColumn col중요포인트표시;
+        private DevExpress.XtraEditors.Repository.RepositoryItemToggleSwitch repositoryItemToggleSwitch1;
     }
 }

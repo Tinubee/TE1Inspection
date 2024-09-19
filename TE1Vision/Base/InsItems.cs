@@ -117,8 +117,8 @@ namespace TE1
         public static InsItem F07 = new InsItem(0, InsType.F, -974.90, 0.00);
         public static InsItem F08 = new InsItem(0, InsType.F, -894.50, +150.00);
 
-        public static InsItem BT = new InsItem(3, InsType.B, -12.83, 83.00, 3.7);
-        public static InsItem BB = new InsItem(3, InsType.B, -977.17, -83.00, 3.7);
+        public static InsItem BoltTop = new InsItem(3, InsType.B, -12.83, 83.00, 3.7);
+        public static InsItem BoltBottom = new InsItem(3, InsType.B, -977.17, -83.00, 3.7);
 
         public static InsItem M01X1 = new InsItem(3, InsType.S, -102.50, -181.90);
         public static InsItem M01Y2 = new InsItem(3, InsType.S, -152.20, -194.40);

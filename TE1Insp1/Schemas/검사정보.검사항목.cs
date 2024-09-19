@@ -225,15 +225,15 @@ namespace TE1.Schemas
         [Result(검사그룹.치수, 장치구분.Cam02, "T056", Hosts.Measure)] T056 = 2056,
 
         // 3. Bolt
-        [Result(검사그룹.치수, 장치구분.Cam03, "BTX", Hosts.Measure)] BTX = 2901,
-        [Result(검사그룹.치수, 장치구분.Cam03, "BTY", Hosts.Measure)] BTY = 2902,
-        [Result(검사그룹.치수, 장치구분.Cam03, "BTTab", Hosts.Measure)] BTTab = 2903,
-        [Result(검사그룹.치수, 장치구분.Cam03, "BTP", Hosts.Measure)] BTP = 2904,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BoltTopX", Hosts.Measure)] BoltTopX = 2901,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BoltTopY", Hosts.Measure)] BoltTopY = 2902,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BoltTopTab", Hosts.Measure)] BoltTopTab = 2903,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BoltTopP", Hosts.Measure)] BoltTopP = 2904,
 
-        [Result(검사그룹.치수, 장치구분.Cam03, "BBX", Hosts.Measure)] BBX = 2911,
-        [Result(검사그룹.치수, 장치구분.Cam03, "BBY", Hosts.Measure)] BBY = 2912,
-        [Result(검사그룹.치수, 장치구분.Cam03, "BBTab", Hosts.Measure)] BBTab = 2913,
-        [Result(검사그룹.치수, 장치구분.Cam03, "BBP", Hosts.Measure)] BBP = 2914,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BoltBottomX", Hosts.Measure)] BoltBottomX = 2911,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BoltBottomY", Hosts.Measure)] BoltBottomY = 2912,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BoltBottomTab", Hosts.Measure)] BoltBottomTab = 2913,
+        [Result(검사그룹.치수, 장치구분.Cam03, "BoltBottomP", Hosts.Measure)] BoltBottomP = 2914,
 
         // 4. Mica
         [Result(검사그룹.치수, 장치구분.Cam03, "M01X1", Hosts.Measure)] M01X1 = 4011,

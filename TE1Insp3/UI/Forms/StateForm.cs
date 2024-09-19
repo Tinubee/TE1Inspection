@@ -68,7 +68,7 @@ namespace TE1.UI.Forms
             if (this.InvokeRequired) { this.BeginInvoke(new Action(() => { 결과갱신(결과); })); return; }
             this.모델자료Bind.ResetBindings(false);
             if (결과 == null) return;
-            this.e뷰어.SetResults(결과);
+            //this.e뷰어.SetResults(결과);
             검사결과(결과);
         }
         private void 검사결과(검사결과 결과)

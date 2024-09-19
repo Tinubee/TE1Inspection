@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -187,9 +188,11 @@ namespace TE1.Schemas
             foreach (Base3D 항목 in InspItems)
             {
                 검사정보 정보 = 결과.GetItem(항목.Type);
-                항목.RemoveItems(Children);
+               
                 if (정보.중요검사포인트 || 정보.측정결과 != 결과구분.OK)
                     Add(항목);
+                else
+                    항목.RemoveItems(Children);
 
                 if (정보 == null)
                 {
@@ -200,7 +203,7 @@ namespace TE1.Schemas
                 {
                     항목.Draw(항목, 정보.결과값, 정보.측정결과);
                 }
-                catch (Exception ex) { Debug.WriteLine(ex.Message); }
+                catch (Exception ex) { Debug.WriteLine(ex.Message, $"{MethodBase.GetCurrentMethod()}"); }
             }
             //}
             foreach (var item in SurfaceItems)
@@ -233,7 +236,7 @@ namespace TE1.Schemas
                     }
 
                 }
-                catch (Exception ex) { Debug.WriteLine(ex.Message); }
+                catch (Exception ex) { Debug.WriteLine(ex.Message, $"{MethodBase.GetCurrentMethod()}"); }
             }
             foreach (var item in SurfaceItems)
                 Remove(item);

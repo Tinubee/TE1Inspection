@@ -121,7 +121,7 @@ namespace TE1.UI.Controls
         private void 동작상태알림()
         {
             if (this.InvokeRequired) { this.BeginInvoke(new Action(동작상태알림)); return; }
-            this.b동작구분.Text = Global.장치상태.자동수동 ? 번역.자동 : 번역.수동;
+            this.b동작구분.Text = Global.장치상태.마스터모드 ? 번역.마스터 : Global.장치상태.자동수동 ? 번역.자동 : 번역.수동;
             this.b동작구분.Appearance.ForeColor = Global.장치상태.시작정지 ? DXSkinColors.ForeColors.Information : DXSkinColors.ForeColors.DisabledText;
         }
 
@@ -146,6 +146,8 @@ namespace TE1.UI.Controls
                 자동,
                 [Translation("Manual", "수동")]
                 수동,
+                [Translation("Master", "마스터")]
+                마스터,
                 [Translation("Count\r\nReset", "수량\r\n초기화")]
                 수량리셋,
                 [Translation("Initialize the inspection quantity?", "검사수량을 초기화하시겠습니까?")]
@@ -157,6 +159,7 @@ namespace TE1.UI.Controls
             private String GetString(Items item) => Localization.GetString(item);
             public String 자동 => GetString(Items.자동);
             public String 수동 => GetString(Items.수동);
+            public String 마스터 => GetString(Items.마스터);
             public String 수량리셋 => GetString(Items.수량리셋);
             public String 리셋확인 => GetString(Items.리셋확인);
             public String 모델변경 => GetString(Items.모델변경);

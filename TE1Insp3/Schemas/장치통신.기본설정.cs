@@ -78,6 +78,8 @@ namespace TE1.Schemas
         public Boolean 자동수동 => 신호읽기(정보주소.자동수동);
         public Boolean 시작정지 => 신호읽기(정보주소.시작정지);
 
+        public Boolean 마스터모드 => 신호읽기(정보주소.마스터모드);
+
         public Boolean 제품투입 { get => 신호읽기(정보주소.제품투입); set => 정보쓰기(정보주소.제품투입, value); }
         public Boolean 평탄측정 { get => 신호읽기(정보주소.평탄측정); set => 정보쓰기(정보주소.평탄측정, value); }
         public Boolean 상부치수 { get => 신호읽기(정보주소.상부치수); set => 정보쓰기(정보주소.상부치수, value); }
