@@ -38,10 +38,10 @@ namespace TE1.Schemas
             {
                 item.SetName($"{PrefixItemName}{Type.ToString()}");
                 //if (collectioin.Contains(item)) return;
-                if (Added) return;
+                //if (Added) return;
                 Items.Add(item);
                 collectioin.Add(item);
-                Added = true;
+                //Added = true;
             }
 
             public virtual void RemoveItems(Visual3DCollection collectioin)

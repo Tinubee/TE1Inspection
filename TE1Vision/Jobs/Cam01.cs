@@ -46,7 +46,7 @@ namespace TE1.Cam01
             try
             {
                 List<DisplayResult> results = JsonConvert.DeserializeObject<List<DisplayResult>>(Results);
-                AddDefectsGraphics(lastRecord, results);
+                //AddDefectsGraphics(lastRecord, results);
 
                 Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
                 foreach (ICogRecord rcd in record.SubRecords)

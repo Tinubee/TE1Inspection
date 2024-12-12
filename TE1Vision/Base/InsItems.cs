@@ -94,7 +94,7 @@ namespace TE1
         public static InsItem T041 = new InsItem(2, InsType.Y, -135.55, 206.85);
         public static InsItem T042 = new InsItem(2, InsType.Y, -114.09, +230.58);
         public static InsItem T043 = new InsItem(2, InsType.Y, -57.71, +230.58);
-        public static InsItem T044 = new InsItem(3, InsType.X, -47.90, +193.32);
+        public static InsItem T044 = new InsItem(2, InsType.X, -47.90, +193.32);
         public static InsItem T045 = new InsItem(2, InsType.X, -47.90, +151.44);
         public static InsItem T046 = new InsItem(2, InsType.Y, -34.00, +130.18);
         public static InsItem T047 = new InsItem(2, InsType.Y, -10.74, +130.18);
@@ -431,6 +431,7 @@ namespace TE1
         public Double 원점Y = 63;
         public Double SetX = Double.NaN;
         public Double SetY = Double.NaN;
+        //public Double 각도 = Double.NaN;
         public List<Double> DList = new List<Double>();
         public Double FontSize { get; set; } = 5;
         public InsItem() { }

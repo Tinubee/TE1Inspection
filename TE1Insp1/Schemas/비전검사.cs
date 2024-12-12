@@ -1,4 +1,5 @@
 ﻿using Cognex.VisionPro;
+using Cognex.VisionPro.ImageProcessing;
 using Cognex.VisionPro.QuickBuild;
 using Cognex.VisionPro.ToolBlock;
 using Cogutils;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using TE1.UI.Forms;
 
 namespace TE1.Schemas
 {
@@ -185,7 +187,29 @@ namespace TE1.Schemas
             if (block == null || block.Outputs.Contains(name)) return;
             block.Outputs.Add(new CogToolBlockTerminal(name, value));
         }
+
+        public static Boolean 표면설정(비전도구 도구)
+        {
+            if (도구 == null) return false;
+            CogToolBlock block = 도구.GetTool(BaseTool.DefectsTools) as CogToolBlock;
+            if (block == null) return false;
+            CogMaskCreatorTool tool = 비전검사.GetTool(block, BaseTool.DefectsMask) as CogMaskCreatorTool;
+            if (tool == null) return false;
+            if (도구.InputImage == null) 도구.마스터로드();
+            CogDefectsEdit f = new CogDefectsEdit();
+            f.Init(도구, tool);
+            f.Show();
+            return true;
+        }
+        public Boolean 표면설정(카메라구분 구분)
+        {
+            if (!this.ContainsKey(구분)) return false;
+            return 표면설정(this[구분]);
+        }
+
         #endregion
+
+
 
         #region Bottom 카메라
         //public static void 하부검사시작()

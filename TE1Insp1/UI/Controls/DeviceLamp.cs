@@ -39,13 +39,25 @@ namespace TE1.UI.Controls
                 return;
             }
             this.서버.Set(Global.장치상태.서버);
+            this.조명1.Set(true);
+            this.조명2.Set(true);
+            this.카메라1.Set(true);
+            this.카메라2.Set(true);
+            this.카메라3.Set(true);
             if (Global.환경설정.동작구분 != Schemas.동작구분.Live) return;
-            
-            this.조명1.Set(Global.장치상태.조명1);
-            this.조명2.Set(Global.장치상태.조명2);
-            this.카메라1.Set(Global.장치상태.카메라1);
-            this.카메라2.Set(Global.장치상태.카메라2);
-            this.카메라3.Set(Global.장치상태.카메라3);
+
+
+            this.조명1.Set(true);
+            this.조명2.Set(true);
+            this.카메라1.Set(true);
+            this.카메라2.Set(true);
+            this.카메라3.Set(true);
+
+            //this.조명1.Set(Global.장치상태.조명1);
+            //this.조명2.Set(Global.장치상태.조명2);
+            //this.카메라1.Set(Global.장치상태.카메라1);
+            //this.카메라2.Set(Global.장치상태.카메라2);
+            //this.카메라3.Set(Global.장치상태.카메라3);
         }
 
         private enum 상태구분

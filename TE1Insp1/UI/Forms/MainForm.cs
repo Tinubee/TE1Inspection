@@ -45,8 +45,10 @@ namespace TE1
             //Test용
             if (e.KeyCode == Keys.T)
             {
-                //Debug.WriteLine("test Success");
-                //this.검사항목변경알림테스트.Invoke();
+                Debug.WriteLine("1");
+                Global.그랩제어.GetItem(카메라구분.Cam01).Active();
+                Global.그랩제어.GetItem(카메라구분.Cam02).Active();
+                Global.그랩제어.GetItem(카메라구분.Cam03).Active();
             }
             if (e.KeyCode == Keys.Y)
             {

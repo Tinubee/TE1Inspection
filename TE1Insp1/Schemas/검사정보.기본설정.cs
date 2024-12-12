@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace TE1.Schemas
 {
@@ -276,7 +277,7 @@ namespace TE1.Schemas
         public Boolean SetResultValue(검사정보 검사, Double value, out Decimal 결과값, out Decimal 측정값, Boolean 마진포함 = false)
         {
             Decimal result = PixelToMeter(검사, value);
-
+            //Debug.WriteLine($"{검사.검사명칭} / {result}");
             if (검사.검사명칭.StartsWith("H") || 검사.검사명칭.StartsWith("R"))
             {
                 if (검사.검사명칭.Contains("X"))
@@ -304,14 +305,72 @@ namespace TE1.Schemas
                 }
             }
             if (검사.검사명칭.StartsWith("T"))
-                result = Math.Abs(result) - Math.Abs(검사.보정값);
+            {
+                if (검사.보정값 != 0)
+                {
+                    result = Math.Abs(result) - Math.Abs(검사.보정값);
+                }
+            }
+
             else if (검사.검사명칭.StartsWith("M"))
-                result = Math.Abs(result) - Math.Abs(검사.보정값);
+            {
+                if (검사.검사항목 == 검사항목.MICA01각도 || 검사.검사항목 == 검사항목.MICA02각도)
+                {
+
+                }
+                else
+                {
+                    InsType check = 검사.검사명칭.Contains("X") == true ? InsType.X : InsType.Y;
+                    Int32 시트번호 = Convert.ToInt32(검사.검사명칭.Substring(1, 2));
+                    Int32 시트위치번호 = Convert.ToInt32(검사.검사명칭.Substring(4, 1));
+
+                    InsItem item = 검사.Attr.검사정보;
+
+                    item.D = Convert.ToDouble(result);
+                    if (check == InsType.X)
+                    {
+                        if (시트위치번호 == 1)
+                            result = Math.Abs(검사.보정값) - Math.Abs(result);
+                        else
+                            result = Math.Abs(result) - Math.Abs(검사.보정값);
+                    }
+                    else
+                    {
+                        if (시트번호 < 16)
+                        {
+                            if (시트위치번호 == 2)
+                                result = Math.Abs(result) - Math.Abs(검사.보정값);
+                            else
+                                result = Math.Abs(검사.보정값) - Math.Abs(result);
+                        }
+                        else if (시트번호 < 31)
+                        {
+                            if (시트위치번호 == 2)
+                                result = Math.Abs(검사.보정값) - Math.Abs(result);
+                            else
+                                result = Math.Abs(result) - Math.Abs(검사.보정값);
+                        }
+                        else if (시트번호 < 46)
+                        {
+                            if (시트위치번호 == 2)
+                                result = Math.Abs(result) - Math.Abs(검사.보정값);
+                            else
+                                result = Math.Abs(검사.보정값) - Math.Abs(result);
+                        }
+                        else
+                        {
+                            if (시트위치번호 == 2)
+                                result = Math.Abs(검사.보정값) - Math.Abs(result);
+                            else
+                                result = Math.Abs(result) - Math.Abs(검사.보정값);
+                        }
+                    }
+                }
+            }
             else
                 result += 검사.보정값;
 
             result *= 검사.결과부호;
-
 
             Boolean r = false;
             if (Global.장치상태.마스터모드)
@@ -322,7 +381,7 @@ namespace TE1.Schemas
                 r = result >= 최소값 && result <= 최대값;
             }
             else
-                 r = result >= 검사.최소값 && result <= 검사.최대값;
+                r = result >= 검사.최소값 && result <= 검사.최대값;
 
             if (Global.환경설정.VIP모드 && (검사.검사명칭.StartsWith("M") || 검사.검사명칭.StartsWith("B")))
             {
@@ -460,17 +519,6 @@ namespace TE1.Schemas
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message, "Inspection"); }
         }
-        //public void SetResults(카메라구분 카메라, Dictionary<String, Object> results)
-        //{
-        //    불량영역제거(카메라);
-        //    foreach (var result in results)
-        //    {
-        //        검사정보 정보 = GetItem((장치구분)카메라, result.Key);
-        //        if (정보 == null) continue;
-        //        Double value = result.Value == null ? Double.NaN : (Double)result.Value;
-        //        SetResult(정보, value);
-        //    }
-        //}
         public void SetResults(Dictionary<Int32, Decimal> 내역)
         {
             if (내역 == null) return;
@@ -675,47 +723,77 @@ namespace TE1.Schemas
             try
             {
                 InsItem item = 정보.Attr.검사정보;
+
                 if (item.InsType == InsType.X || item.InsType == InsType.Y || item.InsType == InsType.S)
                 {
                     if (item.InsType == InsType.S)
                     {
                         InsType check = 정보.검사명칭.Contains("X") == true ? InsType.X : InsType.Y;
+                        Int32 시트번호 = Convert.ToInt32(정보.검사명칭.Substring(1, 2));
+                        Int32 시트위치번호 = Convert.ToInt32(정보.검사명칭.Substring(4, 1));
+                        Decimal 적용값 = 0;
 
-                        Decimal 적용값 = check == InsType.X ? Convert.ToDecimal(Math.Abs(item.X)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
+                        if (check == InsType.X)
+                        {
+                            적용값 = 시트위치번호 == 1 ? Convert.ToDecimal(Math.Abs(item.X)) - this.실측값 : Convert.ToDecimal(Math.Abs(item.X)) + this.실측값;
+                        }
+                        else
+                        {
+                            if (시트번호 < 16)
+                            {
+                                적용값 = 시트위치번호 == 2 ? Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) - this.실측값;
+                            }
+                            else if (시트번호 < 31)
+                            {
+                                적용값 = 시트위치번호 == 2 ? Convert.ToDecimal(Math.Abs(item.Y)) - this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
+                            }
+                            else if (시트번호 < 46)
+                            {
+                                적용값 = 시트위치번호 == 2 ? Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) - this.실측값;
+                            }
+                            else
+                            {
+                                적용값 = 시트위치번호 == 2 ? Convert.ToDecimal(Math.Abs(item.Y)) - this.실측값 : Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값;
+                            }
+                        }
+                        Debug.WriteLine($"{정보.검사명칭} {시트번호} {시트위치번호} - 적용값:{적용값}");
+
+                        item.D = Convert.ToDouble(적용값);
                         this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
                         this.보정값 = check == InsType.X ? Convert.ToDecimal(item.X) : Convert.ToDecimal(item.Y);
                     }
                     else
                     {
-                        if (정보.검사항목 == 검사항목.T044)
+                        //if (정보.검사항목 == 검사항목.T044)
+                        //{
+                        //    Decimal 적용값 = (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
+                        //    this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                        //}
+                        //else
+                        //{
+                        if (item.InsType == InsType.Y)
                         {
-                            Decimal 적용값 = (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
+                            Decimal 적용값 = this.Y < 0 ? (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 - (Decimal)63) : (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 + (Decimal)63);
                             this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                            this.보정값 = Convert.ToDecimal(item.Y);
                         }
-                        else
+                        if (item.InsType == InsType.X)
                         {
-                            if (item.InsType == InsType.Y)
+                            Decimal 적용값 = 0;
+                            if (정보.검사항목 == 검사항목.T015 || 정보.검사항목 == 검사항목.T016 || 정보.검사항목 == 검사항목.T017 || 정보.검사항목 == 검사항목.T018 || 정보.검사항목 == 검사항목.T019)
                             {
-                                Decimal 적용값 = this.Y < 0 ? (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 - (Decimal)63) : (Convert.ToDecimal(Math.Abs(item.Y)) + this.실측값 + (Decimal)63);
-                                this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
-                                this.보정값 = Convert.ToDecimal(item.Y);
+                                적용값 = (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값) - (Decimal)982.25;
                             }
-                            if (item.InsType == InsType.X)
+                            else
                             {
-                                Decimal 적용값 = 0;
-                                if (정보.검사항목 == 검사항목.T015 || 정보.검사항목 == 검사항목.T016 || 정보.검사항목 == 검사항목.T017 || 정보.검사항목 == 검사항목.T018 || 정보.검사항목 == 검사항목.T019)
-                                {
-                                    적용값 = (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값) - (Decimal)982.25;
-                                }
-                                else
-                                {
-                                    적용값 = (Decimal)982.25 - (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
-                                }
 
-                                this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
-                                this.보정값 = Convert.ToDecimal(item.X);
+                                적용값 = (Decimal)982.25 - (Convert.ToDecimal(Math.Abs(item.X)) + this.실측값);
                             }
+
+                            this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(적용값 / this.측정값 * 1000, 9)));
+                            this.보정값 = Convert.ToDecimal(item.X);
                         }
+                        //}
                     }
                 }
                 else
@@ -736,9 +814,20 @@ namespace TE1.Schemas
                                 }
                             }
                             else
+                            {
+                                //if (정보.검사명칭.Contains("Bolt"))
+                                //{
+                                //    Debug.WriteLine($"{this.실측값}");
+                                //}
+                                //else
                                 this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round(-((Decimal)982.25 - Math.Abs(this.실측값)) / this.측정값 * 1000, 9)));
+                            }
+
                         }
-                        else if (정보.검사명칭.Contains("Y")) this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round((this.실측값 + (Decimal)63) / this.측정값 * 1000, 9)));
+                        else if (정보.검사명칭.Contains("Y"))
+                        {
+                            this.교정값 = Convert.ToDecimal(Math.Abs(Math.Round((this.실측값 + (Decimal)63) / this.측정값 * 1000, 9)));
+                        }
 
                     }
                     else

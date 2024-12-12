@@ -18,8 +18,14 @@ namespace TE1
         }
 
         public static String ToolsPath = @"..\Config\Tools\01";
-        public static String PerspectiveName = "Perspective";
-        public static String DefectsName = "Defects";
+        public const String PerspectiveName = "Perspective";
+        public const String MvImageTools = "MvImageTools";
+        public const String MvToolConfig = "Config";
+        public const String DefectsTools = "DefectsTools";
+        public const String DefectsMask = "Mask";
+        public const String DefectsArea = "DefectsArea";
+        public const String DefectsJson = "DefectsJson";
+        //public static String DefectsName = "Defects";
         public static System.Drawing.Font LabelFont = new System.Drawing.Font("Tahoma", 9.75f, System.Drawing.FontStyle.Bold);
         public CogToolBlock ToolBlock;
         public virtual Cameras Camera => Cameras.None;
@@ -47,20 +53,53 @@ namespace TE1
 
         public virtual void ModifyLastRunRecord(ICogRecord lastRecord) { }
 
-        public virtual void AddDefectsGraphics(ICogRecord lastRecord, List<DisplayResult> results)
+        //public virtual void AddDefectsGraphics(ICogRecord lastRecord, List<DisplayResult> results)
+        //{
+        //    try
+        //    {
+        //        foreach (DisplayResult r in results.Where(r => r.KeyName == DefectsName).ToList())
+        //        {
+        //            var rect = new CogRectangleAffine() { CenterX = r.Rect[0], CenterY = r.Rect[1], SideXLength = r.Rect[2], SideYLength = r.Rect[3], Rotation = r.Rect[4], Color = r.Color, TipText = r.Display, LineWidthInScreenPixels = 2 };
+        //            ToolBlock.AddGraphicToRunRecord(rect, lastRecord, ViewerRecodName, r.Display);
+        //            //var label = new CogGraphicLabel() { Text = r.Display, TipText = r.Display, X = r.Rect[0], Y = r.Rect[1], Alignment = CogGraphicLabelAlignmentConstants.BaselineCenter };
+        //            //ToolBlock.AddGraphicToRunRecord(label, lastRecord, ViewerRecodName, r.Display);
+        //        }
+        //    }
+        //    catch (Exception ex) { Debug.WriteLine(ex.Message); }
+        //}
+
+        #region 룰베이스 검사결과
+        public virtual void AddDefectsGraphics(ICogRecord lastRecord)
         {
             try
             {
-                foreach (DisplayResult r in results.Where(r => r.KeyName == DefectsName).ToList())
-                {
-                    var rect = new CogRectangleAffine() { CenterX = r.Rect[0], CenterY = r.Rect[1], SideXLength = r.Rect[2], SideYLength = r.Rect[3], Rotation = r.Rect[4], Color = r.Color, TipText = r.Display, LineWidthInScreenPixels = 2 };
-                    ToolBlock.AddGraphicToRunRecord(rect, lastRecord, ViewerRecodName, r.Display);
-                    //var label = new CogGraphicLabel() { Text = r.Display, TipText = r.Display, X = r.Rect[0], Y = r.Rect[1], Alignment = CogGraphicLabelAlignmentConstants.BaselineCenter };
-                    //ToolBlock.AddGraphicToRunRecord(label, lastRecord, ViewerRecodName, r.Display);
-                }
+                String josn = Output<String>(DefectsJson);
+                if (String.IsNullOrEmpty(josn)) return;
+                List<Double[]> defects = JsonConvert.DeserializeObject<List<Double[]>>(josn);
+                if (defects.Count < 1) return;
+                List<CogRectangleAffine> regions = MvImageTool.ToCoRegions(defects);
+                AddDefectsGraphics(lastRecord, regions);
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message, "AddDefectsGraphics"); }
+
+        }
+        public virtual void AddDefectsGraphics(ICogRecord lastRecord, List<CogRectangleAffine> regions, CogColorConstants color = CogColorConstants.Red)
+        {
+            foreach (CogRectangleAffine region in regions)
+                AddDefectsGraphics(lastRecord, region, color);
+        }
+        public virtual void AddDefectsGraphics(ICogRecord lastRecord, CogRectangleAffine region, CogColorConstants color = CogColorConstants.Red)
+        {
+            try
+            {
+                region.Color = color;
+                ToolBlock.AddGraphicToRunRecord(region, lastRecord, ViewerRecodName, String.Empty);
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
         }
+        #endregion
+
+
 
         public virtual void DebugRecords(ICogRecord record, Int32 depth = 0, String preKey = "")
         {

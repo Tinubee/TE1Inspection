@@ -536,6 +536,9 @@ namespace TE1.Schemas
         [Result(검사그룹.치수, 장치구분.Cam03, "M60X3", Hosts.Measure)] M60X3 = 4603,
         [Result(검사그룹.치수, 장치구분.Cam03, "M60Y4", Hosts.Measure)] M60Y4 = 4604,
 
+        [Result(검사그룹.치수, 장치구분.Cam03, "MICA01각도", Hosts.Measure)] MICA01각도 = 4701,
+        [Result(검사그룹.치수, 장치구분.Cam03, "MICA02각도", Hosts.Measure)] MICA02각도 = 4702,
+
         // 5. Flatness
         [Result(검사그룹.치수, 장치구분.Flatness, "F01", Hosts.Surface)] F01 = 5010,
         [Result(검사그룹.치수, 장치구분.Flatness, "F02", Hosts.Surface)] F02 = 5020,

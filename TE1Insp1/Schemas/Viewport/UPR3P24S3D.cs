@@ -189,10 +189,10 @@ namespace TE1.Schemas
             {
                 검사정보 정보 = 결과.GetItem(항목.Type);
                
-                if (정보.중요검사포인트 || 정보.측정결과 != 결과구분.OK)
-                    Add(항목);
-                else
-                    항목.RemoveItems(Children);
+                //if (정보.중요검사포인트 || 정보.측정결과 != 결과구분.OK)
+                //    Add(항목);
+                //else
+                //    항목.RemoveItems(Children);
 
                 if (정보 == null)
                 {

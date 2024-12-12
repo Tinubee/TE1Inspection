@@ -1,6 +1,7 @@
 ﻿using Cognex.VisionPro;
 using Cognex.VisionPro.Blob;
 using Cognex.VisionPro.CNLSearch;
+using Cognex.VisionPro.ImageProcessing;
 using Cognex.VisionPro.PMAlign;
 using Cognex.VisionPro.ToolBlock;
 using Newtonsoft.Json;
@@ -8,32 +9,29 @@ using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Channels;
+using System.Windows.Media.Media3D;
 
 namespace MvLibs
 {
     public class PointD
     {
-        public Double X = Double.NaN;
-        public Double Y = Double.NaN;
-        [JsonIgnore]
-        public Boolean IsEmpty => X == Double.NaN || Y == Double.NaN;
-        [JsonIgnore]
-        public Boolean IsInfinity => Double.IsInfinity(X) || Double.IsInfinity(Y);
-        [JsonIgnore]
-        internal Point2d Point2d => new Point2d(X, Y);
-        [JsonIgnore]
-        internal Point2f Point2f => new Point2f((Single)X, (Single)Y);
+        public Double X { get; set; } = Double.NaN;
+        public Double Y { get; set; } = Double.NaN;
+        [JsonIgnore] public Boolean IsEmpty => Double.IsNaN(X) || Double.IsNaN(Y);
+        //[JsonIgnore] public Boolean IsInfinity => Double.IsInfinity(X) || Double.IsInfinity(Y);
+        [JsonIgnore] internal Point2d Point2d => new Point2d(X, Y);
+        [JsonIgnore] internal Point2f Point2f => new Point2f((Single)X, (Single)Y);
 
         public PointD() { }
         public PointD(Double x, Double y) { X = x; Y = y; }
         internal PointD(Point2d point) { X = point.X; Y = point.Y; }
-        public override String ToString() => $"[X={X},Y={Y}]";
+        public override String ToString() => $"(X={X},Y={Y})";
     }
     public class LineSegment
     {
@@ -49,10 +47,11 @@ namespace MvLibs
     public static class Base
     {
         public const String SpaceRoot = "@";
+        public static JsonSerializerSettings JsonSettings = new JsonSerializerSettings { Formatting = Formatting.Indented };
 
         #region Common
         [DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
-        public static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
+        public static extern void CopyMemory(IntPtr dest, IntPtr src, UInt32 count);
 
         public static Double ToRadian(Double degree) => degree / 180.0 * Math.PI;
         public static Double ToDegree(Double radian) => radian / Math.PI * 180.0;
@@ -76,32 +75,16 @@ namespace MvLibs
             if (Double.IsInfinity(startX) || Double.IsInfinity(startY) || Double.IsInfinity(endX) || Double.IsInfinity(endY)) return Double.PositiveInfinity;
             return Math.Sqrt(Math.Pow(endX - startX, 2) + Math.Pow(endY - startY, 2));
         }
-
-        public static PointD MidPoint(PointD start, PointD end) => MidPoint(start.X, start.Y, end.X, end.Y);
-        public static PointD MidPoint(Point2d start, Point2d end) => MidPoint(start.X, start.Y, end.X, end.Y);
-        public static PointD MidPoint(Double startX, Double startY, Double endX, Double endY) =>
-            new PointD((startX + endX) / 2, (startY + endY) / 2);
-
-        public static Point2d RotatePoint(Point2d point, Point2d center, Double angle) => RotatePoint(new Point2d[] { point }, center, angle)[0];
-        public static List<Point2d> RotatePoint(List<Point2d> points, Point2d center, Double angle) => RotatePoint(points.ToArray(), center, angle);
-        public static List<Point2d> RotatePoint(Point2d[] points, Point2d center, Double angle)
-        {
-            using (Matrix matrix = new Matrix())
-            {
-                List<PointF> pointfs = new List<PointF>();
-                foreach (Point2d p in points) pointfs.Add(new PointF(Convert.ToSingle(p.X), Convert.ToSingle(p.Y)));
-                matrix.RotateAt((Single)angle, new PointF(Convert.ToSingle(center.X), Convert.ToSingle(center.Y)));
-                matrix.TransformPoints(pointfs.ToArray());
-                return points.ToList();
-            }
-        }
-
         public static Point2d CalculatePoint(Point2d start, Double distance, Double radian)
         {
             Double x = start.X + Math.Cos(radian) * distance;
             Double y = start.Y + Math.Sin(radian) * distance;
             return new Point2d(x, y);
         }
+        public static PointD MidPoint(PointD start, PointD end) => MidPoint(start.X, start.Y, end.X, end.Y);
+        public static PointD MidPoint(Point2d start, Point2d end) => MidPoint(start.X, start.Y, end.X, end.Y);
+        public static PointD MidPoint(Double startX, Double startY, Double endX, Double endY) =>
+            new PointD((startX + endX) / 2, (startY + endY) / 2);
 
         public static PointD LineIntersection(LineSegment line1, LineSegment line2)
         {
@@ -183,80 +166,72 @@ namespace MvLibs
             return s;
         }
 
-        public static Mat Resize(Mat source, Double scale) => Resize(source, scale, scale);
-        public static Mat Resize(Mat source, Double scaleX, Double scaleY) =>
-            source.Resize(new OpenCvSharp.Size(source.Cols * scaleX, source.Rows * scaleY));
+        public static Scalar Scalar(System.Drawing.Color color) => OpenCvSharp.Scalar.FromRgb(color.R, color.G, color.B);
+        public static Mat Resize(Mat mat, Double scale) => Resize(mat, scale, scale);
+        public static Mat Resize(Mat mat, Double scaleX, Double scaleY) =>
+            mat.Resize(new Size(), scaleX, scaleY, InterpolationFlags.Linear);
 
-        public static Scalar ToScalar(Color color) => Scalar.FromRgb(color.R, color.G, color.B);
-        public static Mat CopyRectangle(Mat image, Rect region) => CopyRectangle(image, region, Scalar.Black);
-        public static Mat CopyRectangle(Mat image, Rect region, Scalar background)
+        public static Mat Copy(Mat mat, Rect region, System.Drawing.Color background, Single scale = 1) => Copy(mat, region, Scalar(background), scale);
+        public static Mat Copy(Mat mat, Rect region, Scalar background, Single scale = 1)
         {
-            Rect source = region.Intersect(new Rect(0, 0, image.Width, image.Height));
+            Rect source = region.Intersect(new Rect(0, 0, mat.Width, mat.Height));
+            if (source.Width <= 0 || source.Height <= 0) return null;
             Rect target = new Rect(0, 0, source.Width, source.Height);
             if (region.X < 0) target.X -= region.X;
             if (region.Y < 0) target.Y -= region.Y;
-            //Debug.WriteLine($"region={region}, source={source}, target={target}");
-            Mat output = new Mat(region.Size, image.Type(), background);
-            image[source].CopyTo(output[target]);
-            return output;
-        }
-        #endregion
-
-        #region Image Convert
-        public static Mat ToMat(ICogImage image)
-        {
-            if (image == null) return null;
-            if (image.GetType() == typeof(CogImage8Grey))
-            {
-                using (ICogImage8PixelMemory mem = (image as CogImage8Grey).Get8GreyPixelMemory(CogImageDataModeConstants.Read, 0, 0, image.Width, image.Height))
-                    return new Mat(image.Height, image.Width, MatType.CV_8UC1, mem.Scan0);
-            }
-            else if (image.GetType() == typeof(CogImage24PlanarColor))
-            {
-                using (Bitmap bitmap = (image as CogImage24PlanarColor)?.ToBitmap())
-                    return BitmapConverter.ToMat(bitmap);
-            }
-            return null;
-        }
-        public static Mat ToMat(Bitmap image)
-        {
-            if (image == null) return null;
-            return new Mat(image.GetHbitmap());
-        }
-        public static ICogImage ToCogImage(Mat mat)
-        {
-            if (mat.Type() == MatType.CV_8UC3)
-                return new CogImage24PlanarColor(mat.ToBitmap());
-            return ToCogGray(mat);
-        }
-        public static CogImage8Grey ToCogGray(Mat mat)
-        {
-            CogImage8Grey image = new CogImage8Grey();
-            using (CogImage8Root cogImage8Root = new CogImage8Root())
-            {
-                cogImage8Root.Initialize(mat.Width, mat.Height, mat.Ptr(0), mat.Width, null);
-                image.SetRoot(cogImage8Root);
-            }
-            return image;
+            //Debug.WriteLine($"{source.X}, {source.Y}, {source.Width}, {source.Height}", "source");
+            //Debug.WriteLine($"{target.X}, {target.Y}, {target.Width}, {target.Height}", "target");
+            Mat output = new Mat(region.Size, mat.Type(), background);
+            mat[source].CopyTo(output[target]);
+            if (scale == 1.0f) return output;
+            Mat resized = Resize(output, scale);
+            output.Dispose();
+            return resized;
         }
 
-        public static CogImage8Grey ToCogGray(IntPtr sufaceAddress, Int32 width, Int32 height)
+        public static Mat Copy(Mat source, RotatedRect region, System.Drawing.Color background, Single scale = 1) => Copy(source, region, Scalar(background), scale);
+        public static Mat Copy(Mat source, RotatedRect region, Scalar background, Single scale = 1)
         {
-            CogImage8Grey image = new CogImage8Grey();
-            using (CogImage8Root cogImage8Root = new CogImage8Root())
+            Rect rect = BoundingRect(region);
+            Single angle = region.Angle % 360.0f;
+            if (angle == 0.0f) return Copy(source, rect, background, scale);
+
+            Point2f center = new Point2f(rect.Width / 2, rect.Height / 2);
+            using (Mat copyed = Copy(source, rect, background))
+            using (Mat matrix = Cv2.GetRotationMatrix2D(center, angle, scale))
+            using (Mat affine = copyed.WarpAffine(matrix, rect.Size, InterpolationFlags.Linear, BorderTypes.Constant, background))
             {
-                cogImage8Root.Initialize(width, height, sufaceAddress, width, null);
-                image.SetRoot(cogImage8Root);
+                Single cx = affine.Cols / 2.0f;
+                Single cy = affine.Rows / 2.0f;
+                Single w = region.Size.Width * scale;
+                Single h = region.Size.Height * scale;
+                Single x = cx - w / 2.0f;
+                Single y = cy - h / 2.0f;
+                Point p = new Point2d(x, y).ToPoint();
+                Size s = new Size2d(w, h).ToSize();
+                return new Mat(affine, new Rect(p, s));
             }
-            return image;
         }
 
-        public static CogImage8Grey CopyToCogImage(Mat image)
+        public static Rect BoundingRect(RotatedRect rect)
         {
-            Int32 bufferSize = image.Width * image.Height;
-            IntPtr bufferAddress = Marshal.AllocHGlobal(bufferSize);
-            CopyMemory(bufferAddress, image.Ptr(0), (UInt32)bufferSize);
-            return ToCogGray(bufferAddress, image.Width, image.Height);
+            Point2f[] pt = rect.Points();
+            Int32 x = (Int32)Math.Floor(pt.Min(p => p.X));
+            Int32 y = (Int32)Math.Floor(pt.Min(p => p.Y));
+            Int32 w = (Int32)Math.Ceiling(pt.Max(p => p.X) - x);
+            Int32 h = (Int32)Math.Ceiling(pt.Max(p => p.Y) - y);
+            return new Rect(x, y, w, h);
+        }
+
+        public static T GetAttribute<T>(Enum @enum)
+        {
+            if (@enum == null) return default(T);
+            try
+            {
+                Type type = @enum.GetType();
+                return (T)type.GetField(type.GetEnumName(@enum)).GetCustomAttributes(typeof(T), true).FirstOrDefault();
+            }
+            catch (Exception ex) { Debug.WriteLine($"[{@enum.GetType()}] {ex.Message}", "GetAttribute"); return default(T); }
         }
         #endregion
 
@@ -266,32 +241,63 @@ namespace MvLibs
             if (block == null || !block.Tools.Contains(name)) return null;
             return block.Tools[name];
         }
-        public static T Input<T>(CogToolBlock block, String name)
+
+        public static CogToolBlockTerminal AddTerminal(CogToolBlockTerminalCollection terminals, String name, Type type, Object value = null)
         {
-            if (block == null || !block.Inputs.Contains(name)) return default(T);
-            Object v = block.Inputs[name].Value;
-            if (v == null) return default(T);
-            return (T)v;
+            if (terminals.Contains(name)) return terminals[name];
+            CogToolBlockTerminal terminal = new CogToolBlockTerminal(name, type);
+            if (value != null) terminal.Value = value;
+            terminals.Add(terminal);
+            return terminal;
         }
-        public static Boolean Input(CogToolBlock block, String name, Object value)
+
+        public static CogToolBlockTerminal GetTerminal(CogToolBlockTerminalCollection terminals, String name)
         {
-            if (block == null || !block.Inputs.Contains(name)) return false;
-            block.Inputs[name].Value = value;
+            if (terminals == null || !terminals.Contains(name)) return null;
+            return terminals[name];
+        }
+        public static Boolean SetTerminalValue(CogToolBlockTerminalCollection terminals, String name, Object value)
+        {
+            CogToolBlockTerminal terminal = GetTerminal(terminals, name);
+            if (terminal == null) return false;
+            terminal.Value = value;
             return true;
         }
-        public static T Output<T>(CogToolBlock block, String name)
+        public static T GetTerminalValue<T>(CogToolBlockTerminalCollection terminals, String name)
         {
-            if (block == null || !block.Outputs.Contains(name)) return default(T);
-            Object v = block.Outputs[name].Value;
-            if (v == null) return default(T);
-            return (T)v;
+            CogToolBlockTerminal terminal = GetTerminal(terminals, name);
+            if (terminal == null) return default(T);
+            return (T)terminal.Value;
         }
-        public static Boolean Output(CogToolBlock block, String name, Object value)
+        public static T Input<T>(CogToolBlock block, String name) => GetTerminalValue<T>(block?.Inputs, name);
+        public static Boolean Input(CogToolBlock block, String name, Object value) => SetTerminalValue(block?.Inputs, name, value);
+        public static T Output<T>(CogToolBlock block, String name) => GetTerminalValue<T>(block?.Outputs, name);
+        public static Boolean Output(CogToolBlock block, String name, Object value) => SetTerminalValue(block?.Outputs, name, value);
+
+        public static Boolean DisposeImage(ICogImage image)
         {
-            if (block == null || !block.Outputs.Contains(name)) return false;
-            block.Outputs[name].Value = value;
+            if (image == null) return false;
+            if (image.GetType() == typeof(CogImage8Grey)) (image as CogImage8Grey).Dispose();
+            else if (image.GetType() == typeof(CogImage24PlanarColor)) (image as CogImage24PlanarColor).Dispose();
+            image = null;
             return true;
         }
+
+        public static Boolean DisposeImage(CogToolBlockTerminal terminal)
+        {
+            if (terminal == null) return false;
+            if (terminal.ValueType != typeof(CogImage8Grey) && terminal.ValueType != typeof(CogImage24PlanarColor)) return false;
+            if (terminal.Value == null) return true;
+            if (terminal.ValueType == typeof(CogImage8Grey))
+                (terminal.Value as CogImage8Grey)?.Dispose();
+            else if (terminal.ValueType == typeof(CogImage24PlanarColor))
+                (terminal.Value as CogImage24PlanarColor)?.Dispose();
+            terminal.Value = null;
+            return true;
+        }
+
+        public static Boolean DisposeInputImage(CogToolBlock block, String name) => DisposeImage(GetTerminal(block?.Inputs, name));
+        public static Boolean DisposeOutputImage(CogToolBlock block, String name) => DisposeImage(GetTerminal(block?.Outputs, name));
 
         public static void InitOutputs(CogToolBlock block)
         {
@@ -299,34 +305,36 @@ namespace MvLibs
             foreach (CogToolBlockTerminal item in block.Outputs)
             {
                 if (item.Value == null) continue;
-                if (item.ValueType == typeof(CogImage8Grey))
+                if (item.ValueType == typeof(CogImage8Grey) || item.ValueType == typeof(CogImage24PlanarColor))
                 {
-                    //(item.Value as CogImage8Grey)?.Dispose();
+                    //DisposeImage(item);
                     continue;
                 }
                 item.Value = null;
             }
         }
 
-        public static Boolean LoadTrainImage(CogCNLSearchTool tool, String file)
-        {
-            if (tool.Pattern.Trained) return true;
-            if (!File.Exists(file)) return false;
-            tool.Pattern.TrainImage = new CogImage8Grey(new Bitmap(file));
-            tool.Pattern.TrainRegion = new CogRectangle() { X = 0, Y = 0, Width = tool.Pattern.TrainImage.Width, Height = tool.Pattern.TrainImage.Height };
-            tool.Pattern.OriginX = tool.Pattern.TrainImage.Width / 2;
-            tool.Pattern.OriginY = tool.Pattern.TrainImage.Height / 2;
-            tool.Pattern.Train();
-            return tool.Pattern.Trained;
-        }
+        //public static String InputPath(CogToolBlock block, String name)
+        //{
+        //    if (block == null || !block.Inputs.Contains(name)) return null;
+        //    CogToolBlockTerminal terminal = block.Inputs[name];
+        //    return $"Inputs.Item[\"{terminal.ID}\"].Value.({terminal.ValueType})";
+        //}
+        //public static String OutputPath(CogToolBlock block, String name)
+        //{
+        //    if (block == null || !block.Outputs.Contains(name)) return null;
+        //    CogToolBlockTerminal terminal = block.Outputs[name];
+        //    return $"Outputs.Item[\"{terminal.ID}\"].Value.({terminal.ValueType})";
+        //}
 
         public static Boolean LoadTrainImage(CogPMAlignTool tool, String file)
         {
             if (tool.Pattern.Trained) return true;
             if (!File.Exists(file)) return false;
-            tool.Pattern.TrainImage = new CogImage8Grey(new Bitmap(file));
+            tool.Pattern.TrainImage = new CogImage8Grey(new System.Drawing.Bitmap(file));
             tool.Pattern.TrainRegion = new CogRectangle() { X = 0, Y = 0, Width = tool.Pattern.TrainImage.Width, Height = tool.Pattern.TrainImage.Height };
-            
+            //tool.Pattern.OriginX = tool.Pattern.TrainImage.Width / 2;
+            //tool.Pattern.OriginY = tool.Pattern.TrainImage.Height / 2;
             tool.Pattern.Train();
             return tool.Pattern.Trained;
         }
@@ -371,10 +379,69 @@ namespace MvLibs
         public static CogRectangleAffine GetBoundingBox(CogBlobResult result, CogBlobAxisConstants axis = CogBlobAxisConstants.Principal) =>
             result?.GetBoundingBox(axis);
 
-        //public static CogRectangle GetBoundingBox(CogPolygon polygon) =>
-        //    polygon?.EnclosingRectangle(CogCopyShapeConstants.GeometryOnly);
-        //public static CogRectangle GetBoundingBox(CogIDResult result) =>
-        //    GetBoundingBox(result?.BoundsPolygon);
+        public static ICogImage8PixelMemory[] GetChannels(ICogImage image)
+        {
+            if (image == null) return null;
+            if (image.GetType() == typeof(CogImage8Grey))
+                return new ICogImage8PixelMemory[] { (image as CogImage8Grey).Get8GreyPixelMemory(CogImageDataModeConstants.Read, 0, 0, image.Width, image.Height) };
+            if (image.GetType() == typeof(CogImage24PlanarColor))
+            {
+                ICogImage8PixelMemory[] c = new ICogImage8PixelMemory[3];
+                (image as CogImage24PlanarColor).Get24PlanarColorPixelMemory(CogImageDataModeConstants.Read, 0, 0, image.Width, image.Height, out c[0], out c[1], out c[2]);
+                return c;
+            }
+            return null;
+        }
+
+        public static Mat ToMat(ICogImage image)
+        {
+            ICogImage8PixelMemory[] channels = GetChannels(image);
+            if (channels == null || channels.Length < 1) return null;
+            Mat mat = null;
+
+            if (channels.Length == 1)
+                mat = Mat.FromPixelData(image.Height, image.Width, MatType.CV_8UC1, channels[0].Scan0).Clone();
+            else
+            {
+                mat = new Mat(image.Height, image.Width, MatType.CV_8UC3);
+                Mat[] mats = new Mat[] {
+                    Mat.FromPixelData(image.Height, image.Width, MatType.CV_8UC1, channels[2].Scan0).Clone(), // B
+                    Mat.FromPixelData(image.Height, image.Width, MatType.CV_8UC1, channels[1].Scan0).Clone(), // G
+                    Mat.FromPixelData(image.Height, image.Width, MatType.CV_8UC1, channels[0].Scan0).Clone(), // R
+                };
+                Cv2.Merge(mats, mat);
+                foreach (var m in mats)
+                    m.Dispose();
+            }
+            foreach (var m in channels)
+                m.Dispose();
+            return mat;
+        }
+
+        //public static IntPtr CopyMemory(ICogImage8PixelMemory channel)
+        //{
+        //    Int32 imageSize = channel.Width * channel.Height * channel.Stride;
+        //    IntPtr ptr = Marshal.AllocHGlobal(imageSize);
+        //    CopyMemory(ptr, channel.Scan0, (UInt32)imageSize);
+        //    return ptr;
+        //}
+        //public static Mat ToMat(CogImage8Grey image)
+        //{
+        //    if (image == null) return null;
+        //    using (System.Drawing.Bitmap bitmap = image.ToBitmap())
+        //    using (Mat color = BitmapConverter.ToMat(bitmap))
+        //        return color.CvtColor(ColorConversionCodes.BGR2GRAY);
+        //}
+
+        public static ICogImage ToCogImage(Mat mat)
+        {
+            if (mat == null) return null;
+            using(System.Drawing.Bitmap bitmap = mat.ToBitmap())
+            {
+                if (mat.Type() == MatType.CV_8UC3) return new CogImage24PlanarColor(bitmap);
+                else return new CogImage8Grey(bitmap);
+            }
+        }
         #endregion
     }
 }

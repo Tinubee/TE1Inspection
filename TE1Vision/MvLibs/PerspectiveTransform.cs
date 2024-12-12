@@ -107,6 +107,23 @@ namespace MvLibs
             Reverse = Cv2.GetPerspectiveTransform(Destination.ToArray(), Norminal.ToArray());
         }
 
+        public Mat WarpPerspective(Mat source)
+        {
+            Size sz = source.Size();
+            PointD c = Origins.Center();
+            Point2f[] dst = Origins.ToArray();
+            Point2f[] nom = {
+                new Point2f((Single)(c.X - SideX), (Single)(c.Y - SideY)),
+                new Point2f((Single)(c.X + SideX), (Single)(c.Y - SideY)),
+                new Point2f((Single)(c.X - SideX), (Single)(c.Y + SideY)),
+                new Point2f((Single)(c.X + SideX), (Single)(c.Y + SideY)),
+            };
+            using (Mat matrix = Cv2.GetPerspectiveTransform(dst, nom))
+                return source.WarpPerspective(matrix, sz);
+
+            //return source.WarpPerspective(Reverse, sz);
+        }
+
         public void CreateMatrix()
         {
             CreateNorminal();
@@ -117,12 +134,18 @@ namespace MvLibs
         public void CreateMatrix(RectanglePoints origins, out PointD center)
         {
             CreateNorminal();
+            Origins = origins;
             PointD oc = origins.Center();
             Destination.LT = new PointD(origins.LT.X - oc.X, origins.LT.Y - oc.Y);
             Destination.RT = new PointD(origins.RT.X - oc.X, origins.RT.Y - oc.Y);
             Destination.LB = new PointD(origins.LB.X - oc.X, origins.LB.Y - oc.Y);
             Destination.RB = new PointD(origins.RB.X - oc.X, origins.RB.Y - oc.Y);
-            Origins = origins;
+
+            //Norminal.LT = new PointD(oc.X - SideX, oc.Y - SideY);
+            //Norminal.RT = new PointD(oc.X + SideX, oc.Y - SideY);
+            //Norminal.LB = new PointD(oc.X - SideX, oc.Y + SideY);
+            //Norminal.RB = new PointD(oc.X + SideX, oc.Y + SideY);
+
             CreateTransform();
             center = TransForward(0, 0);
         }
@@ -178,5 +201,39 @@ namespace MvLibs
 
 
         public void Dispose() { Forward?.Dispose(); Reverse?.Dispose(); }
+    }
+
+    public class PerspectiveCorrect
+    {
+        public Double CalibX = 1;
+        public Double CalibY = 1;
+        public Double RealWidth = 100;
+        public Double RealHeight = 100;
+        [JsonIgnore] public Double SideX => RealWidth / CalibX / 2;
+        [JsonIgnore] public Double SideY => RealHeight / CalibY / 2;
+        public RectanglePoints Points = new RectanglePoints();
+
+        public PointD GetOrigin() => Points.Center();
+
+        public RectanglePoints GetNominals()
+        {
+            PointD c = GetOrigin();
+            return new RectanglePoints() {
+                LT = new PointD(c.X - SideX, c.Y - SideY),
+                RT = new PointD(c.X + SideX, c.Y - SideY),
+                LB = new PointD(c.X - SideX, c.Y + SideY),
+                RB = new PointD(c.X + SideX, c.Y + SideY),
+            };
+        }
+
+        public Mat WarpPerspective(Mat source, Double scale = 1.0)
+        {
+            if (source == null) return null;
+            Size size = source.Size();
+            if (scale != 1)
+                size = new Size(size.Width * scale, size.Height * scale);
+            using (Mat matrix = Cv2.GetPerspectiveTransform(Points.ToArray(), GetNominals().ToArray()))
+                return source.WarpPerspective(matrix, size);
+        }
     }
 }

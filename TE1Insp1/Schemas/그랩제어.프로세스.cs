@@ -85,9 +85,12 @@ namespace TE1.Schemas
         }
         public void Active(카메라구분 구분) => this.GetItem(구분)?.Active();
 
-        Boolean 검사중 = false;
+        //Boolean 검사중 = false;
         public void 그랩완료(그랩장치 장치)
         {
+            
+
+
             if (장치.구분 == 카메라구분.Cam03)
                 new Thread(() => Global.조명제어.TurnOff()).Start();
             //if (장치.구분 == 카메라구분.Cam01 || 장치.구분 == 카메라구분.Cam02)

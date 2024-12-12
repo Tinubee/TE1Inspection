@@ -218,6 +218,9 @@ namespace TE1.UI.Controls
             //if (정보.실측값 == 0) { Global.Notify("Enter the actual value and run it.", 로그영역, AlertControl.AlertTypes.Warning); return; }
             if (정보.측정값 == 0) { Global.Notify("Perform the inspection and then run it.", 로그영역, AlertControl.AlertTypes.Warning); return; }
             if (!Global.Confirm(this.FindForm(), "Want to perform a calibration?")) return;
+
+            //Debug.WriteLine($"{정보.검사명칭}");
+            
             정보.교정계산(정보);
 
             this.GridView1.RefreshRow(this.GridView1.FocusedRowHandle);

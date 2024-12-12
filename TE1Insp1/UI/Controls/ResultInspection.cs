@@ -7,6 +7,7 @@ using System;
 using System.Windows.Media.Media3D;
 using System.Windows;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 
 namespace TE1.UI.Controls
 {
@@ -66,6 +67,7 @@ namespace TE1.UI.Controls
             if (this.InvokeRequired) { this.BeginInvoke(new Action(() => { 검사완료알림(결과); })); return; }
             this.e결과뷰어.SetResults(결과);
             this.e결과목록.SetResults(결과);
+
             this.e측정결과.Appearance.ForeColor = 환경설정.ResultColor(결과.측정결과);
             this.e치수결과.Properties.Appearance.ForeColor = 환경설정.ResultColor(결과.치수결과);
             this.e외관결과.Properties.Appearance.ForeColor = 환경설정.ResultColor(결과.외관결과);
@@ -73,6 +75,7 @@ namespace TE1.UI.Controls
             검사정보 정보 = 결과.GetItem(검사항목.QrLegibility);
             if (정보 != null) this.e큐알등급.Properties.Appearance.ForeColor = 환경설정.ResultColor(정보.측정결과);
             else this.e큐알등급.Properties.Appearance.ForeColor = 환경설정.ResultColor(결과구분.WA);
+        
             this.Bind검사결과.DataSource = 결과;
             this.Bind검사결과.ResetBindings(false);
         }

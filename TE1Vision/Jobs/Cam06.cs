@@ -52,7 +52,7 @@ namespace TE1.Cam06
                 //    //var label = new CogGraphicLabel() { Text = r.Display, TipText = r.Display, X = r.Rect[0], Y = r.Rect[1], Alignment = CogGraphicLabelAlignmentConstants.BaselineCenter };
                 //    //ToolBlock.AddGraphicToRunRecord(label, lastRecord, ViewerRecodName, r.Display);
                 //}
-                AddDefectsGraphics(lastRecord, results);
+                //AddDefectsGraphics(lastRecord, results);
 
                 Dictionary<String, CogGraphicLabel> labels = new Dictionary<String, CogGraphicLabel>();
                 foreach (ICogRecord rcd in record.SubRecords)

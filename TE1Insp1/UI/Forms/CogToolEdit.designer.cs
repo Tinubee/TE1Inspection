@@ -29,6 +29,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions1 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.XtraEditors.Controls.EditorButtonImageOptions editorButtonImageOptions2 = new DevExpress.XtraEditors.Controls.EditorButtonImageOptions();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
+            DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CogToolEdit));
             this.toolbarFormControl1 = new DevExpress.XtraBars.ToolbarForm.ToolbarFormControl();
             this.toolbarFormManager1 = new DevExpress.XtraBars.ToolbarForm.ToolbarFormManager(this.components);
@@ -43,6 +53,11 @@
             this.b사진열기 = new DevExpress.XtraBars.BarButtonItem();
             this.b검사수행 = new DevExpress.XtraBars.BarButtonItem();
             this.b자동교정 = new DevExpress.XtraBars.BarToggleSwitchItem();
+            this.barStaticItem2 = new DevExpress.XtraBars.BarStaticItem();
+            this.b사진보정설정 = new DevExpress.XtraBars.BarEditItem();
+            this.e사진보정설정 = new DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit();
+            this.barStaticItem3 = new DevExpress.XtraBars.BarStaticItem();
+            this.b표면검사설정 = new DevExpress.XtraBars.BarButtonItem();
             this.dockManager1 = new DevExpress.XtraBars.Docking.DockManager(this.components);
             this.dockPanel1 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel1_Container = new DevExpress.XtraBars.Docking.ControlContainer();
@@ -51,6 +66,7 @@
             this.e뷰어 = new Cogutils.RecordsDisplay();
             ((System.ComponentModel.ISupportInitialize)(this.toolbarFormControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolbarFormManager1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.e사진보정설정)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).BeginInit();
             this.dockPanel1.SuspendLayout();
             this.dockPanel1_Container.SuspendLayout();
@@ -76,6 +92,10 @@
             this.toolbarFormControl1.TitleItemLinks.Add(this.barStaticItem1);
             this.toolbarFormControl1.TitleItemLinks.Add(this.b설정저장);
             this.toolbarFormControl1.TitleItemLinks.Add(this.b자동교정);
+            this.toolbarFormControl1.TitleItemLinks.Add(this.barStaticItem2);
+            this.toolbarFormControl1.TitleItemLinks.Add(this.b사진보정설정);
+            this.toolbarFormControl1.TitleItemLinks.Add(this.barStaticItem3);
+            this.toolbarFormControl1.TitleItemLinks.Add(this.b표면검사설정);
             this.toolbarFormControl1.ToolbarForm = this;
             // 
             // toolbarFormManager1
@@ -92,8 +112,14 @@
             this.barStaticItem1,
             this.b사진열기,
             this.b검사수행,
-            this.b자동교정});
-            this.toolbarFormManager1.MaxItemId = 9;
+            this.b자동교정,
+            this.barStaticItem2,
+            this.b사진보정설정,
+            this.barStaticItem3,
+            this.b표면검사설정});
+            this.toolbarFormManager1.MaxItemId = 13;
+            this.toolbarFormManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.e사진보정설정});
             // 
             // barDockControlTop
             // 
@@ -181,6 +207,49 @@
             this.b자동교정.Caption = "Calibration";
             this.b자동교정.Id = 8;
             this.b자동교정.Name = "b자동교정";
+            // 
+            // barStaticItem2
+            // 
+            this.barStaticItem2.Caption = "  ";
+            this.barStaticItem2.Id = 9;
+            this.barStaticItem2.Name = "barStaticItem2";
+            // 
+            // b사진보정설정
+            // 
+            this.b사진보정설정.Caption = "Defects Config";
+            this.b사진보정설정.Edit = this.e사진보정설정;
+            this.b사진보정설정.Id = 10;
+            this.b사진보정설정.Name = "b사진보정설정";
+            this.b사진보정설정.Size = new System.Drawing.Size(250, 0);
+            // 
+            // e사진보정설정
+            // 
+            this.e사진보정설정.AutoHeight = false;
+            editorButtonImageOptions2.SvgImage = ((DevExpress.Utils.Svg.SvgImage)(resources.GetObject("editorButtonImageOptions2.SvgImage")));
+            editorButtonImageOptions2.SvgImageSize = new System.Drawing.Size(16, 16);
+            this.e사진보정설정.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, true, true, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default),
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, editorButtonImageOptions2, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject5, serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
+            this.e사진보정설정.Columns.AddRange(new DevExpress.XtraEditors.Controls.LookUpColumnInfo[] {
+            new DevExpress.XtraEditors.Controls.LookUpColumnInfo("Name", "Name")});
+            this.e사진보정설정.DisplayMember = "Name";
+            this.e사진보정설정.Name = "e사진보정설정";
+            this.e사진보정설정.NullText = "[Imaging Config]";
+            this.e사진보정설정.ShowHeader = false;
+            this.e사진보정설정.ValueMember = "Name";
+            // 
+            // barStaticItem3
+            // 
+            this.barStaticItem3.Caption = "  ";
+            this.barStaticItem3.Id = 11;
+            this.barStaticItem3.Name = "barStaticItem3";
+            // 
+            // b표면검사설정
+            // 
+            this.b표면검사설정.Caption = "Defects Config";
+            this.b표면검사설정.Id = 12;
+            this.b표면검사설정.Name = "b표면검사설정";
+            this.b표면검사설정.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             // 
             // dockManager1
             // 
@@ -277,6 +346,7 @@
             this.ToolbarFormControl = this.toolbarFormControl1;
             ((System.ComponentModel.ISupportInitialize)(this.toolbarFormControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.toolbarFormManager1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.e사진보정설정)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).EndInit();
             this.dockPanel1.ResumeLayout(false);
             this.dockPanel1_Container.ResumeLayout(false);
@@ -311,5 +381,10 @@
         private Controls.ResultGrid e결과목록;
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
         private Cogutils.RecordsDisplay e뷰어;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem2;
+        private DevExpress.XtraBars.BarEditItem b사진보정설정;
+        private DevExpress.XtraEditors.Repository.RepositoryItemLookUpEdit e사진보정설정;
+        private DevExpress.XtraBars.BarStaticItem barStaticItem3;
+        private DevExpress.XtraBars.BarButtonItem b표면검사설정;
     }
 }

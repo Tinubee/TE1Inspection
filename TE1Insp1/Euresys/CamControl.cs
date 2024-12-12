@@ -158,6 +158,7 @@ namespace TE1.Multicam
             String state = this.ChannelState();
             if (state == Multicam.ChannelState.READY) return;
             this.SetParamString("ChannelState", Multicam.ChannelState.READY);
+            this.SetParamString("ChannelState", Multicam.ChannelState.ACTIVE);
             //this.FreeSufaceTable();
         }
 
@@ -167,15 +168,24 @@ namespace TE1.Multicam
             this.EncoderTickCount = 0;
             String state = this.ChannelState();
             MC.GetParam(this.Channel, "SurfaceIndex", out Int32 surfaceIndex);
-            //Debug.WriteLine($"ChannelState={state}, SurfaceIndex={surfaceIndex}", this.Camera.ToString());
+            Debug.WriteLine($"ChannelState={state}, SurfaceIndex={surfaceIndex}", this.Camera.ToString());
 
-            if (state == Multicam.ChannelState.ACTIVE) return;
-            if (state != Multicam.ChannelState.READY)
+            if (state == Multicam.ChannelState.ACTIVE)
             {
-                this.SetParamString("ChannelState", Multicam.ChannelState.READY);
-                Thread.Sleep(100);
+                Debug.WriteLine("Active");
+                SoftTrig();
             }
-            this.SetParamString("ChannelState", Multicam.ChannelState.ACTIVE);
+            else
+            {
+                this.SetParamString("ChannelState", Multicam.ChannelState.ACTIVE);
+                SoftTrig();
+            }
+            //if (state != Multicam.ChannelState.READY)
+            //{
+            //    this.SetParamString("ChannelState", Multicam.ChannelState.READY);
+            //    Thread.Sleep(100);
+            //}
+            //this.SetParamString("ChannelState", Multicam.ChannelState.ACTIVE);
             //this.FreeSufaceTable();
         }
 
@@ -195,28 +205,14 @@ namespace TE1.Multicam
             //this.FreeSufaceTable();
         }
 
-        /*
+
         [Description("Software Trig")]
         public void SoftTrig()
         {
-            Debug.WriteLine(this.TrigDelay, "Delay");
-            if (this.TrigDelay > 0)
-            {
-                Task.Run(() => {
-                    Debug.WriteLine("Acquisition Start", this.Camera.ToString());
-                    Task.Delay(this.TrigDelay).Wait();
-                    this.Active();
-                    //MC.SetParam(this.Channel, "ForceTrig", "TRIG");
-                });
-            }
-            else
-            {
-                Debug.WriteLine("Acquisition Start", this.Camera.ToString());
-                this.Active();
-                //MC.SetParam(this.Channel, "ForceTrig", "TRIG");
-            }
+            Debug.WriteLine($"ChannelState => {this.ChannelState()}", this.Camera.ToString());
+            MC.SetParam(this.Channel, "ForceTrig", "TRIG");
         }
-        */
+
 
         [Description("채널 상태")]
         public String ChannelState()
@@ -273,6 +269,7 @@ namespace TE1.Multicam
                     //MC.GetParam(currentChannel, "Elapsed_Pg", out Elapsed_Pg);
                     //MC.GetParam(currentChannel, "Remaining_Pg", out Remaining_Pg);
                     //Debug.WriteLine($"{this.Camera}: Elapsed_Pg={Elapsed_Pg}, Remaining_Pg={Remaining_Pg}");
+                    Debug.WriteLine($"ChannelState f => {this.ChannelState()}, {this.Camera}");
                     this.ImageGrap(currentChannel, signalInfo.SignalInfo, imageSizeX, imageSizeY, bufferPitch);
                 }
                 //else if (this.AcquisitionMode == AcquisitionMode.LONGPAGE)

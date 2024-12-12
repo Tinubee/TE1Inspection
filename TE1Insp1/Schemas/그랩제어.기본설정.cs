@@ -343,6 +343,7 @@ namespace TE1.Schemas
 
         private void AcquisitionFinishedEvent(IntPtr surfaceAddr, Int32 width, Int32 height, String error)
         {
+            Debug.WriteLine("Acquisition Finished");
             if (surfaceAddr == IntPtr.Zero) this.AcquisitionFinished(error);
             else this.AcquisitionFinished(surfaceAddr, width, height);
             //this.Stop();

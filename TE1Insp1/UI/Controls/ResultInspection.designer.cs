@@ -38,9 +38,9 @@
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.e결과뷰어 = new TE1.UI.Controls.Viewport3D();
             this.e외관결과 = new DevExpress.XtraEditors.TextEdit();
-            this.Bind검사결과 = new System.Windows.Forms.BindingSource(this.components);
             this.e치수결과 = new DevExpress.XtraEditors.TextEdit();
             this.e큐알등급 = new DevExpress.XtraEditors.TextEdit();
+            this.Bind검사결과 = new System.Windows.Forms.BindingSource(this.components);
             this.e검사순번 = new DevExpress.XtraEditors.TextEdit();
             this.e측정결과 = new DevExpress.XtraEditors.LabelControl();
             this.e검사시간 = new DevExpress.XtraEditors.TextEdit();
@@ -61,9 +61,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.e외관결과.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Bind검사결과)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.e치수결과.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.e큐알등급.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Bind검사결과)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.e검사순번.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.e검사시간.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.e큐알코드.Properties)).BeginInit();
@@ -111,8 +111,8 @@
             // 
             // e외관결과
             // 
-            this.e외관결과.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.Bind검사결과, "외관문구", true));
-            this.e외관결과.EditValue = "-";
+            this.e외관결과.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.Bind검사결과, "외관결과", true));
+            this.e외관결과.EditValue = "OK";
             this.e외관결과.EnterMoveNextControl = true;
             this.e외관결과.Location = new System.Drawing.Point(399, 54);
             this.e외관결과.Name = "e외관결과";
@@ -125,17 +125,13 @@
             this.e외관결과.StyleController = this.layoutControl1;
             this.e외관결과.TabIndex = 9;
             // 
-            // Bind검사결과
+            // e치수결과
             // 
-            this.Bind검사결과.DataSource = typeof(TE1.Schemas.검사결과);
-            // 
-            // eCTQ결과
-            // 
-            this.e치수결과.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.Bind검사결과, "품질문구", true));
-            this.e치수결과.EditValue = "-";
+            this.e치수결과.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.Bind검사결과, "치수결과", true));
+            this.e치수결과.EditValue = "OK";
             this.e치수결과.EnterMoveNextControl = true;
             this.e치수결과.Location = new System.Drawing.Point(399, 10);
-            this.e치수결과.Name = "eCTQ결과";
+            this.e치수결과.Name = "e치수결과";
             this.e치수결과.Properties.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.e치수결과.Properties.Appearance.Options.UseFont = true;
             this.e치수결과.Properties.Appearance.Options.UseTextOptions = true;
@@ -160,6 +156,10 @@
             this.e큐알등급.Size = new System.Drawing.Size(66, 32);
             this.e큐알등급.StyleController = this.layoutControl1;
             this.e큐알등급.TabIndex = 7;
+            // 
+            // Bind검사결과
+            // 
+            this.Bind검사결과.DataSource = typeof(TE1.Schemas.검사결과);
             // 
             // e검사순번
             // 
@@ -188,14 +188,14 @@
             this.e측정결과.Appearance.Options.UseTextOptions = true;
             this.e측정결과.Appearance.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
             this.e측정결과.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.e측정결과.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.Bind검사결과, "결과문구", true));
+            this.e측정결과.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.Bind검사결과, "측정결과", true));
             this.e측정결과.Location = new System.Drawing.Point(6, 6);
             this.e측정결과.MinimumSize = new System.Drawing.Size(0, 50);
             this.e측정결과.Name = "e측정결과";
             this.e측정결과.Size = new System.Drawing.Size(276, 86);
             this.e측정결과.StyleController = this.layoutControl1;
             this.e측정결과.TabIndex = 2;
-            this.e측정결과.Text = "Waiting";
+            this.e측정결과.Text = "OK";
             // 
             // e검사시간
             // 
@@ -409,9 +409,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.e외관결과.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Bind검사결과)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.e치수결과.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.e큐알등급.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Bind검사결과)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.e검사순번.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.e검사시간.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.e큐알코드.Properties)).EndInit();

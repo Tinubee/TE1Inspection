@@ -42,9 +42,6 @@ namespace TE1
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //Global.MainForm = new MainForm();
-            //Application.Run(Global.MainForm);
-
             try
             {
                 Global.MainForm = new MainForm();

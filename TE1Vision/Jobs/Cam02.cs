@@ -231,10 +231,10 @@ namespace TE1.Cam02
         {
             base.AfterToolRun(tool, result);
             if (result != CogToolResultConstants.Accept) return;
-            else if (tool.Name.Contains("H"))
-            {
-                //Debug.WriteLine($"{tool.Name} Run");
-            }
+            //else if (tool.Name.Contains("H"))
+            //{
+            //    Debug.WriteLine($"{tool.Name} Run");
+            //}
         }
 
         public override void StartedRun()
@@ -587,6 +587,11 @@ namespace TE1.Cam02
         {
             result = new InsItem() { InsType = ins.InsType };
             if (tool == null) return false;
+
+            //if(tool.Name.Contains("H11"))
+            //{
+            //    Debug.WriteLine($"{tool.RunStatus.Result} / {tool.Results.Count}");
+            //}
             if (tool.RunStatus.Result == CogToolResultConstants.Accept && tool.Results.GetCircle() != null)
             {
                 CogCircle c = tool.Results.GetCircle();
@@ -598,6 +603,7 @@ namespace TE1.Cam02
             }
             else
             {
+                Debug.WriteLine($"");
                 result.X = 0;
                 result.Y = 0;
                 result.D = 0;

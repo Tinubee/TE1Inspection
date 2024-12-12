@@ -58,6 +58,7 @@
             this.dockPanel1 = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanel1_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.e결과목록 = new TE1.UI.Controls.ResultGrid();
+            this.simpleLabelItem1 = new DevExpress.XtraLayout.SimpleLabelItem();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.e외관결과.Properties)).BeginInit();
@@ -79,6 +80,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).BeginInit();
             this.dockPanel1.SuspendLayout();
             this.dockPanel1_Container.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.simpleLabelItem1)).BeginInit();
             this.SuspendLayout();
             // 
             // layoutControl1
@@ -129,13 +131,13 @@
             // 
             this.Bind검사결과.DataSource = typeof(TE1.Schemas.검사결과);
             // 
-            // eCTQ결과
+            // e치수결과
             // 
             this.e치수결과.DataBindings.Add(new System.Windows.Forms.Binding("EditValue", this.Bind검사결과, "품질문구", true));
             this.e치수결과.EditValue = "-";
             this.e치수결과.EnterMoveNextControl = true;
             this.e치수결과.Location = new System.Drawing.Point(399, 10);
-            this.e치수결과.Name = "eCTQ결과";
+            this.e치수결과.Name = "e치수결과";
             this.e치수결과.Properties.Appearance.Font = new System.Drawing.Font("맑은 고딕", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.e치수결과.Properties.Appearance.Options.UseFont = true;
             this.e치수결과.Properties.Appearance.Options.UseTextOptions = true;
@@ -232,7 +234,7 @@
             this.e큐알코드.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "Copy", -1, true, true, false, editorButtonImageOptions1, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, DevExpress.Utils.ToolTipAnchor.Default)});
             this.e큐알코드.Properties.ReadOnly = true;
-            this.e큐알코드.Size = new System.Drawing.Size(550, 32);
+            this.e큐알코드.Size = new System.Drawing.Size(449, 32);
             this.e큐알코드.StyleController = this.layoutControl1;
             this.e큐알코드.TabIndex = 4;
             // 
@@ -250,7 +252,8 @@
             this.layoutControlItem5,
             this.layoutControlItem6,
             this.layoutControlItem7,
-            this.layoutControlItem8});
+            this.layoutControlItem8,
+            this.simpleLabelItem1});
             this.Root.Name = "Root";
             this.Root.Padding = new DevExpress.XtraLayout.Utils.Padding(4, 4, 4, 4);
             this.Root.Size = new System.Drawing.Size(1268, 900);
@@ -262,7 +265,7 @@
             this.layoutControlItem1.Location = new System.Drawing.Point(511, 0);
             this.layoutControlItem1.Name = "layoutControlItem1";
             this.layoutControlItem1.Padding = new DevExpress.XtraLayout.Utils.Padding(6, 6, 6, 6);
-            this.layoutControlItem1.Size = new System.Drawing.Size(671, 44);
+            this.layoutControlItem1.Size = new System.Drawing.Size(570, 44);
             this.layoutControlItem1.Text = "QR Code";
             this.layoutControlItem1.TextSize = new System.Drawing.Size(97, 25);
             // 
@@ -398,6 +401,17 @@
             this.e결과목록.Size = new System.Drawing.Size(645, 867);
             this.e결과목록.TabIndex = 0;
             // 
+            // simpleLabelItem1
+            // 
+            this.simpleLabelItem1.AllowHotTrack = false;
+            this.simpleLabelItem1.AppearanceItemCaption.Options.UseTextOptions = true;
+            this.simpleLabelItem1.AppearanceItemCaption.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.simpleLabelItem1.Location = new System.Drawing.Point(1081, 0);
+            this.simpleLabelItem1.Name = "simpleLabelItem1";
+            this.simpleLabelItem1.Size = new System.Drawing.Size(101, 44);
+            this.simpleLabelItem1.Text = "QR 등급";
+            this.simpleLabelItem1.TextSize = new System.Drawing.Size(97, 25);
+            // 
             // ResultInspection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -427,6 +441,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dockManager1)).EndInit();
             this.dockPanel1.ResumeLayout(false);
             this.dockPanel1_Container.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.simpleLabelItem1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -456,5 +471,6 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem8;
         private ResultGrid e결과목록;
         private DevExpress.XtraEditors.ButtonEdit e큐알코드;
+        private DevExpress.XtraLayout.SimpleLabelItem simpleLabelItem1;
     }
 }

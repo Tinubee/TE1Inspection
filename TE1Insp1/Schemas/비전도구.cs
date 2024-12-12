@@ -179,7 +179,7 @@ namespace TE1.Schemas
             if (this.InputImage == null) return false;
             Boolean r = false;
             String error = String.Empty;
-            if      (this.마스터형식 == 사진형식.Bmp) r = Common.ImageSaveBmp(this.InputImage, this.마스터경로, out error);
+            if (this.마스터형식 == 사진형식.Bmp) r = Common.ImageSaveBmp(this.InputImage, this.마스터경로, out error);
             else if (this.마스터형식 == 사진형식.Jpg) r = Common.ImageSaveJpg(this.InputImage, this.마스터경로, out error);
             else return false;
             if (!r) Utils.WarningMsg("마스터 이미지 등록실패!!!\n" + error);
@@ -258,6 +258,7 @@ namespace TE1.Schemas
             {
                 Input("Results", GetDisplayResultJson(결과));
                 ICogRecord records = this.ToolBlock.CreateLastRunRecord();
+                Debug.WriteLine($"{records}");
                 ICogRecord record = null;
                 if (records != null && records.SubRecords != null && records.SubRecords.ContainsKey(this.ViewerRecodName))
                 {
@@ -266,8 +267,6 @@ namespace TE1.Schemas
                     else
                         record = records.SubRecords[this.ViewerRecodName];
                 }
-
-
                 if (this.OutputImage != null)
                 {
                     if (this.Display != null) this.Display.SetImage(this.OutputImage, record, null);
@@ -276,10 +275,12 @@ namespace TE1.Schemas
                 }
                 else
                 {
+                  
                     if (this.Display != null) this.Display.SetImage(this.InputImage, record, null);
                     if (this.RecordsDisplay != null && !Global.장치상태.자동수동)
                         this.RecordsDisplay.ViewResultImage(this.InputImage, records, String.Empty);
                 }
+                //Debug.WriteLine("8");
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message, "DisplayResult"); }
         }
@@ -287,7 +288,11 @@ namespace TE1.Schemas
         {
             List<DisplayResult> results = new List<DisplayResult>();
             foreach (검사정보 정보 in 결과.검사내역.Where(x => x.카메라여부 && (Int32)x.검사장치 == (Int32)카메라).ToList())
+            {
+                //Debug.WriteLine($"{정보.변수명칭}");
                 results.Add(new DisplayResult() { KeyName = 정보.변수명칭, Display = 정보.DisplayText(), Color = CogColor(정보.측정결과) });
+            }
+                
 
             //foreach (표면불량 불량 in 결과.불량영역(this.카메라))
             //{

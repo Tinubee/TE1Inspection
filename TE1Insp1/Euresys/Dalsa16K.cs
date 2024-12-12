@@ -13,10 +13,10 @@ namespace TE1.Multicam
         public override UInt32 DriverIndex { get; set; } = 0;
         public override AcquisitionMode AcquisitionMode { get; set; } = AcquisitionMode.PAGE;
         public override LineRateMode LineRateMode { get; set; } = LineRateMode.PULSE;
-        public override TrigMode TrigMode { get; set; } = TrigMode.HARD;
-        public override NextTrigMode NextTrigMode { get; set; } = NextTrigMode.HARD;
+        public override TrigMode TrigMode { get; set; } = TrigMode.SOFT;
+        public override NextTrigMode NextTrigMode { get; set; } = NextTrigMode.SAME;
         public override EndTrigMode EndTrigMode { get; set; } = EndTrigMode.AUTO;
-        public override Int32 SeqLength_Pg { get; set; } = 1;
+        public override Int32 SeqLength_Pg { get; set; } = -1;
         public override Int32 PageLength_Ln { get; set; } = 31000;
 
         public Dalsa16K(카메라구분 camera) { this.Camera = camera; }
@@ -43,8 +43,8 @@ namespace TE1.Multicam
             //MC.SetParam(this.Channel, "ImageFlipY", "ON");
 
             //MC.SetParam(this.Channel, "BreakEffect", this.BreakEffect.ToString());
-            //MC.SetParam(this.Channel, "LineTrigCtl", "DIFF_PAIRED");
-            //MC.SetParam(this.Channel, "LineTrigLine", "DIN1_DIN2");
+            MC.SetParam(this.Channel, "LineTrigCtl", "DIFF");
+            MC.SetParam(this.Channel, "LineTrigLine", "DIN1");
             //MC.SetParam(this.Channel, "LineTrigEdge", "RISING_A");   // RISING_A == GOHIGH == GOLOW, FALLING_A, ALL_A, ALL_A_B
 
             //DebugParam("SeqLength_Pg");
