@@ -8,21 +8,23 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>TE1</RootNamespace>
     <AssemblyName>TE1Insp</AssemblyName>
-    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\IVM\TE1Insp1\Execute\</OutputPath>
+    <OutputPath>C:\IVM\TE1Insp1\Execute\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -33,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
@@ -45,6 +48,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ActUtlTypeLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=627cb188e78f967a, processorArchitecture=MSIL">
@@ -63,26 +67,30 @@
     <Reference Include="Cognex.VisionPro.Display.Controls, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
     <Reference Include="Cognex.VisionPro.ImageFile, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
     <Reference Include="Cognex.VisionPro.ImageProcessing, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
+    <Reference Include="Cognex.VisionPro.ImageProcessing.Controls, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
+    <Reference Include="Cognex.VisionPro.PMAlign, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
+    <Reference Include="Cognex.VisionPro.PMAlign.Controls, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
     <Reference Include="Cognex.VisionPro.QuickBuild.Controls, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
     <Reference Include="Cognex.VisionPro.QuickBuild.Core, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
     <Reference Include="Cognex.VisionPro.ToolGroup, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
     <Reference Include="Cognex.VisionPro.ToolGroup.Controls, Version=73.0.0.0, Culture=neutral, PublicKeyToken=ef0f902af9dee505, processorArchitecture=AMD64" />
-    <Reference Include="DevExpress.BonusSkins.v23.1" />
-    <Reference Include="DevExpress.Data.Desktop.v23.1" />
-    <Reference Include="DevExpress.Data.v23.1" />
-    <Reference Include="DevExpress.Dialogs.v23.1.Core, Version=23.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.Utils.v23.1" />
-    <Reference Include="DevExpress.Sparkline.v23.1.Core" />
-    <Reference Include="DevExpress.XtraBars.v23.1, Version=23.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraDialogs.v23.1, Version=23.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraEditors.v23.1" />
-    <Reference Include="DevExpress.Printing.v23.1.Core" />
-    <Reference Include="DevExpress.Drawing.v23.1" />
-    <Reference Include="DevExpress.XtraGauges.v23.1.Core, Version=23.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraGauges.v23.1.Win, Version=23.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraGrid.v23.1, Version=23.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraLayout.v23.1, Version=23.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
-    <Reference Include="DevExpress.XtraPrinting.v23.1, Version=23.1.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.BonusSkins.v23.2" />
+    <Reference Include="DevExpress.Data.Desktop.v23.2" />
+    <Reference Include="DevExpress.Data.v23.2" />
+    <Reference Include="DevExpress.Dialogs.v23.2.Core, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.Utils.v23.2" />
+    <Reference Include="DevExpress.Sparkline.v23.2.Core" />
+    <Reference Include="DevExpress.XtraBars.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraDialogs.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraEditors.v23.2" />
+    <Reference Include="DevExpress.Printing.v23.2.Core" />
+    <Reference Include="DevExpress.Drawing.v23.2" />
+    <Reference Include="DevExpress.XtraGauges.v23.2.Core, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGauges.v23.2.Win, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraGrid.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraLayout.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraPrinting.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraVerticalGrid.v23.2, Version=23.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -279,6 +287,12 @@
     <Compile Include="UI\Forms\CalibInfo.Designer.cs">
       <DependentUpon>CalibInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Forms\CogDefectsEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\CogDefectsEdit.Designer.cs">
+      <DependentUpon>CogDefectsEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Forms\CogToolEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -290,6 +304,12 @@
     </Compile>
     <Compile Include="UI\Forms\BaseForm.Designer.cs">
       <DependentUpon>BaseForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Forms\ImagingConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Forms\ImagingConfig.Designer.cs">
+      <DependentUpon>ImagingConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Forms\Login.cs">
       <SubType>Form</SubType>
@@ -400,11 +420,17 @@
     <EmbeddedResource Include="UI\Forms\CalibInfo.resx">
       <DependentUpon>CalibInfo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\CogDefectsEdit.resx">
+      <DependentUpon>CogDefectsEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\CogToolEdit.resx">
       <DependentUpon>CogToolEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Forms\ImagingConfig.resx">
+      <DependentUpon>ImagingConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
@@ -435,7 +461,7 @@
       <Version>2.25.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces">
-      <Version>8.0.0</Version>
+      <Version>9.0.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore">
       <Version>3.1.32</Version>
@@ -444,7 +470,7 @@
       <Version>3.1.32</Version>
     </PackageReference>
     <PackageReference Include="MQTTnet">
-      <Version>4.3.6.1152</Version>
+      <Version>4.3.7.1207</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.3</Version>
@@ -456,37 +482,37 @@
       <Version>3.1.18</Version>
     </PackageReference>
     <PackageReference Include="OpenCvSharp4">
-      <Version>4.9.0.20240103</Version>
+      <Version>4.10.0.20241108</Version>
     </PackageReference>
     <PackageReference Include="OpenCvSharp4.Extensions">
-      <Version>4.9.0.20240103</Version>
+      <Version>4.10.0.20241108</Version>
     </PackageReference>
     <PackageReference Include="OpenCvSharp4.runtime.win">
-      <Version>4.9.0.20240103</Version>
+      <Version>4.10.0.20241108</Version>
     </PackageReference>
     <PackageReference Include="OpenCvSharp4.Windows">
-      <Version>4.9.0.20240103</Version>
+      <Version>4.10.0.20241108</Version>
     </PackageReference>
     <PackageReference Include="protobuf-net">
-      <Version>3.2.30</Version>
+      <Version>3.2.45</Version>
     </PackageReference>
     <PackageReference Include="System.Collections.Immutable">
-      <Version>8.0.0</Version>
+      <Version>9.0.0</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations">
       <Version>5.0.0</Version>
     </PackageReference>
     <PackageReference Include="System.Diagnostics.DiagnosticSource">
-      <Version>8.0.1</Version>
+      <Version>9.0.0</Version>
     </PackageReference>
     <PackageReference Include="System.Reflection.Emit">
       <Version>4.7.0</Version>
     </PackageReference>
     <PackageReference Include="System.Text.Encodings.Web">
-      <Version>8.0.0</Version>
+      <Version>9.0.0</Version>
     </PackageReference>
     <PackageReference Include="System.Text.Json">
-      <Version>8.0.3</Version>
+      <Version>9.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -510,14 +536,17 @@
     <None Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MvUtils\MvUtils\MvUtils.csproj">
-      <Project>{bdb2ed5c-4a7f-4116-b5a0-1831a1ec0624}</Project>
-      <Name>MvUtils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\TE1Vision\TE1Vision.csproj">
       <Project>{df960dc0-b92c-4668-b761-f61251b811ec}</Project>
       <Name>TE1Vision</Name>
     </ProjectReference>
+    <ProjectReference Include="C:\IVM\TE1Vision\MvUtils\MvUtils\MvUtils.csproj">
+      <Project>{bdb2ed5c-4a7f-4116-b5a0-1831a1ec0624}</Project>
+      <Name>MvUtils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yaxissettings.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
